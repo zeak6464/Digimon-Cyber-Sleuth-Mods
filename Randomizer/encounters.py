@@ -31,10 +31,10 @@ def encounters_func():
     # n= Number of Digimon
     digi1 = pandas.read_csv(digimon).sample(n=1947,replace=True) 
     digi2 = pandas.read_csv(digimon).sample(n=1947,replace=True) 
-    #digi3 = pandas.read_csv(digimon).sample(n=1947,replace=True) 
-    #digi4 = pandas.read_csv(digimon).sample(n=1947,replace=True) 
-    #digi5 = pandas.read_csv(digimon).sample(n=1947,replace=True) 
-    #digi6 = pandas.read_csv(digimon).sample(n=1947,replace=True) 
+    digi3 = pandas.read_csv(digimon).sample(n=1947,replace=True) 
+    digi4 = pandas.read_csv(digimon).sample(n=1947,replace=True) 
+    digi5 = pandas.read_csv(digimon).sample(n=1947,replace=True) 
+    digi6 = pandas.read_csv(digimon).sample(n=1947,replace=True) 
 
 
     # Open the csv file (File_Name)
@@ -44,8 +44,8 @@ def encounters_func():
     # Inserts Colums
     df.insert(loc=0,column="id",value= pandas.read_csv(file_name)["id"])
 
-    df.insert(loc=1,column="digi1",value= digi1)
-    df.insert(loc=2,column="digi2",value= digi2)
+    df.insert(loc=1,column="digi1",value=  pandas.read_csv(file_name)["digi1"])
+    df.insert(loc=2,column="digi2",value=  pandas.read_csv(file_name)["digi2"])
     df.insert(loc=3,column="digi3",value=  pandas.read_csv(file_name)["digi3"])
     df.insert(loc=4,column="digi4",value=  pandas.read_csv(file_name)["digi4"])
     df.insert(loc=5,column="digi5",value=  pandas.read_csv(file_name)["digi5"])
