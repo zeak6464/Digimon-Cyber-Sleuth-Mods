@@ -7,6 +7,7 @@ import dedigivolve
 import digivolve
 import encounters
 import market
+import digimondata
 
 #create display window
 SCREEN_HEIGHT = 500
@@ -24,6 +25,7 @@ en_img = pygame.image.load('en_btn.png').convert_alpha()
 mar_img = pygame.image.load('mar_btn.png').convert_alpha()
 done_img = pygame.image.load('done_btn.png').convert_alpha()
 re_img = pygame.image.load('re_btn.png').convert_alpha()
+digi_img = pygame.image.load('digi_btn.png').convert_alpha()
 
 #create button instances
 re_button = button.Button(250, 425, re_img, 1)
@@ -39,6 +41,10 @@ re2_button = button.Button(100, 150, shop_img, 1)
 de_button = button.Button(100, 250, de_img, 1)
 done3 = button.Button(100, 250, done_img, 1)
 re3_button = button.Button(100, 250, de_img, 1)
+
+digi_button = button.Button(100, 350, digi_img, 1)
+done7 = button.Button(100, 350, done_img, 1)
+re7_button = button.Button(100, 350, digi_img, 1)
 
 di_button = button.Button(450, 50, di_img, 1)
 done4 = button.Button(450, 50, done_img, 1)
@@ -82,6 +88,10 @@ while run:
         market.market_func()
         mar_button = done6
         print('Market Done')
+    if digi_button.draw(screen):
+        digimondata.digimondata_func()
+        digi_button = done7
+        print('Digimon Data Done')    
     if re_button.draw(screen):
         start_button = re1_button
         shop_button = re2_button
@@ -89,6 +99,7 @@ while run:
         di_button = re4_button
         en_button = re5_button
         mar_button = re6_button
+        digi_button = re7_button
         print('Resetting Done')
 #event handler
     for event in pygame.event.get():
