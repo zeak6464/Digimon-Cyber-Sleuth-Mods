@@ -1,4 +1,4 @@
-id,nameId,itemType?,sortValue,buyPrice,sellPrice,inBattle,inOverworld,unk8,effectType,effectValue,farmEffect1,farmValue1,farmEffect2,farmValue2,medalId?,medalRarity,medalUnk1,medalPrice,empty2?,keisukeSkin,takumiSkin,amiSkin,skinFlag,descriptionId,iconId,unk29
+id,nameId,itemType,sortValue,buyPrice,sellPrice,inBattle,inOverworld,unk8,effectType,effectValue,farmEffect1,farmValue1,farmEffect2,farmValue2,medalId?,medalRarity,medalUnk1,medalPrice,empty2?,keisukeSkin,takumiSkin,amiSkin,skinFlag,descriptionId,iconId,unk29
 1,1,0,3,100,20,1,1,4000,0,250,-1,0,-1,0,-1,-1,-1,0,0,"","","",0,1,1,10
 2,2,0,4,400,80,1,1,4001,0,750,-1,0,-1,0,-1,-1,-1,0,0,"","","",0,2,1,0
 3,3,0,5,900,180,1,1,4002,7,100,-1,0,-1,0,-1,-1,-1,0,0,"","","",0,3,1,0

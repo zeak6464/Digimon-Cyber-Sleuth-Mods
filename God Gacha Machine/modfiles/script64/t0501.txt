@@ -1,0 +1,5133 @@
+function GASHA_PLAY( VolNo )
+{
+	local str2;
+	this.Talk.Load("s_common_message");
+	this.Talk.SetMode(1);
+	
+	this.Field.MoveOffPlayer();
+	
+	this.Window.OpenMultiSelect(64);
+
+	while (!this.Window.IsNextMultiSelect())
+	{
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+
+	local pick = this.Window.GetResultMultiSelect();
+	this.Window.CloseMultiSelect();
+
+	while (!this.Window.IsEndCloseMultiSelect())
+	{
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+			
+	switch(pick)
+	{
+	case 1:
+		this.Window.OpenMoneyWindow(1);
+		str2 = "This gives you money!";
+		this.Debug.Log(str2);
+		this.Talk.SetString(str2);
+		this.Common.AddMoney(10000);
+		this.Message(6000);
+		this.MessageClose();
+		this.Window.CloseMoneyWindow();
+		this.TalkExit();
+		this.Field.MoveOnPlayer();
+		break;
+			
+	case 2:
+		str2 = "This clears the game!";
+		this.Debug.Log(str2);
+		this.Talk.SetString(str2);
+		this.Message(6000);
+		this.MessageClose();
+		this.Flag.Set(3199);
+		this.Flag.Set(3100);
+		this.Common.SendNoticeStoryClearCyberSleuth();
+		this.INFO_WINDOW(3200);
+		this.CHAPTER_END_SAVE("t05", 4);
+		this.Field.MoveOnPlayer();
+		break;
+
+				
+	case 3:
+		str2 = "This is a Battle with a Different Feild!";
+		this.Debug.Log(str2);
+		this.Talk.SetString(str2);
+		this.Message(6000);
+		this.MessageClose();
+		this.Field.MoveOnPlayer();
+		this.TalkExit();
+		this.Battle.Encount(23, 817);
+		break;
+				
+	case 4:
+		for( local i = 1; i <= 12303; ++i )
+			{
+				this.Item.Add(i, 1);
+			}
+		str2 = "This gave me all the items!";
+		this.Debug.Log(str2);
+		this.Talk.SetString(str2);
+		this.Message(6000);
+		this.MessageClose();
+		this.TalkExit();
+		this.Field.MoveOnPlayer();
+		break;
+				
+	case 5:
+		str2 = "This is a Tutorial Battle!";
+		this.Debug.Log(str2);
+		this.Talk.SetString(str2);
+		this.Message(6000);
+		this.MessageClose();
+		this.Field.MoveOnPlayer();
+		this.TalkExit();
+		this.Common.SetFieldGuest(3001);
+		this.Field.AddGuestFormal(0, 56);
+		this.Battle.Encount(1000, 100);
+		break;
+				
+	case 6:
+		if (this.Common.GetPartyEmptyNum() == 0)
+		{
+			this.Debug.Log("NO_SLOT");
+			this.Message(3040);
+			this.MessageClose();
+			break;
+		}
+		else
+		{
+			str2 = this.Math.Rand(1, 332);
+			this.Field.AddPartyFormal(str2);
+			str2 = "This gave me a random Digimon to my party!";
+			this.Debug.Log(str2);
+			this.Talk.SetString(str2);
+			this.Message(6000);
+			this.MessageClose();
+			this.TalkExit();
+			this.Field.MoveOnPlayer();
+			break;
+		}
+	}
+}
+
+function MEDAL_MANIA()
+{
+	local SelYen = 0;
+	local str1 = 0;
+	local result = 0;
+	this.Talk.Load("s_common_message");
+	this.Talk.SetMode(1);
+
+	if (!this.Flag.Check(9400))
+	{
+		this.Message(600);
+		this.Message(601);
+		this.Message(602);
+		this.Message(603);
+		this.Message(604);
+		this.MessageClose();
+		this.TalkExit();
+		this.TUTORIAL_WINDOW(24);
+		this.Flag.Set(9400);
+	}
+	else
+	{
+		this.Message(610);
+		this.MessageClose();
+		this.MessageSel(3, 1000);
+		result = this.Talk.GetResultSelectedNum();
+
+		switch(result)
+		{
+		case 0:
+			SelYen = this.Medal.GetEstimateSellPrice();
+			this.Message(660);
+
+			if (SelYen == 0)
+			{
+				this.Message(662);
+				this.MessageClose();
+				this.TalkExit();
+			}
+			else
+			{
+				this.Talk.SetNumber(SelYen);
+				this.Message(661);
+				this.MessageClose();
+				this.Window.OpenYesNoInfo(5054);
+				this.WaitYesNoInfoWindow();
+				local result = this.Window.GetResultYesNoInfo();
+				this.Window.CloseYesNoInfo();
+				this.WaitCloseYesNoInfoWindow();
+				this.WaitFrame(0.5);
+
+				switch(result)
+				{
+				case 1:
+					this.Sound.PlaySE("fe_096", false);
+					this.Message(680);
+					this.MessageClose();
+					this.Medal.AllSell();
+					this.SELL_MEDAL_CHECK();
+					this.VOL_MEDAL_CHECK();
+					this.Message(910);
+					this.MessageClose();
+					this.TalkExit();
+					break;
+
+				case 2:
+					this.Message(670);
+					this.MessageClose();
+					this.TalkExit();
+					this.Field.MoveOnPlayer();
+					break;
+
+				case 3:
+					this.Message(670);
+					this.MessageClose();
+					this.TalkExit();
+					this.Field.MoveOnPlayer();
+					break;
+				}
+			}
+
+			break;
+
+		case 1:
+			this.Message(630);
+			this.MessageClose();
+			this.Medal.OpenList();
+
+			while (!this.Medal.IsEndList())
+			{
+				this.WaitFrame(this.Util.SecondFromFrame(1));
+			}
+
+			this.Medal.CloseList();
+
+			if (this.Flag.Check(9423))
+			{
+				this.Message(820);
+			}
+			else
+			{
+				this.Message(5008);
+			}
+
+			this.MessageClose();
+			this.TalkExit();
+			break;
+
+		case 2:
+			this.Message(620);
+			this.MessageClose();
+			this.TalkExit();
+			break;
+
+		case -1:
+			this.Message(620);
+			this.MessageClose();
+			this.TalkExit();
+			break;
+		}
+	}
+}
+
+function VOL_MEDAL_CHECK()
+{
+	if (this.Medal.IsCompleteCollection(1) && !this.Flag.Check(9401))
+	{
+		this.Message(690);
+		this.MessageClose();
+		this.INFO_GET_ITEM(522, 1);
+		this.Message(900);
+		this.MessageClose();
+		this.Flag.Set(9401);
+	}
+
+	if (this.Medal.IsCompleteCollection(2) && !this.Flag.Check(9402))
+	{
+		this.Message(691);
+		this.MessageClose();
+		this.INFO_GET_ITEM(372, 1);
+		this.INFO_GET_ITEM(374, 1);
+		this.Message(900);
+		this.MessageClose();
+		this.Flag.Set(9402);
+	}
+
+	if (this.Medal.IsCompleteCollection(3) && !this.Flag.Check(9403))
+	{
+		this.Message(692);
+		this.MessageClose();
+		this.INFO_GET_ITEM(208, 3);
+		this.Message(900);
+		this.MessageClose();
+		this.Flag.Set(9403);
+	}
+
+	if (this.Medal.IsCompleteCollection(4) && !this.Flag.Check(9404))
+	{
+		this.Message(693);
+		this.MessageClose();
+		this.INFO_GET_ITEM(54, 3);
+		this.Message(900);
+		this.MessageClose();
+		this.Flag.Set(9404);
+	}
+
+	if (this.Medal.IsCompleteCollection(5) && !this.Flag.Check(9405))
+	{
+		this.Message(694);
+		this.MessageClose();
+		this.INFO_GET_ITEM(534, 1);
+		this.INFO_GET_ITEM(535, 1);
+		this.Message(900);
+		this.MessageClose();
+		this.Flag.Set(9405);
+	}
+
+	if (this.Medal.IsCompleteCollection(6) && !this.Flag.Check(9406))
+	{
+		this.Message(695);
+		this.MessageClose();
+		this.INFO_GET_ITEM(12, 5);
+		this.INFO_GET_ITEM(22, 2);
+		this.Message(900);
+		this.MessageClose();
+		this.Flag.Set(9406);
+	}
+
+	if (this.Medal.IsCompleteCollection(7) && !this.Flag.Check(9407))
+	{
+		this.Message(696);
+		this.MessageClose();
+		this.INFO_GET_ITEM(200, 10);
+		this.INFO_GET_ITEM(201, 3);
+		this.Message(900);
+		this.MessageClose();
+		this.Flag.Set(9407);
+	}
+
+	if (this.Medal.IsCompleteCollection(8) && !this.Flag.Check(9408))
+	{
+		this.Message(697);
+		this.MessageClose();
+		this.INFO_GET_ITEM(78, 2);
+		this.INFO_GET_ITEM(79, 1);
+		this.Message(900);
+		this.MessageClose();
+		this.Flag.Set(9408);
+	}
+
+	if (this.Medal.IsCompleteCollection(9) && !this.Flag.Check(9409))
+	{
+		this.Message(698);
+		this.MessageClose();
+		this.INFO_GET_ITEM(24, 3);
+		this.Message(900);
+		this.MessageClose();
+		this.Flag.Set(9409);
+	}
+
+	if (this.Medal.IsCompleteCollection(10) && !this.Flag.Check(9410))
+	{
+		this.Message(699);
+		this.MessageClose();
+		this.INFO_GET_ITEM(325, 1);
+		this.INFO_GET_ITEM(339, 1);
+		this.INFO_GET_ITEM(25, 3);
+		this.Message(900);
+		this.MessageClose();
+		this.Flag.Set(9410);
+	}
+
+	if (this.Medal.IsCompleteCollection(11) && !this.Flag.Check(9411))
+	{
+		this.Message(700);
+		this.MessageClose();
+		this.INFO_GET_ITEM(304, 1);
+		this.INFO_GET_ITEM(309, 1);
+		this.Message(900);
+		this.MessageClose();
+		this.Flag.Set(9411);
+	}
+
+	if (this.Medal.IsCompleteCollection(12) && !this.Flag.Check(9412))
+	{
+		this.Message(701);
+		this.MessageClose();
+		this.INFO_GET_ITEM(315, 1);
+		this.Message(900);
+		this.MessageClose();
+		this.Flag.Set(9412);
+	}
+
+	if (this.Medal.IsCompleteCollection(13) && !this.Flag.Check(9413))
+	{
+		this.Message(702);
+		this.MessageClose();
+		this.INFO_GET_ITEM(202, 2);
+		this.INFO_GET_ITEM(203, 2);
+		this.Message(900);
+		this.MessageClose();
+		this.Flag.Set(9413);
+	}
+}
+
+function SELL_MEDAL_CHECK()
+{
+	local mdret;
+	mdret = this.Medal.GetSellKindNum();
+
+	if (mdret >= 50 && !this.Flag.Check(9414))
+	{
+		this.Message(800);
+		this.MessageClose();
+		this.INFO_GET_ITEM(3, 3);
+		this.INFO_GET_ITEM(9, 3);
+		this.Message(900);
+		this.MessageClose();
+		this.Flag.Set(9414);
+	}
+
+	if (mdret >= 100 && !this.Flag.Check(9415))
+	{
+		this.Message(801);
+		this.MessageClose();
+		this.INFO_GET_ITEM(5, 3);
+		this.INFO_GET_ITEM(10, 3);
+		this.Message(900);
+		this.MessageClose();
+		this.Flag.Set(9415);
+	}
+
+	if (mdret >= 150 && !this.Flag.Check(9416))
+	{
+		this.Message(802);
+		this.MessageClose();
+		this.INFO_GET_ITEM(22, 5);
+		this.Message(900);
+		this.MessageClose();
+		this.Flag.Set(9416);
+	}
+
+	if (mdret >= 200 && !this.Flag.Check(9417))
+	{
+		this.Message(803);
+		this.MessageClose();
+		this.INFO_GET_ITEM(12, 5);
+		this.Message(900);
+		this.MessageClose();
+		this.Flag.Set(9417);
+	}
+
+	if (mdret >= 250 && !this.Flag.Check(9418))
+	{
+		this.Message(804);
+		this.MessageClose();
+		this.INFO_GET_ITEM(381, 2);
+		this.Message(900);
+		this.MessageClose();
+		this.Flag.Set(9418);
+	}
+
+	if (mdret >= 300 && !this.Flag.Check(9419))
+	{
+		this.Message(805);
+		this.MessageClose();
+		this.INFO_GET_ITEM(523, 1);
+		this.Message(900);
+		this.MessageClose();
+		this.Flag.Set(9419);
+	}
+
+	if (mdret >= 350 && !this.Flag.Check(9420))
+	{
+		this.Message(806);
+		this.MessageClose();
+		this.INFO_GET_ITEM(78, 3);
+		this.Message(900);
+		this.MessageClose();
+		this.Flag.Set(9420);
+	}
+
+	if (mdret >= 400 && !this.Flag.Check(9421))
+	{
+		this.Message(807);
+		this.MessageClose();
+		this.INFO_GET_ITEM(52, 5);
+		this.Message(900);
+		this.MessageClose();
+		this.Flag.Set(9421);
+	}
+
+	if (mdret >= 450 && !this.Flag.Check(9422))
+	{
+		this.Message(808);
+		this.MessageClose();
+		this.INFO_GET_ITEM(13, 5);
+		this.INFO_GET_ITEM(25, 3);
+		this.Message(900);
+		this.MessageClose();
+		this.Flag.Set(9422);
+	}
+
+	if (mdret >= 500 && !this.Flag.Check(9423))
+	{
+		this.Message(809);
+		this.MessageClose();
+		this.INFO_GET_ITEM(208, 5);
+		this.INFO_GET_ITEM(54, 5);
+		this.INFO_GET_ITEM(56, 10);
+		this.Message(900);
+		this.MessageClose();
+		this.Flag.Set(9423);
+	}
+
+	local i = 0;
+	local count = 0;
+
+	for( i = 1501; i <= 1701; i++ )
+	{
+		if (this.Medal.SellID(i))
+		{
+			this.Debug.Log("SELL_ID_" + i);
+			count = count + 1;
+		}
+	}
+
+	if (count == 200)
+	{
+	}
+	else if (this.Flag.Check(9423))
+	{
+		this.Message(5000);
+		this.Message(5001);
+		this.Message(5002);
+		this.Message(5003);
+		this.MessageClose();
+	}
+}
+
+function m01_t05_0101()
+{
+	this.Field.SetBGSkip(true);
+	this.Vista.Start();
+	this.Vista.LoadBackGround("t0501f");
+	this.Vista.LoadCameraAnimation("m01_t05_0101_evt_Camera");
+	this.Vista.SetLight("m01_t05_0101_evt_Light");
+	this.WaitVistaLoad();
+	this.Vista.Play();
+	this.Sound.PlaySE("fe_058", true);
+	this.Vista.SetCameraAnimationTime(0, 90);
+	this.Field.SetVisible(true);
+	this.Fade.In(0, 1);
+	this.WaitFrame(1.0);
+	this.Vista.StartChapter(1, 1, true);
+	this.WaitFrame(2.0);
+	this.Vista.SetCameraAnimationTime(300, 420);
+	this.Sound.StopSE("fe_058", 10.0);
+	this.WaitFrame(3.0);
+	this.Vista.EndChapter();
+	this.Flag.Set(4001);
+	this.WaitFrame(0.5);
+	this.Fade.Out(0, 0.5);
+	this.WaitFrame(0.5);
+	this.VistaExit();
+	this.Vista.Start();
+	this.Vista.LoadBackGround("t0502f");
+	this.Vista.LoadCameraAnimation("m01_t05_0101_evt_Camera");
+	this.Vista.SetLight("m01_t05_0101_evt_Light");
+	this.WaitVistaLoad();
+	this.Field.SetNpcVisible("npc_0000", false);
+	this.Field.SetNpcVisible("npc_0001", false);
+	this.Field.SetNpcVisible("npc_0002", false);
+	this.Field.SetNpcVisible("npc_0003", false);
+	this.Field.SetNpcVisible("npc_0004", false);
+	this.Field.SetNpcVisible("npc_0005", false);
+	this.Field.SetNpcVisible("npc_0006", false);
+	this.Field.SetNpcVisible("npc_0007", false);
+	this.Field.SetNpcVisible("npc_0008", false);
+	this.Field.SetNpcVisible("npc_0009", false);
+	this.Field.SetNpcVisible("npc_0010", false);
+	this.Field.SetNpcVisible("npc_0011", false);
+	this.Field.SetNpcVisible("npc_0012", false);
+	this.Field.SetNpcVisible("npc_0013", false);
+	this.Field.SetNpcVisible("npc_0020", false);
+	this.Field.SetNpcVisible("npc_0021", false);
+	this.Field.SetNpcVisible("npc_0022", false);
+	this.Field.SetNpcVisible("npc_0023", false);
+	this.Field.SetNpcVisible("npc_0024", false);
+	this.Field.SetNpcVisible("npc_0025", false);
+	this.Field.SetNpcVisible("npc_0026", false);
+	this.Field.SetNpcVisible("npc_0027", false);
+	this.Field.SetNpcVisible("npc_0028", false);
+	this.Field.SetNpcVisible("npc_0029", false);
+	this.Field.SetNpcVisible("npc_0030", false);
+	this.Field.SetNpcVisible("npc_0031", false);
+	this.Field.SetNpcVisible("npc_0032", false);
+	this.Field.SetNpcVisible("npc_0033", false);
+	this.Field.SetGimmickVisible("obj_gk_1000", false);
+	this.Vista.Play();
+	this.Vista.SetCameraAnimationTime(600, 720);
+	this.Fade.In(0, 0.5);
+	this.WaitFrame(4.0);
+	this.Vista.SetCameraAnimationTime(800, 890);
+	this.WaitFrame(2.0);
+	this.Sound.StopAllSE(2.0);
+	this.Fade.Out(0, 1);
+	this.WaitFrame(1);
+	this.VistaExit();
+	this.WaitFrame(0.1);
+}
+
+function m01_t05_0102()
+{
+	this.Field.SetExecSkip(true);
+	this.Talk.Load("m01_t05_0102");
+	this.Talk.LoadModel(1, this.Common.GetPlayerModelName(), 1);
+	this.Talk.LoadModel(2, "npc006", 2);
+	this.Talk.LoadAnimation(1, "fw01");
+	this.Talk.LoadAnimation(2, "fw01");
+	this.Talk.LoadAnimation(1, "e001");
+	this.Talk.LoadAnimation(1, "e005");
+	this.Talk.LoadAnimation(1, "e010");
+	this.Talk.LoadAnimation(1, "e112");
+	this.Talk.LoadAnimation(1, "e114");
+	this.Talk.LoadAnimation(2, "e001");
+	this.Talk.LoadAnimation(2, "e002");
+	this.Talk.LoadAnimation(2, "e003");
+	this.Talk.LoadAnimation(2, "e004");
+	this.Talk.LoadAnimation(2, "e008");
+	this.Talk.LoadAnimation(2, "e010");
+	this.Talk.LoadAnimation(2, "e002_end");
+	this.Talk.LoadAnimation(2, "e003_end");
+	this.Talk.LoadAnimation(2, "e004_end");
+	this.Talk.LoadAnimation(2, "e008_end");
+	this.Talk.LoadAnimation(1, "f01_m01");
+	this.Talk.LoadAnimation(1, "f06_m01");
+	this.Talk.LoadAnimation(1, "f08_m01");
+	this.Talk.LoadAnimation(1, "f09_m01");
+	this.Talk.LoadAnimation(2, "f01_m01");
+	this.Talk.LoadAnimation(2, "f02_m01");
+	this.Talk.LoadAnimation(2, "f03_m01");
+	this.Talk.LoadAnimation(2, "f01_m02");
+	this.Talk.LoadAnimation(2, "f02_m02");
+	this.Talk.LoadAnimation(2, "f03_m02");
+	this.Talk.LoadAnimation(2, "f07_m02");
+	local result;
+	this.WaitTalkLoadModel();
+	this.Vista.Start();
+	this.Vista.LoadBackGround("t0504f");
+	this.Vista.LoadCameraAnimation("m01_t05_0102_evt_Camera");
+	this.Vista.LoadLocater("m01_t05_0102_evt");
+	this.Vista.SetLight("m01_t05_0102_evt_Light");
+	this.Vista.LoadAnimation("player", "fw01");
+	this.Vista.LoadAnimation("player", "e001");
+	this.Vista.LoadAnimation("player", "e500");
+	this.Vista.LoadAnimation("npc006", "e001");
+	this.WaitVistaLoad();
+	this.Vista.LocateModel("player", 0, 0);
+	this.Vista.LocateModel("npc006", 0, 0);
+	this.Vista.PlayAnimation("player", "e500", 0, true);
+	this.Vista.PlayAnimation("npc006", "e001", 0, true);
+	this.Vista.SetModelVisible("EFF_FLD_OMEN", false, 0);
+	this.Sound.StopBGM(0.1);
+	this.Sound.PlayBGM("M08", 0);
+	this.Vista.Play();
+	this.Vista.SetCameraAnimationTime(0, 75);
+	this.Fade.In(0, 0.5);
+	this.WaitFrame(2.5);
+	this.Vista.SetCameraAnimationTime(200, 275);
+	this.WaitFrame(2.2);
+	this.Vista.SetCameraAnimationTime(400, 660);
+	this.WaitFrame(8.8000002);
+	this.Talk.SetMode(2);
+	this.Talk.SetCamera("talkCamera01");
+	this.Talk.SetLight("talkLight01");
+	this.WaitFrame(0.2);
+	this.Talk.ShowModel(1, 2133, 1, 0);
+	this.Talk.ShowModel(2, 2113, 1, 0);
+	this.Talk.MovePosition(1, 2130, 1.0, 1);
+	this.Talk.MovePosition(2, 2110, 1.0, 1);
+	this.WaitFrame(0.5);
+	this.Talk.PlayAnimation(1, "e001", 0.40000001, true);
+	this.Talk.PlayAnimationSlotB(2, "f01_m02", true);
+	this.MessageTalk(1);
+	this.Talk.PlayAnimationSlotB(2, "f01_m01", true);
+	this.MessageTalk(2);
+	this.Talk.PlayAnimationSlotB(2, "f02_m02", true);
+	this.MessageTalk(3);
+	this.MessageTalk(4);
+	this.Talk.PlayAnimationSlotB(2, "f02_m01", true);
+	this.MessageTalk(5);
+	this.MessageClose();
+	this.Talk.PlayAnimation(1, "e010", 0.2, true);
+	this.WaitFrame(1.2);
+	this.Talk.PlayAnimation(2, "e008", 0.2, true);
+	this.Talk.PlayAnimationSlotB(2, "f01_m02", true);
+	this.MessageTalk(6);
+	this.MessageTalk(7);
+	this.Talk.PlayAnimationSlotB(2, "f01_m01", true);
+	this.MessageTalk(8);
+	this.Talk.PlayAnimationSlotB(2, "f01_m02", true);
+	this.MessageTalk(9);
+	this.MessageTalk(10);
+	this.Talk.PlayAnimationSlotB(2, "f01_m01", true);
+	this.Talk.PlayAnimation(2, "e008_end", 0.2, false);
+	this.WaitFrame(0.40000001);
+	this.Talk.PlayAnimation(2, "e001", 0.40000001, true);
+	this.Talk.PlayAnimationSlotB(2, "f02_m02", true);
+	this.MessageTalk(11);
+	this.MessageTalk(12);
+	this.MessageTalk(13);
+	this.Talk.PlayAnimationSlotB(2, "f02_m01", true);
+	this.Talk.PlayAnimation(1, "e008", 0.5, true);
+	this.MessageTalk(14);
+	this.MessageTalkSel(2, 15);
+	result = this.Talk.GetResultSelectedNum();
+
+	switch(result)
+	{
+	case 0:
+		this.Talk.PlayAnimationSlotB(2, "f02_m02", true);
+		this.Talk.PlayAnimation(2, "e010", 0.40000001, true);
+		this.MessageTalk(17);
+		break;
+
+	case 1:
+		this.Talk.PlayAnimation(1, "e001", 0.5, true);
+		this.Talk.MovePosition(1, 2130, 1.0, 1);
+		this.Talk.PlayAnimationSlotB(2, "f07_m02", true);
+		this.MessageTalk(16);
+		this.Talk.PlayAnimationSlotB(2, "f02_m02", true);
+		break;
+	}
+
+	this.Talk.PlayAnimation(2, "e002", 0.40000001, true);
+	this.MessageTalk(18);
+	this.MessageTalk(19);
+	this.Talk.PlayAnimationSlotB(2, "f02_m01", true);
+	this.Talk.PlayAnimation(2, "e002_end", 0.2, false);
+	this.WaitFrame(0.40000001);
+	this.Talk.PlayAnimation(2, "e004", 0.40000001, true);
+	this.Talk.PlayAnimationSlotB(2, "f02_m02", true);
+	this.MessageTalk(20);
+	this.MessageTalk(21);
+	this.Talk.PlayAnimationSlotB(2, "f03_m02", true);
+	this.MessageTalk(22);
+	this.Talk.PlayAnimationSlotB(2, "f03_m01", true);
+	this.Talk.PlayAnimation(1, "e112", 0.40000001, true);
+	this.MessageTalk(23);
+	this.MessageClose();
+	this.Talk.PlayAnimation(2, "e004_end", 0.2, false);
+	this.WaitFrame(0.40000001);
+	this.Talk.PlayAnimation(1, "e001", 0.5, true);
+	this.Talk.PlayAnimation(2, "e001", 0.40000001, true);
+	this.Talk.PlayAnimationSlotB(2, "f02_m02", true);
+	this.MessageTalk(24);
+	this.Talk.PlayAnimationSlotB(2, "f01_m02", true);
+	this.MessageTalk(25);
+	this.MessageTalk(26);
+	this.Talk.PlayAnimationSlotB(2, "f01_m01", true);
+	this.Talk.PlayAnimation(1, "e111", 0.5, true);
+	this.MessageTalk(27);
+	this.MessageClose();
+	this.Talk.PlayAnimation(2, "e004", 0.2, true);
+	this.Talk.PlayAnimationSlotB(2, "f01_e03", true);
+	this.WaitFrame(2.0);
+	this.Talk.PlayAnimationSlotB(2, "f01_m02", true);
+	this.MessageTalk(28);
+	this.MessageTalk(29);
+	this.Talk.PlayAnimation(1, "e001", 0.5, true);
+	this.Talk.PlayAnimationSlotB(2, "f03_m02", true);
+	this.Talk.PlayAnimation(2, "e008", 0.44999999, true);
+	this.WaitFrame(0.5);
+	this.MessageTalk(30);
+	this.Talk.PlayAnimationSlotB(2, "f03_m01", true);
+	this.Talk.PlayAnimation(1, "e114", 0.5, true);
+	this.MessageTalk(31);
+	this.Talk.PlayAnimation(1, "e001", 0.5, true);
+	this.Talk.PlayAnimationSlotB(2, "f02_m02", true);
+	this.Talk.PlayAnimation(2, "e002", 0.40000001, true);
+	this.MessageTalk(32);
+	this.MessageTalk(33);
+	this.Talk.PlayAnimationSlotB(2, "f02_m01", true);
+	this.Talk.PlayAnimation(2, "e008", 0.40000001, true);
+	this.Talk.PlayAnimationSlotB(2, "f01_m02", true);
+	this.MessageTalk(34);
+	this.MessageTalk(35);
+	this.Talk.PlayAnimationSlotB(2, "f01_m01", true);
+	this.Talk.PlayAnimation(1, "e008", 0.40000001, true);
+	this.MessageTalk(36);
+	this.MessageClose();
+	this.WaitFrame(0.5);
+	this.Talk.MovePosition(1, 2133, 1.5, 1);
+	this.Talk.MovePosition(2, 2113, 1.5, 1);
+	this.Talk.HideModel(1, 2, 0.5);
+	this.Talk.HideModel(2, 2, 0.5);
+	this.WaitFrame(0.5);
+	this.Fade.Out(0, 0.30000001);
+	this.WaitFrame(0.30000001);
+	this.TalkExit();
+	this.WaitFrame(0.1);
+	this.Talk.Load("m01_t05_0102");
+	this.Talk.LoadModel(1, this.Common.GetPlayerModelName(), 1);
+	this.Talk.LoadModel(2, "npc006", 2);
+	this.Talk.LoadAnimation(1, "fw01");
+	this.Talk.LoadAnimation(2, "fw01");
+	local result;
+	this.WaitTalkLoadModel();
+	this.Vista.PlayAnimation("player", "fw01", 0, true);
+	this.Vista.LocateModel("player", 1000, 1045);
+	this.Vista.SetCameraAnimationTime(1000, 1075);
+	this.Fade.In(0, 0.5);
+	this.WaitFrame(0.2);
+	this.Vista.PlayAnimation("npc006", "fw01", 0.2, true);
+	this.Vista.LocateModel("npc006", 1000, 1025);
+	this.WaitFrame(1.0);
+	this.Vista.PlayAnimation("npc006", "e001", 0.30000001, true);
+	this.Vista.PlayAnimation("player", "e001", 0.5, true);
+	this.WaitFrame(1.3);
+	this.Vista.LocateModel("player", 1200, 1200);
+	this.Vista.SetCameraAnimationTime(1200, 1275);
+	this.WaitFrame(2.5);
+	this.Talk.SetMode(2);
+	this.Talk.SetCamera("talkCamera01");
+	this.Talk.SetLight("talkLight01");
+	this.WaitFrame(0.2);
+	this.Talk.ShowModel(1, 4233, 1, 0);
+	this.Talk.ShowModel(2, 4253, 1, 0);
+	this.Talk.MovePosition(1, 4231, 1.0, 1);
+	this.Talk.MovePosition(2, 4252, 1.0, 1);
+	this.WaitFrame(0.5);
+	this.MessageTalk(37);
+	this.MessageTalk(38);
+	this.MessageClose();
+	this.Sound.StopBGM(1.0);
+	this.Fade.Out(0, 0.1);
+	this.WaitFrame(0.1);
+	this.Fade.BackOut(0, 0.1);
+	this.WaitFrame(0.1);
+	this.Talk.HideModel(1, 2, 0);
+	this.Talk.HideModel(2, 2, 0);
+	this.Fade.In(0, 0.1);
+	this.MessageTalk(39);
+	this.MessageClose();
+	this.Fade.Out(0, 0.1);
+	this.WaitFrame(0.1);
+	this.Fade.BackIn(0, 0.1);
+	this.WaitFrame(0.1);
+	this.Talk.ShowModel(1, 4231, 2, 0);
+	this.Talk.ShowModel(2, 4252, 2, 0);
+	this.Fade.In(0, 0.1);
+	this.MessageTalk(40);
+	this.MessageTalkSel(2, 41);
+	result = this.Talk.GetResultSelectedNum();
+
+	switch(result)
+	{
+	case 0:
+		this.MessageClose();
+		this.Sound.PlayBGM("M16", 0);
+		this.Talk.MovePosition(1, 4260, 6.0, 1);
+		this.Talk.MovePosition(2, 6007, 6.0, 1);
+		this.WaitFrame(0.5);
+		break;
+
+	case 1:
+		this.MessageClose();
+		this.Sound.PlayBGM("M16", 0);
+		this.Talk.MovePosition(1, 4260, 6.0, 1);
+		this.Talk.MovePosition(2, 6007, 6.0, 1);
+		this.WaitFrame(0.5);
+		this.MessageTalk(42);
+		this.MessageClose();
+		this.Fade.Out(0, 0.1);
+		this.WaitFrame(0.1);
+		this.Fade.BackOut(0, 0.1);
+		this.WaitFrame(0.1);
+		this.Talk.HideModel(1, 2, 0);
+		this.Talk.HideModel(2, 2, 0);
+		this.Fade.In(0, 0.1);
+		this.MessageTalk(43);
+		this.MessageClose();
+		this.Fade.Out(0, 0.1);
+		this.WaitFrame(0.1);
+		this.Fade.BackIn(0, 0.1);
+		this.WaitFrame(0.1);
+		this.Talk.ShowModel(1, 4260, 2, 0);
+		this.Fade.In(0, 0.1);
+		break;
+	}
+
+	this.MessageTalk(44);
+	this.MessageClose();
+	this.Fade.Out(0, 0.30000001);
+	this.WaitFrame(0.30000001);
+	this.TalkExit();
+	this.VistaExit();
+}
+
+function m01_t05_0103()
+{
+	this.Field.SetBGSkip(true);
+	this.Vista.Start();
+	this.Vista.LoadBackGround("t0504f");
+	this.Vista.LoadCameraAnimation("m01_t05_0103_evt_Camera");
+	this.Vista.LoadLocater("m01_t05_0103_evt");
+	this.Vista.SetLight("m01_t05_0103_evt_Light");
+	this.Vista.LoadAnimation("player", "e001");
+	this.Vista.LoadAnimation("npc006", "e001");
+	this.Vista.LoadAnimation("npc006", "e577");
+	this.WaitVistaLoad();
+	this.Vista.LocateModel("player", 0, 0);
+	this.Vista.LocateModel("npc006", 0, 0);
+	this.Vista.LocateModel("EFF_FLD_CJUMP", 0, 0);
+	this.Vista.LocateModel("EFF_FLD_CJUMP_P", 0, 0);
+	this.Vista.LocateModel("EFF_FLD_OMEN", 0, 0);
+	this.Vista.SetModelPriority("EFF_FLD_CJUMP", -1);
+	this.Vista.SetModelPriority("EFF_FLD_OMEN", -2);
+	this.Vista.PlayAnimation("player", "e001", 0, true);
+	this.Vista.PlayAnimation("npc006", "e001", 0, true);
+	this.Vista.PlayAnimation("EFF_FLD_CJUMP", "EFF_FLD_CJUMP", 0, false);
+	this.Vista.PlayAnimation("EFF_FLD_CJUMP_P", "EFF_FLD_CJUMP_P", 0, false);
+	this.Vista.PlayAnimation("EFF_FLD_OMEN", "EFF_FLD_OMEN", 0, true);
+	this.Vista.SetLoopFrameModel("EFF_FLD_CJUMP", "EFF_FLD_CJUMP", 0, 0);
+	this.Vista.SetLoopFrameModel("EFF_FLD_CJUMP_P", "EFF_FLD_CJUMP_P", 0, 0);
+	this.Vista.Play();
+	this.Vista.SetCameraAnimationTime(0, 90);
+	this.Fade.In(0, 0.30000001);
+	this.Sound.PlaySE("fe_042", false);
+	this.WaitFrame(1.5);
+	this.Vista.PlayAnimation("player", "fc01", 0.2, false);
+	this.Vista.PlayAnimation("EFF_FLD_CJUMP", "EFF_FLD_CJUMP", 0, true);
+	this.Vista.PlayAnimation("EFF_FLD_CJUMP_P", "EFF_FLD_CJUMP_P", 0, true);
+	this.WaitFrame(1.0);
+	this.WaitFrame(0.5);
+	this.Vista.SetCameraAnimationTime(200, 320);
+	this.Vista.SetModelVisible("EFF_FLD_OMEN", false, 0.5);
+	this.WaitFrame(0.1);
+	this.WaitFrame(0.1);
+	this.WaitFrame(0.2);
+	this.Vista.PlayAnimation("npc006", "e577", 0.2, true);
+	this.Vista.PlayAnimationSlotB("npc006", "f07_m01", true);
+	this.WaitFrame(2.5999999);
+	this.Fade.Out(0, 1.0);
+	this.WaitFrame(1.0);
+	this.VistaExit();
+	this.WaitFrame(0.1);
+}
+
+function m21_t05_0103()
+{
+	this.Field.SetBGSkip(true);
+	this.Vista.Start();
+	this.Vista.LoadBackGround("t0501f");
+	this.Vista.LoadCameraAnimation("m21_t05_0103_evt_Camera");
+	this.Vista.LoadLocater("m21_t05_0103_evt");
+	this.Vista.SetLight("m21_t05_0103_evt_Light");
+	this.Vista.LoadSubtitle("subtitle_m21_t05_0103");
+	this.WaitVistaLoad();
+	this.Vista.Play();
+	this.Vista.SetCameraAnimationTime(0, 1600);
+	this.Field.SetVisible(true);
+	this.Fade.In(0, 0.5);
+	this.WaitFrame(1.0);
+	this.Vista.PlaySubtitle();
+	this.WaitFrame(49.5);
+	this.Fade.Out(0, 1.0);
+	this.WaitFrame(1.5);
+	this.VistaExit();
+	this.WaitFrame(0.1);
+}
+
+function s411_t05_0101()
+{
+	this.Talk.Load("quest_001");
+	this.Talk.LoadModel(1, this.Common.GetPlayerModelName(), 1);
+	this.Talk.LoadModel(2, "mob015");
+	this.Talk.LoadAnimation(1, "e001");
+	this.Talk.LoadAnimation(1, "e002");
+	this.Talk.LoadAnimation(1, "e008");
+	this.Talk.LoadAnimation(1, "e009");
+	this.Talk.LoadAnimation(2, "fn01");
+	this.Talk.LoadAnimation(2, "fn09");
+	this.Talk.LoadAnimation(2, "fn03");
+	this.Talk.LoadAnimation(1, "f06_m01");
+	this.Talk.LoadAnimation(1, "f06_e03");
+	this.Talk.LoadModelTexture(2, "b");
+	local result;
+	this.WaitTalkLoadModel();
+	this.Talk.SetMode(2);
+	this.Talk.SetCamera("talkCamera01");
+	this.Talk.SetLight("talkLight01");
+	this.Talk.ShowModel(1, 2113, 1, 0);
+	this.Talk.ShowModel(2, 2133, 1, 0);
+	this.Talk.ChangeTextureModel(2, "b");
+	this.Talk.MovePosition(1, 2110, 1.0, 1);
+	this.Talk.MovePosition(2, 2131, 1.0, 1);
+	this.Talk.PlayAnimationSlotB(2, "f02_m01", true);
+	this.WaitFrame(0.5);
+	this.Talk.PlayAnimationSlotB(2, "f02_m02", true);
+	this.MessageTalk(100);
+	this.Talk.PlayAnimationSlotB(2, "f01_m02", true);
+	this.MessageTalk(101);
+	this.Talk.PlayAnimationSlotB(2, "f01_m01", true);
+	this.Talk.SetLastTalkerManageID(-1);
+	this.MessageClose();
+	this.Talk.PlayAnimation(1, "e009", 0.2, true);
+	this.WaitFrame(0.5);
+	this.Talk.PlayAnimationSlotB(2, "f07_m02", true);
+	this.Talk.PlayAnimation(2, "fn09", 0.5, true);
+	this.MessageTalk(102);
+	this.MessageTalk(103);
+	this.Talk.PlayAnimationSlotB(2, "f08_m02", true);
+	this.MessageTalk(104);
+	this.Talk.PlayAnimation(1, "e008", 0.5, true);
+	this.Talk.PlayAnimationSlotB(1, "f06_e03", true);
+	this.MessageTalk(105);
+	this.Talk.PlayAnimationSlotB(2, "f08_m01", true);
+	this.Talk.SetLastTalkerManageID(-1);
+	this.MessageClose();
+	this.WaitFrame(1.0);
+	this.Talk.PlayAnimationSlotB(2, "f01_m01", true);
+	this.Talk.PlayAnimation(2, "fn01", 0.5, true);
+	this.WaitFrame(0.30000001);
+	this.Talk.PlayAnimationSlotB(2, "f01_m02", true);
+	this.MessageTalk(106);
+	this.Talk.PlayAnimation(1, "e001", 0.5, true);
+	this.Talk.PlayAnimationSlotB(1, "f01_m01", true);
+	this.Talk.PlayAnimation(2, "fn03", 0.5, true);
+	this.Talk.PlayAnimationSlotB(2, "f02_m01", true);
+	this.WaitFrame(0.2);
+	this.Talk.PlayAnimationSlotB(2, "f02_m02", true);
+	this.MessageTalk(107);
+	this.MessageTalk(108);
+	this.MessageTalk(109);
+	this.Talk.PlayAnimationSlotB(2, "f02_m01", true);
+	this.Talk.SetLastTalkerManageID(-1);
+	this.Talk.MovePosition(1, 2111, 1.0, 1);
+	this.Talk.PlayAnimation(1, "e002", 0.5, true);
+	this.Talk.PlayAnimationSlotB(1, "f02_m01", true);
+	this.MessageTalkSel(2, 110);
+	result = this.Talk.GetResultSelectedNum();
+
+	switch(result)
+	{
+	case 0:
+		this.Talk.MovePosition(1, 2110, 1.0, 1);
+		this.Talk.PlayAnimation(1, "e001", 0.5, true);
+		this.Talk.PlayAnimation(2, "fn01", 0.5, true);
+		this.Talk.PlayAnimationSlotB(2, "f07_m02", true);
+		this.MessageTalk(111);
+		this.Talk.PlayAnimationSlotB(2, "f07_m01", true);
+		this.Talk.SetLastTalkerManageID(-1);
+		this.MessageClose();
+		this.Talk.PlayAnimation(1, "e010", 0.2, true);
+		this.Talk.PlayAnimationSlotB(1, "f06_m01", true);
+		this.WaitFrame(0.80000001);
+		this.Talk.PlayAnimationSlotB(1, "f01_m01", true);
+		break;
+
+	case 1:
+		this.Talk.MovePosition(1, 2110, 1.0, 1);
+		this.Talk.PlayAnimation(1, "e001", 0.5, true);
+		this.Talk.PlayAnimation(2, "fn01", 0.5, true);
+		this.WaitFrame(0.30000001);
+		this.Talk.PlayAnimationSlotB(2, "f02_m02", true);
+		this.MessageTalk(112);
+		this.Talk.PlayAnimationSlotB(2, "f02_m01", true);
+		this.Talk.SetLastTalkerManageID(-1);
+		break;
+	}
+
+	this.Talk.PlayAnimationSlotB(2, "f02_m02", true);
+	this.MessageTalk(113);
+	this.Talk.PlayAnimationSlotB(2, "f02_m01", true);
+	this.Talk.SetLastTalkerManageID(-1);
+	this.MessageClose();
+	this.Talk.PlayAnimationSlotB(1, "f02_m01", true);
+	this.Talk.PlayAnimation(1, "e009", 0.5, true);
+	this.WaitFrame(1.2);
+	this.Talk.PlayAnimationSlotB(2, "f08_m01", true);
+	this.Talk.PlayAnimation(2, "fn09", 0.5, true);
+	this.WaitFrame(0.30000001);
+	this.Talk.PlayAnimationSlotB(2, "f08_m02", true);
+	this.MessageTalk(114);
+	this.Talk.PlayAnimationSlotB(2, "f08_m01", true);
+	this.Talk.SetLastTalkerManageID(-1);
+	this.MessageClose();
+	this.WaitFrame(0.1);
+	this.Talk.MovePosition(1, 2113, 1.5, 1);
+	this.Talk.MovePosition(2, 2133, 1.5, 1);
+	this.Talk.HideModel(1, 2, 0.5);
+	this.Talk.HideModel(2, 2, 0.5);
+	this.WaitFrame(0.40000001);
+	this.TalkExit();
+	this.WaitFrame(0.1);
+}
+
+function s411_t05_0201()
+{
+	this.Talk.Load("quest_001");
+	this.Talk.LoadModel(1, this.Common.GetPlayerModelName(), 1);
+	this.Talk.LoadModel(2, "mob015");
+	this.Talk.LoadAnimation(1, "e001");
+	this.Talk.LoadAnimation(1, "e008");
+	this.Talk.LoadAnimation(1, "e009");
+	this.Talk.LoadAnimation(2, "fn01");
+	this.Talk.LoadAnimation(2, "fn03");
+	this.Talk.LoadAnimation(2, "fn09");
+	this.Talk.LoadAnimation(1, "f01_m01");
+	this.Talk.LoadAnimation(1, "f02_m01");
+	this.Talk.LoadAnimation(1, "f01_m02");
+	this.Talk.LoadModelTexture(2, "b");
+	this.WaitTalkLoadModel();
+	this.Talk.SetMode(2);
+	this.Talk.SetCamera("talkCamera01");
+	this.Talk.SetLight("talkLight01");
+	this.Talk.ShowModel(1, 2113, 1, 0);
+	this.Talk.ShowModel(2, 2133, 1, 0);
+	this.Talk.ChangeTextureModel(2, "b");
+	this.Talk.MovePosition(1, 2110, 1.0, 1);
+	this.Talk.PlayAnimationSlotB(1, "f02_m01", true);
+	this.Talk.PlayAnimationSlotB(2, "f02_m01", true);
+	this.Talk.MovePosition(2, 2131, 1.0, 1);
+	this.WaitFrame(0.5);
+	this.Talk.PlayAnimationSlotB(2, "f02_m02", true);
+	this.MessageTalk(300);
+	this.Talk.PlayAnimationSlotB(2, "f02_m01", true);
+	this.Talk.SetLastTalkerManageID(-1);
+	this.MessageClose();
+	this.WaitFrame(0.2);
+	this.Talk.PlayAnimation(1, "e009", 0.40000001, true);
+	this.WaitFrame(0.60000002);
+	this.Talk.PlayAnimationSlotB(2, "f07_m02", true);
+	this.MessageTalk(301);
+	this.Talk.PlayAnimationSlotB(2, "f02_m02", true);
+	this.MessageTalk(302);
+	this.Talk.PlayAnimationSlotB(2, "f02_m01", true);
+	this.Talk.SetLastTalkerManageID(-1);
+	this.MessageClose();
+	this.Talk.PlayAnimationSlotB(1, "f01_m02", true);
+	this.Talk.PlayAnimation(1, "e008", 0.44999999, true);
+	this.WaitFrame(0.80000001);
+	this.Talk.PlayAnimationSlotB(2, "f01_m01", true);
+	this.Talk.PlayAnimationSlotB(1, "f01_m01", true);
+	this.Talk.SetLastTalkerManageID(-1);
+	this.Talk.PlayAnimationSlotB(2, "f01_m02", true);
+	this.MessageTalk(303);
+	this.Talk.PlayAnimation(1, "e001", 0.5, true);
+	this.WaitFrame(0.30000001);
+	this.Talk.PlayAnimation(2, "fn09", 0.40000001, true);
+	this.Talk.PlayAnimationSlotB(2, "f02_m02", true);
+	this.MessageTalk(304);
+	this.MessageTalk(305);
+	this.MessageTalk(306);
+	this.Talk.PlayAnimationSlotB(2, "f02_m01", true);
+	this.Talk.SetLastTalkerManageID(-1);
+	this.MessageClose();
+	this.Talk.PlayAnimationSlotB(1, "f02_m01", true);
+	this.Talk.PlayAnimation(1, "e009", 0.2, true);
+	this.WaitFrame(0.5);
+	this.Talk.PlayAnimation(2, "fn01", 0.5, true);
+	this.WaitFrame(0.30000001);
+	this.Talk.PlayAnimationSlotB(2, "f02_m02", true);
+	this.MessageTalk(307);
+	this.Talk.PlayAnimationSlotB(2, "f02_m01", true);
+	this.Talk.SetLastTalkerManageID(-1);
+	this.MessageClose();
+	this.Talk.MovePosition(1, 2113, 1.5, 1);
+	this.Talk.MovePosition(2, 2133, 1.5, 1);
+	this.Talk.HideModel(1, 2, 0.5);
+	this.Talk.HideModel(2, 2, 0.5);
+	this.WaitFrame(0.5);
+	this.TalkExit();
+	this.WaitFrame(0.1);
+}
+
+function s111_t05_0101()
+{
+	this.Talk.Load("quest_111");
+	this.Talk.LoadModel(1, this.Common.GetPlayerModelName(), 1);
+	this.Talk.LoadModel(2, "npc002", 4);
+	this.Talk.LoadModel(3, "chr050", 2);
+	this.Talk.LoadModel(4, "chr151", 3);
+	this.Talk.LoadAnimation(1, "e001");
+	this.Talk.LoadAnimation(1, "e003");
+	this.Talk.LoadAnimation(1, "e008");
+	this.Talk.LoadAnimation(1, "e009");
+	this.Talk.LoadAnimation(1, "e114");
+	this.Talk.LoadAnimation(2, "e001");
+	this.Talk.LoadAnimation(2, "e005");
+	this.Talk.LoadAnimation(2, "e009");
+	this.Talk.LoadAnimation(3, "bn01");
+	this.Talk.LoadAnimation(4, "bn01");
+	this.Talk.LoadAnimation(1, "f01_m01");
+	this.Talk.LoadAnimation(2, "f02_m01");
+	this.Talk.LoadAnimation(2, "f06_m01");
+	this.Talk.LoadAnimation(2, "f02_m02");
+	this.Talk.LoadAnimation(2, "f06_m02");
+	this.WaitTalkLoadModel();
+	this.Talk.SetMode(2);
+	this.Talk.SetCamera("talkCamera01");
+	this.Talk.SetLight("talkLight01");
+	this.Talk.ShowModel(1, 4113, 1, 0);
+	this.Talk.ShowModel(2, 4133, 1, 0);
+	this.Talk.ShowModel(3, 7075, 1, 0);
+	this.Talk.ShowModel(4, 7075, 1, 0);
+	this.Talk.MovePosition(1, 4110, 1.0, 1);
+	this.Talk.MovePosition(2, 4132, 1.0, 1);
+	this.Talk.PlayAnimation(2, "e005", 0, true);
+	this.Talk.PlayAnimationSlotB(2, "f06_m01", true);
+	this.Talk.MovePosition(3, 7078, 1.0, 1);
+	this.Talk.MovePosition(4, 7077, 1.0, 1);
+	this.WaitFrame(0.5);
+	this.MessageTalk(100);
+	this.MessageTalk(101);
+	this.Talk.PlayAnimationSlotB(2, "f06_m02", true);
+	this.MessageTalk(102);
+	this.Talk.PlayAnimation(2, "e001", 0.5, true);
+	this.Talk.PlayAnimationSlotB(2, "f02_m02", true);
+	this.MessageTalk(103);
+	this.Talk.PlayAnimationSlotB(2, "f02_m01", true);
+	this.MessageClose();
+	this.Talk.MovePosition(3, 5004, 1.0, 1);
+	this.Talk.MovePosition(4, 4146, 1.0, 1);
+	this.WaitFrame(0.5);
+	this.Talk.PlayAnimationSlotB(2, "f02_m02", true);
+	this.MessageTalk(104);
+	this.Talk.PlayAnimationSlotB(2, "f02_m01", true);
+	this.Talk.PlayAnimation(1, "e114", 0.34999999, true);
+	this.MessageTalk(105);
+	this.Talk.PlayAnimationSlotB(2, "f02_m02", true);
+	this.Talk.PlayAnimation(2, "e009", 0.40000001, true);
+	this.MessageTalk(106);
+	this.Talk.PlayAnimationSlotB(2, "f02_m01", true);
+	this.MessageClose();
+	this.WaitFrame(0.5);
+	this.Talk.PlayAnimation(1, "e008", 0.5, true);
+	this.Talk.PlayAnimationSlotB(1, "f09_m01", true);
+	this.MessageTalk(110);
+	this.Talk.SetLastTalkerManageID(-1);
+	this.MessageTalk(111);
+	this.MessageTalk(112);
+	this.Talk.PlayAnimation(1, "e001", 0.5, true);
+	this.Talk.PlayAnimationSlotB(1, "f01_m01", true);
+	this.Talk.PlayAnimation(4, "e005", 0.5, true);
+	this.MessageTalk(113);
+	this.Talk.PlayAnimation(3, "e002", 0.5, true);
+	this.Talk.PlayAnimation(1, "e003", 0.40000001, true);
+	this.MessageTalk(114);
+	this.MessageTalk(115);
+	this.Talk.PlayAnimation(3, "e002_end", 0.2, false);
+	this.WaitFrame(0.30000001);
+	this.Talk.PlayAnimation(4, "e004", 0.5, false);
+	this.MessageTalk(116);
+	this.Talk.PlayAnimation(2, "e006", 0.2, true);
+	this.Talk.PlayAnimationSlotB(2, "f03_m02", true);
+	this.MessageTalk(117);
+	this.Talk.PlayAnimationSlotB(2, "f03_m01", true);
+	this.Talk.PlayAnimation(1, "e003_end", 0.2, false);
+	this.Talk.SetLastTalkerManageID(-1);
+	this.MessageTalk(118);
+	this.MessageTalk(119);
+	this.Talk.PlayAnimation(2, "e005", 0.40000001, true);
+	this.MessageTalk(120);
+	this.Talk.PlayAnimationSlotB(2, "f03_m01", true);
+	this.Talk.PlayAnimation(1, "e009", 0.5, true);
+	this.Talk.PlayAnimationSlotB(1, "f02_m01", true);
+	this.MessageTalk(121);
+	this.MessageClose();
+	this.Talk.MovePosition(1, 4113, 1.5, 1);
+	this.Talk.MovePosition(2, 4133, 1.5, 1);
+	this.Talk.MovePosition(3, 7075, 1.5, 1);
+	this.Talk.MovePosition(4, 7075, 1.5, 1);
+	this.Talk.HideModel(1, 2, 0.5);
+	this.Talk.HideModel(2, 2, 0.5);
+	this.Talk.HideModel(3, 2, 0.5);
+	this.Talk.HideModel(4, 2, 0.5);
+	this.WaitFrame(0.5);
+	this.TalkExit();
+	this.WaitFrame(0.1);
+}
+
+function s111_t05_0201()
+{
+	this.Sound.StopBGM(0.2);
+	this.Sound.PlayBGM("M50", 0);
+	this.Talk.Load("quest_111");
+	this.Talk.LoadModel(1, this.Common.GetPlayerModelName(), 1);
+	this.Talk.LoadModel(2, "npc002", 4);
+	this.Talk.LoadModel(3, "chr050", 2);
+	this.Talk.LoadModel(4, "chr151", 3);
+	this.Talk.LoadAnimation(1, "e001");
+	this.Talk.LoadAnimation(2, "e001");
+	this.Talk.LoadAnimation(3, "bn01");
+	this.Talk.LoadAnimation(3, "e004");
+	this.Talk.LoadAnimation(4, "bn01");
+	local result;
+	this.WaitTalkLoadModel();
+	this.Talk.SetMode(2);
+	this.Talk.SetCamera("talkCamera01");
+	this.Talk.SetLight("talkLight01");
+	this.Talk.ShowModel(1, 4113, 1, 0);
+	this.Talk.ShowModel(2, 4133, 1, 0);
+	this.Talk.ShowModel(3, 5003, 1, 0);
+	this.Talk.ShowModel(4, 4143, 1, 0);
+	this.Talk.MovePosition(1, 4110, 1.0, 1);
+	this.Talk.MovePosition(2, 4132, 1.0, 1);
+	this.Talk.MovePosition(3, 5004, 1.0, 1);
+	this.Talk.MovePosition(4, 4136, 1.0, 1);
+	this.Talk.PlayAnimationSlotB(2, "f02_m01", true);
+	this.WaitFrame(0.5);
+	this.Talk.PlayAnimation(2, "e004", 0.2, true);
+	this.Talk.PlayAnimationSlotB(2, "f03_m02", true);
+	this.MessageTalk(151);
+	this.Talk.PlayAnimation(2, "e001", 0.5, true);
+	this.Talk.PlayAnimationSlotB(2, "f02_m02", true);
+	this.MessageTalk(152);
+	this.Talk.PlayAnimationSlotB(2, "f02_m01", true);
+	this.Talk.PlayAnimation(4, "e002", 0.5, true);
+	this.Talk.SetLastTalkerManageID(-1);
+	this.MessageTalk(153);
+	this.Talk.PlayAnimation(4, "bn01", 0.5, true);
+	this.Talk.PlayAnimation(3, "e002", 0.5, true);
+	this.MessageTalk(154);
+	this.Talk.PlayAnimation(3, "bn01", 0.5, true);
+	this.Talk.PlayAnimationSlotB(2, "f02_m02", true);
+	this.MessageTalk(155);
+	this.Talk.PlayAnimationSlotB(2, "f02_m01", true);
+	this.MessageTalk(156);
+	this.Talk.PlayAnimation(2, "e008", 0.5, true);
+	this.Talk.PlayAnimationSlotB(2, "f01_m02", true);
+	this.MessageTalk(157);
+	this.Talk.PlayAnimationSlotB(2, "f01_m01", true);
+	this.Talk.MovePosition(1, 4111, 1.0, 1);
+	this.Talk.PlayAnimation(1, "e008", 0.5, true);
+	this.MessageTalkSel(3, 158);
+	result = this.Talk.GetResultSelectedNum();
+
+	switch(result)
+	{
+	case 0:
+		this.Talk.MovePosition(1, 4110, 1.0, 1);
+		this.Talk.PlayAnimation(1, "e001", 0.44999999, true);
+		this.Talk.PlayAnimation(2, "e005", 0.30000001, true);
+		this.Talk.PlayAnimationSlotB(2, "f06_m02", true);
+		this.MessageTalk(159);
+		this.MessageTalk(160);
+		this.MessageTalk(161);
+		this.Talk.PlayAnimationSlotB(2, "f06_m01", true);
+		this.MessageClose();
+		break;
+
+	case 1:
+		this.Talk.MovePosition(1, 4110, 1.0, 1);
+		this.Talk.PlayAnimation(1, "e001", 0.44999999, true);
+		this.Talk.PlayAnimation(2, "e005", 0.30000001, true);
+		this.Talk.PlayAnimationSlotB(2, "f06_m02", true);
+		this.MessageTalk(162);
+		this.MessageTalk(163);
+		this.MessageTalk(164);
+		this.Talk.PlayAnimationSlotB(2, "f06_m01", true);
+		this.MessageClose();
+		break;
+
+	case 2:
+		this.Talk.MovePosition(1, 4110, 1.0, 1);
+		this.Talk.PlayAnimation(1, "e001", 0.44999999, true);
+		this.Talk.PlayAnimation(2, "e005", 0.30000001, true);
+		this.Talk.PlayAnimationSlotB(2, "f06_m02", true);
+		this.MessageTalk(165);
+		this.MessageTalk(166);
+		this.MessageTalk(167);
+		this.Talk.PlayAnimationSlotB(2, "f06_m01", true);
+		this.MessageClose();
+		break;
+	}
+
+	this.Talk.PlayAnimation(2, "e008", 0.30000001, true);
+	this.WaitFrame(0.30000001);
+	this.Talk.PlayAnimationSlotB(2, "f01_m02", true);
+	this.MessageTalk(168);
+	this.Talk.PlayAnimationSlotB(2, "f02_m02", true);
+	this.MessageTalk(174);
+	this.MessageTalk(169);
+	this.Talk.PlayAnimation(1, "e003", 0.2, true);
+	this.Talk.PlayAnimationSlotB(1, "f08_m01", true);
+	this.Talk.PlayAnimationSlotB(2, "f02_m01", true);
+	this.MessageTalk(170);
+	this.Talk.SetLastTalkerManageID(-1);
+	this.MessageTalk(171);
+	this.MessageClose();
+	this.Talk.PlayAnimationSlotB(1, "f01_m01", true);
+	this.Talk.PlayAnimation(1, "e003_end", 0.30000001, false);
+	this.WaitFrame(0.30000001);
+	this.Talk.PlayAnimation(1, "e001", 0.40000001, true);
+	this.Talk.PlayAnimation(3, "e002", 0.5, true);
+	this.MessageTalk(172);
+	this.Talk.PlayAnimation(3, "bn01", 0.5, true);
+	this.Talk.PlayAnimation(2, "e004", 0.40000001, true);
+	this.Talk.PlayAnimationSlotB(2, "f03_m02", true);
+	this.Talk.PlayAnimationSlotB(1, "f02_m01", true);
+	this.MessageTalk(173);
+	this.Talk.PlayAnimationSlotB(2, "f03_m01", true);
+	this.MessageClose();
+	this.Sound.StopBGM(2.0);
+	this.Talk.PlayAnimationSlotB(1, "f03_m01", true);
+	this.Talk.PlayAnimation(1, "e009", 0.5, true);
+	this.WaitFrame(1.0);
+	this.Talk.MovePosition(1, 4113, 1.5, 1);
+	this.Talk.MovePosition(2, 4133, 1.5, 1);
+	this.Talk.MovePosition(3, 5003, 1.5, 1);
+	this.Talk.MovePosition(4, 4143, 1.5, 1);
+	this.Talk.HideModel(1, 2, 0.5);
+	this.Talk.HideModel(2, 2, 0.5);
+	this.Talk.HideModel(3, 2, 0.5);
+	this.Talk.HideModel(4, 2, 0.5);
+	this.WaitFrame(0.5);
+	this.TalkExit();
+	this.WaitFrame(0.1);
+}
+
+function s102_t05_0101()
+{
+	this.Talk.Load("quest_102");
+	this.Talk.LoadCommunication(3006, 6000);
+	this.Talk.LoadCommunication_Ani("e001");
+	this.Talk.LoadCommunication_Ani("f02_m01");
+	this.Talk.LoadCommunication_Ani("f02_m02");
+	this.Talk.LoadModel(1, this.Common.GetPlayerModelName(), 1);
+	this.Talk.LoadModel(2, "mob004", 2);
+	this.Talk.LoadAnimation(1, "e001");
+	this.Talk.LoadAnimation(1, "e003");
+	this.Talk.LoadAnimation(1, "e003_end");
+	this.Talk.LoadAnimation(1, "e112");
+	this.Talk.LoadAnimation(2, "fn01");
+	this.Talk.LoadAnimation(2, "fn08");
+	this.Talk.LoadAnimation(1, "f06_m01");
+	this.Talk.LoadAnimation(1, "f09_m01");
+	this.Talk.LoadAnimation(1, "f01_m02");
+	this.Talk.LoadModelTexture(2, "c");
+	this.WaitTalkLoadModel();
+	this.WaitTalkLoadModelCommunication();
+	this.Talk.SetMode(2);
+	this.Talk.SetCamera("talkCamera01");
+	this.Talk.SetLight("talkLight01");
+	this.Talk.ShowModel(1, 4113, 1, 0);
+	this.Talk.ShowModel(2, 4233, 1, 0);
+	this.Talk.ChangeTextureModel(2, "c");
+	this.Talk.MovePosition(1, 4110, 1.0, 1);
+	this.Talk.MovePosition(2, 4230, 1.0, 1);
+	this.WaitFrame(0.5);
+	this.MessageTalk(100);
+	this.MessageTalk(101);
+	this.MessageClose();
+	this.Talk.MovePosition(2, 4130, 0.5, 1);
+	this.WaitFrame(0.30000001);
+	this.Talk.MovePosition(2, 4130, 0.5, 1);
+	this.WaitFrame(0.2);
+	this.Talk.PlayAnimation(2, "fn08", 0.25, true);
+	this.Talk.PlayAnimationSlotB(2, "f01_m02", true);
+	this.MessageTalk(102);
+	this.Talk.PlayAnimationSlotB(2, "f01_m01", true);
+	this.Talk.SetLastTalkerManageID(-1);
+	this.MessageClose();
+	this.Talk.PlayAnimation(1, "e003", 0.2, true);
+	this.Talk.PlayAnimationSlotB(1, "f01_m02", true);
+	this.WaitFrame(1.0);
+	this.Talk.PlayAnimation(2, "fn02", 0.5, true);
+	this.Talk.PlayAnimationSlotB(1, "f01_m01", true);
+	this.Talk.SetLastTalkerManageID(-1);
+	this.Talk.PlayAnimationSlotB(2, "f01_m02", true);
+	this.MessageTalk(103);
+	this.MessageTalk(104);
+	this.Talk.PlayAnimationSlotB(2, "f01_m01", true);
+	this.Talk.SetLastTalkerManageID(-1);
+	this.MessageClose();
+	this.Talk.PlayAnimation(1, "e003_end", 0.30000001, false);
+	this.WaitFrame(0.30000001);
+	this.Talk.PlayAnimation(1, "e001", 0.40000001, true);
+	this.Talk.MovePosition(2, 4230, 1.0, 1);
+	this.WaitFrame(0.80000001);
+	this.MessageTalk(105);
+	this.MessageTalk(106);
+	this.MessageTalk(107);
+	this.MessageTalk(108);
+	this.MessageTalk(114);
+	this.Talk.PlayAnimation(2, "fn08", 0.30000001, true);
+	this.MessageTalk(109);
+	this.MessageClose();
+	this.Talk.PlayAnimation(1, "e112", 0.40000001, false);
+	this.Talk.PlayAnimationSlotB(1, "f06_m01", true);
+	this.WaitFrame(1.5);
+	this.Talk.PlayAnimationSlotB(1, "f09_m01", true);
+	this.Sound.PlaySE("ev_017", true);
+	this.WaitFrame(0.80000001);
+	this.Talk.PlayAnimationSlotB(1, "f01_m01", true);
+	this.Talk.PlayAnimation(1, "e511", 0.40000001, true);
+	this.Sound.StopSE("ev_017", 0.1);
+	this.Sound.PlaySE("ev_018", false);
+	this.WaitFrame(1.0);
+	this.Talk.MovePosition(1, 4113, 1.5, 1);
+	this.Talk.MovePosition(2, 4233, 1.5, 1);
+	this.Talk.HideModel(1, 2, 0.5);
+	this.Talk.HideModel(2, 2, 0.5);
+	this.WaitFrame(0.5);
+	this.ShowCommunication("e001");
+	this.Talk.PlayCommunication_AniSlotB("f02_m02", true);
+	this.MessageTalk(110);
+	this.MessageTalk(111);
+	this.MessageTalk(112);
+	this.MessageTalk(113);
+	this.Talk.PlayCommunication_AniSlotB("f02_m01", true);
+	this.MessageClose();
+	this.CommunicationClose();
+	this.TalkExit();
+	this.WaitFrame(0.1);
+}
+
+function s102_t05_0401()
+{
+	this.Sound.StopBGM(0.2);
+	this.Sound.PlayBGM("M44", 0);
+	this.Talk.Load("quest_102");
+	this.Talk.LoadModel(1, this.Common.GetPlayerModelName(), 1);
+	this.Talk.LoadModel(2, "npc002", 2);
+	this.Talk.LoadModel(3, "npc005", 3);
+	this.Talk.LoadModel(4, "npc003", 4);
+	this.Talk.LoadAnimation(1, "fw01");
+	this.Talk.LoadAnimation(1, "e001");
+	this.Talk.LoadAnimation(1, "e008");
+	this.Talk.LoadAnimation(2, "fw01");
+	this.Talk.LoadAnimation(2, "e001");
+	this.Talk.LoadAnimation(2, "e005");
+	this.Talk.LoadAnimation(2, "e006");
+	this.Talk.LoadAnimation(3, "fw01");
+	this.Talk.LoadAnimation(3, "e001");
+	this.Talk.LoadAnimation(3, "e003");
+	this.Talk.LoadAnimation(3, "e003_end");
+	this.Talk.LoadAnimation(4, "fw01");
+	this.Talk.LoadAnimation(4, "e001");
+	this.Talk.LoadAnimation(1, "f01_m01");
+	this.Talk.LoadAnimation(1, "f02_m01");
+	this.Talk.LoadAnimation(1, "f09_m01");
+	this.Talk.LoadAnimation(2, "f01_m01");
+	this.Talk.LoadAnimation(2, "f02_m01");
+	this.Talk.LoadAnimation(2, "f03_m01");
+	this.Talk.LoadAnimation(2, "f07_m01");
+	this.Talk.LoadAnimation(3, "f01_m01");
+	this.Talk.LoadAnimation(3, "f02_m01");
+	this.Talk.LoadAnimation(4, "f01_m01");
+	this.WaitTalkLoadModel();
+	this.Talk.SetMode(2);
+	this.Talk.SetCamera("talkCamera01");
+	this.Talk.SetLight("talkLight01");
+	this.Talk.ShowModel(1, 4113, 1, 0);
+	this.Talk.ShowModel(2, 4133, 1, 0);
+	this.Talk.ShowModel(3, 4133, 1, 0);
+	this.Talk.ShowModel(4, 4133, 1, 0);
+	this.Talk.MovePosition(1, 4110, 1.0, 1);
+	this.Talk.MovePosition(2, 4132, 1.0, 1);
+	this.Talk.MovePosition(3, 4131, 1.0, 1);
+	this.WaitFrame(0.5);
+	this.Talk.PlayAnimation(2, "e006", 0.2, true);
+	this.Talk.PlayAnimationSlotB(2, "f07_m02", true);
+	this.MessageTalk(351);
+	this.MessageTalk(352);
+	this.Talk.PlayAnimationSlotB(2, "f07_m01", true);
+	this.Talk.PlayAnimation(3, "e003", 0.2, true);
+	this.Talk.PlayAnimationSlotB(3, "f02_m02", true);
+	this.MessageTalk(353);
+	this.Talk.PlayAnimationSlotB(2, "f01_m01", true);
+	this.MessageTalk(354);
+	this.Talk.PlayAnimationSlotB(3, "f02_m01", true);
+	this.Talk.PlayAnimation(2, "e001", 0.34999999, true);
+	this.Talk.PlayAnimationSlotB(2, "f02_m01", true);
+	this.Talk.PlayAnimation(3, "e003_end", 0.5, false);
+	this.WaitFrame(0.5);
+	this.Talk.PlayAnimation(3, "e001", 0.40000001, true);
+	this.Talk.PlayAnimationSlotB(3, "f02_m02", true);
+	this.MessageTalk(355);
+	this.Talk.PlayAnimationSlotB(3, "f02_m01", true);
+	this.Talk.PlayAnimation(1, "e008", 0.40000001, true);
+	this.Talk.PlayAnimationSlotB(1, "f02_m01", true);
+	this.MessageTalk(356);
+	this.MessageClose();
+	this.Sound.StopBGM(1.2);
+	this.Sound.StopAllSE(0.5);
+	this.Fade.Out(0, 0.30000001);
+	this.WaitFrame(1.6);
+	this.Talk.HideModel(1, 2, 0);
+	this.Talk.HideModel(2, 2, 0);
+	this.Talk.HideModel(3, 2, 0);
+	this.Fade.BackOut(0, 0.1);
+	this.WaitFrame(0.30000001);
+	this.Sound.PlaySE("ev_074", true);
+	this.Fade.In(0, 0.30000001);
+	this.WaitFrame(0.30000001);
+	this.MessageTalk(357);
+	this.MessageTalk(358);
+	this.MessageTalk(359);
+	this.Sound.PlaySE("ev_020", false);
+	this.MessageTalk(360);
+	this.MessageTalk(361);
+	this.MessageTalk(362);
+	this.MessageTalk(363);
+	this.MessageTalk(364);
+	this.MessageTalk(365);
+	this.MessageClose();
+	this.Sound.StopSE("ev_074", 1.0);
+	this.WaitFrame(1.0);
+	this.Fade.Out(0, 0);
+	this.Talk.ShowModel(1, 4110, 2, 0);
+	this.Talk.ShowModel(2, 4132, 2, 0);
+	this.Talk.ShowModel(3, 4131, 2, 0);
+	this.Talk.PlayAnimationSlotB(1, "f02_m01", true);
+	this.Talk.PlayAnimationSlotB(2, "f02_m01", true);
+	this.Talk.PlayAnimationSlotB(3, "f02_m01", true);
+	this.Fade.BackIn(0, 0.1);
+	this.Fade.In(0, 1);
+	this.Sound.PlayBGM("M44", 0);
+	this.WaitFrame(1.0);
+	this.Talk.PlayAnimationSlotB(3, "f02_m02", true);
+	this.MessageTalk(366);
+	this.MessageTalk(367);
+	this.Talk.PlayAnimationSlotB(2, "f03_m02", true);
+	this.Talk.PlayAnimationSlotB(3, "f02_m01", true);
+	this.MessageTalk(368);
+	this.Talk.PlayAnimationSlotB(2, "f03_m01", true);
+	this.MessageClose();
+	this.Talk.PlayAnimation(1, "e009", 0.40000001, true);
+	this.WaitFrame(0.80000001);
+	this.Sound.StopBGM(1.2);
+	this.Talk.MovePosition(1, 4150, 0.5, 1);
+	this.WaitFrame(0.2);
+	this.Sound.PlaySE("ev_056", false);
+	this.Talk.PlayAnimation(1, "fw01", 0.2, true);
+	this.Talk.PlayAnimation(2, "fw01", 0.2, true);
+	this.Talk.PlayAnimation(3, "fw01", 0.2, true);
+	this.Talk.MovePosition(1, 4153, 2.5, 1);
+	this.Talk.MovePosition(3, 4153, 2.5, 1);
+	this.Talk.MovePosition(2, 4156, 2.5, 1);
+	this.WaitFrame(0.1);
+	this.Sound.PlaySE("ev_056", false);
+	this.WaitFrame(0.1);
+	this.Sound.PlaySE("ev_056", false);
+	this.WaitFrame(0.1);
+	this.Talk.HideModel(1, 2, 0.5);
+	this.WaitFrame(0.30000001);
+	this.Talk.HideModel(3, 2, 0.5);
+	this.Sound.StopSE("ev_056", 1.2);
+	this.WaitFrame(1.0);
+	this.Talk.PlayAnimation(2, "e001", 0.30000001, true);
+	this.Talk.PlayAnimationSlotB(2, "f13_m01", true);
+	this.WaitFrame(0.5);
+	this.Sound.PlayBGM("M51", 0);
+	this.Talk.MovePosition(2, 4110, 1.2, 1);
+	this.Talk.MovePosition(4, 4136, 1.5, 1);
+	this.WaitFrame(1.0);
+	this.MessageTalk(369);
+	this.MessageClose();
+	this.Talk.PlayAnimationSlotB(2, "f01_m02", true);
+	this.MessageTalk(370);
+	this.Talk.PlayAnimationSlotB(2, "f01_m01", true);
+	this.MessageTalk(371);
+	this.MessageClose();
+	this.Talk.MovePosition(4, 4175, 0.5, 1);
+	this.WaitFrame(0.30000001);
+	this.Sound.PlaySE("ev_056", false);
+	this.Talk.PlayAnimation(4, "fw01", 0.2, true);
+	this.Talk.MovePosition(4, 4173, 2.5, 1);
+	this.WaitFrame(0.30000001);
+	this.Sound.StopSE("ev_056", 1.5);
+	this.Talk.HideModel(4, 2, 0.5);
+	this.WaitFrame(1.0);
+	this.Talk.ShowModel(3, 4113, 2, 0);
+	this.Talk.PlayAnimationSlotB(3, "f01_m02", true);
+	this.Talk.MovePosition(3, 4112, 1.0, 1);
+	this.Talk.MovePosition(2, 4111, 1.0, 1);
+	this.MessageTalk(372);
+	this.Talk.PlayAnimationSlotB(3, "f01_m01", true);
+	this.Talk.PlayAnimation(2, "e005", 0.2, true);
+	this.Talk.PlayAnimationSlotB(2, "f01_m02", true);
+	this.MessageTalk(373);
+	this.Talk.PlayAnimationSlotB(2, "f01_m01", true);
+	this.MessageClose();
+	this.Sound.StopBGM(2.0);
+	this.Talk.MovePosition(2, 4113, 1.5, 1);
+	this.Talk.MovePosition(3, 4113, 1.5, 1);
+	this.Talk.HideModel(2, 2, 0.5);
+	this.Talk.HideModel(3, 2, 0.5);
+	this.WaitFrame(0.5);
+	this.TalkExit();
+	this.WaitFrame(0.1);
+}
+
+function s102_t05_0601()
+{
+	this.Sound.StopBGM(0.2);
+	this.Sound.PlayBGM("M44", 0);
+	this.Talk.Load("quest_102");
+	this.Talk.LoadModel(1, this.Common.GetPlayerModelName(), 1);
+	this.Talk.LoadModel(2, "npc002", 2);
+	this.Talk.LoadModel(3, "npc005", 3);
+	this.Talk.LoadModel(4, "npc003", 4);
+	this.Talk.LoadAnimation(1, "e001");
+	this.Talk.LoadAnimation(1, "e003");
+	this.Talk.LoadAnimation(2, "e001");
+	this.Talk.LoadAnimation(2, "e003");
+	this.Talk.LoadAnimation(2, "e005");
+	this.Talk.LoadAnimation(2, "e006");
+	this.Talk.LoadAnimation(2, "e008");
+	this.Talk.LoadAnimation(2, "e009");
+	this.Talk.LoadAnimation(3, "e001");
+	this.Talk.LoadAnimation(3, "e003");
+	this.Talk.LoadAnimation(3, "e003_end");
+	this.Talk.LoadAnimation(3, "e008");
+	this.Talk.LoadAnimation(3, "e008_end");
+	this.Talk.LoadAnimation(1, "f01_m01");
+	this.Talk.LoadAnimation(1, "f02_m01");
+	this.Talk.LoadAnimation(1, "f03_m01");
+	this.Talk.LoadAnimation(2, "f01_m01");
+	this.Talk.LoadAnimation(2, "f01_e01");
+	this.Talk.LoadAnimation(2, "f02_m01");
+	this.Talk.LoadAnimation(2, "f03_m01");
+	this.Talk.LoadAnimation(2, "f01_m02");
+	this.Talk.LoadAnimation(2, "f02_m02");
+	this.Talk.LoadAnimation(2, "f03_m02");
+	this.Talk.LoadAnimation(3, "f01_m01");
+	this.Talk.LoadAnimation(3, "f02_m01");
+	this.Talk.LoadAnimation(3, "f03_m01");
+	this.Talk.LoadAnimation(3, "f06_m01");
+	this.Talk.LoadAnimation(3, "f01_m02");
+	this.Talk.LoadAnimation(3, "f02_m02");
+	this.Talk.LoadAnimation(3, "f07_m02");
+	this.WaitTalkLoadModel();
+	this.Talk.SetMode(2);
+	this.Talk.SetCamera("talkCamera01");
+	this.Talk.SetLight("talkLight01");
+	this.Talk.ShowModel(1, 4113, 1, 0);
+	this.Talk.ShowModel(2, 4133, 1, 0);
+	this.Talk.ShowModel(3, 4133, 1, 0);
+	this.Talk.MovePosition(1, 4110, 1.0, 1);
+	this.Talk.MovePosition(2, 4132, 1.0, 1);
+	this.Talk.MovePosition(3, 4131, 1.0, 1);
+	this.Talk.PlayAnimationSlotB(1, "f02_m01", true);
+	this.WaitFrame(0.5);
+	this.Talk.PlayAnimation(2, "e003", 0.2, true);
+	this.Talk.PlayAnimationSlotB(2, "f01_m02", true);
+	this.MessageTalk(550);
+	this.Talk.PlayAnimationSlotB(2, "f01_m01", true);
+	this.Talk.PlayAnimation(3, "e003", 0.2, true);
+	this.Talk.PlayAnimationSlotB(3, "f01_m02", true);
+	this.MessageTalk(551);
+	this.Talk.MovePosition(3, 4171, 0.5, 1);
+	this.MessageTalk(552);
+	this.Talk.PlayAnimationSlotB(3, "f01_m01", true);
+	this.Talk.PlayAnimationSlotB(2, "f01_m02", true);
+	this.MessageTalk(553);
+	this.Talk.PlayAnimation(2, "e006", 0.30000001, true);
+	this.Talk.PlayAnimationSlotB(2, "f02_m02", true);
+	this.MessageTalk(554);
+	this.Talk.PlayAnimation(2, "e005", 0.5, true);
+	this.Talk.PlayAnimationSlotB(2, "f03_m02", true);
+	this.MessageTalk(555);
+	this.Talk.PlayAnimationSlotB(2, "f03_m01", true);
+	this.Talk.PlayAnimation(3, "e003_end", 0.5, false);
+	this.WaitFrame(0.5);
+	this.Talk.PlayAnimation(3, "e001", 0.40000001, true);
+	this.Talk.MovePosition(3, 4131, 1.0, 1);
+	this.Talk.PlayAnimationSlotB(3, "f01_m02", true);
+	this.MessageTalk(556);
+	this.Talk.PlayAnimationSlotB(3, "f01_m01", true);
+	this.Talk.PlayAnimation(1, "e003", 0.2, true);
+	this.MessageTalk(557);
+	this.MessageClose();
+	this.Sound.StopBGM(1.2);
+	this.Sound.StopAllSE(0.5);
+	this.Fade.Out(0, 0.30000001);
+	this.WaitFrame(1.6);
+	this.Sound.PlaySE("ev_074", true);
+	this.Talk.HideModel(1, 2, 0);
+	this.Talk.HideModel(2, 2, 0);
+	this.Talk.HideModel(3, 2, 0);
+	this.Fade.BackOut(0, 0.1);
+	this.WaitFrame(0.30000001);
+	this.Fade.In(0, 0.30000001);
+	this.WaitFrame(0.30000001);
+	this.MessageTalk(558);
+	this.MessageTalk(559);
+	this.MessageTalk(560);
+	this.MessageTalk(561);
+	this.MessageTalk(562);
+	this.Sound.PlaySE("ev_020", false);
+	this.MessageTalk(563);
+	this.MessageTalk(564);
+	this.MessageTalk(565);
+	this.MessageTalk(566);
+	this.MessageTalk(567);
+	this.MessageTalk(568);
+	this.MessageTalk(569);
+	this.MessageClose();
+	this.Fade.Out(0, 0);
+	this.Sound.StopSE("ev_074", 1.0);
+	this.WaitFrame(1.0);
+	this.Talk.ShowModel(1, 4110, 2, 0);
+	this.Talk.ShowModel(2, 4132, 2, 0);
+	this.Talk.ShowModel(3, 4131, 2, 0);
+	this.Talk.PlayAnimationSlotB(1, "f02_m01", true);
+	this.Talk.PlayAnimationSlotB(2, "f03_m01", true);
+	this.Talk.PlayAnimationSlotB(3, "f01_m01", true);
+	this.Fade.BackIn(0, 0.1);
+	this.Fade.In(0, 1);
+	this.Sound.PlayBGM("M44", 0);
+	this.WaitFrame(1.0);
+	this.Talk.PlayAnimation(2, "e009", 0.40000001, true);
+	this.Talk.PlayAnimationSlotB(2, "f03_m02", true);
+	this.MessageTalk(570);
+	this.MessageTalk(571);
+	this.Talk.PlayAnimationSlotB(2, "f02_m01", true);
+	this.Talk.PlayAnimation(3, "e008", 0.2, true);
+	this.Talk.PlayAnimationSlotB(3, "f01_m02", true);
+	this.MessageTalk(572);
+	this.Talk.PlayAnimationSlotB(3, "f01_m01", true);
+	this.Talk.PlayAnimation(3, "e008_end", 0.2, false);
+	this.WaitFrame(0.30000001);
+	this.Talk.PlayAnimationSlotB(3, "f02_m02", true);
+	this.Talk.PlayAnimation(3, "e001", 0.40000001, true);
+	this.MessageTalk(573);
+	this.Talk.PlayAnimationSlotB(2, "f02_m02", true);
+	this.Talk.PlayAnimationSlotB(3, "f02_m01", true);
+	this.MessageTalk(574);
+	this.Talk.MovePosition(3, 4171, 1.0, 1);
+	this.Talk.PlayAnimation(3, "e003", 0.2, true);
+	this.Talk.PlayAnimationSlotB(3, "f06_m02", true);
+	this.Talk.PlayAnimationSlotB(2, "f02_e01", true);
+	this.MessageTalk(575);
+	this.MessageTalk(576);
+	this.Talk.PlayAnimationSlotB(3, "f06_m01", true);
+	this.MessageClose();
+	this.Talk.PlayAnimation(1, "e003", 0.2, true);
+	this.Talk.PlayAnimationSlotB(1, "f03_m01", true);
+	this.Talk.PlayAnimation(2, "e008", 0.2, true);
+	this.Talk.PlayAnimationSlotB(2, "f03_m01", true);
+	this.WaitFrame(2.0);
+	this.Sound.StopBGM(2.0);
+	this.Talk.MovePosition(1, 4113, 1.5, 1);
+	this.Talk.MovePosition(2, 4133, 1.5, 1);
+	this.Talk.MovePosition(3, 4173, 1.5, 1);
+	this.Talk.HideModel(1, 2, 0.5);
+	this.Talk.HideModel(2, 2, 0.5);
+	this.Talk.HideModel(3, 2, 0.5);
+	this.WaitFrame(0.5);
+	this.TalkExit();
+	this.WaitFrame(0.1);
+}
+
+function s202_t05_0301()
+{
+	this.Sound.StopBGM(2.0);
+	this.Talk.Load("quest_202");
+	this.Talk.LoadCommunication(3006, 6000);
+	this.Talk.LoadCommunication_Ani("e001");
+	this.Talk.LoadCommunication_Ani("f01_m01");
+	this.Talk.LoadCommunication_Ani("f01_m02");
+	this.Talk.LoadModel(1, this.Common.GetPlayerModelName(), 1);
+	this.Talk.LoadModel(2, "mob120", 2);
+	this.Talk.LoadAnimation(1, "e001");
+	this.Talk.LoadAnimation(1, "e005");
+	this.Talk.LoadAnimation(2, "fn01");
+	this.Talk.LoadAnimation(1, "f07_m01");
+	this.Talk.LoadAnimation(1, "f08_m01");
+	this.Talk.LoadAnimation(1, "f09_m01");
+	this.Talk.LoadAnimation(1, "f04_m02");
+	this.Talk.LoadAnimation(1, "f05_m02");
+	this.Talk.LoadAnimation(2, "f01_m01");
+	this.Talk.LoadAnimation(2, "f02_m01");
+	this.Talk.LoadAnimation(2, "f02_m02");
+	this.WaitTalkLoadModel();
+	this.Talk.SetMode(2);
+	this.Talk.SetCamera("talkCamera01");
+	this.Talk.SetLight("talkLight01");
+	this.Talk.ShowModel(1, 1113, 1, 0);
+	this.Talk.MovePosition(1, 1112, 1.5, 1);
+	this.WaitFrame(0.5);
+	this.Talk.PlayAnimation(1, "e008", 0.5, true);
+	this.Talk.PlayAnimationSlotB(1, "f08_e03", true);
+	this.MessageTalk(401);
+	this.MessageClose();
+	this.Sound.PlaySE("fe_068", false);
+	this.Fade.Out(1, 0.2);
+	this.Fade.BackOut(0, 0.1);
+	this.WaitFrame(0.5);
+	this.Sound.PlayBGM("M35", 0);
+	this.WaitFrame(0.5);
+	this.Talk.HideModel(1, 2, 0);
+	this.Talk.ShowModel(2, 1110, 1, 0);
+	this.Fade.In(1, 0.2);
+	this.WaitFrame(0.2);
+	this.Talk.PlayAnimationSlotB(2, "f01_m02", true);
+	this.MessageTalk(402);
+	this.Talk.MovePosition(2, 1210, 0.2, 1);
+	this.MessageTalk(403);
+	this.Talk.PlayAnimationSlotB(2, "f02_m01", true);
+	this.MessageClose();
+	this.Fade.Out(1, 0.1);
+	this.Fade.BackOut(0, 0.1);
+	this.WaitFrame(0.2);
+	this.Talk.ShowModel(1, 1310, 2, 0);
+	this.Talk.PlayAnimationSlotB(1, "f07_e03", true);
+	this.Talk.HideModel(2, 2, 0);
+	this.Fade.BackIn(0, 0.1);
+	this.Fade.In(1, 0.1);
+	this.Talk.MovePosition(1, 1210, 0.5, 1);
+	this.WaitFrame(0.2);
+	this.Talk.PlayAnimationSlotB(1, "f07_m01", true);
+	this.WaitFrame(1.0);
+	this.Talk.PlayAnimationSlotB(1, "f08_e03", true);
+	this.Talk.PlayAnimation(1, "e005", 0.5, true);
+	this.WaitFrame(1.2);
+	this.WaitFrame(0.5);
+	this.Talk.PlayAnimationSlotB(1, "f09_m01", true);
+	this.Sound.PlaySE("ev_017", true);
+	this.WaitFrame(0.80000001);
+	this.Talk.PlayAnimationSlotB(1, "f01_m01", true);
+	this.Talk.PlayAnimation(1, "e511", 0.40000001, true);
+	this.Sound.StopSE("ev_017", 0.1);
+	this.Sound.PlaySE("ev_018", false);
+	this.WaitFrame(1.0);
+	this.Talk.MovePosition(1, 2113, 1.5, 1);
+	this.Talk.HideModel(1, 2, 0.5);
+	this.WaitFrame(0.5);
+	this.ShowCommunication("e001");
+	this.Talk.PlayCommunication_AniSlotB("f01_m02", true);
+	this.MessageTalk(404);
+	this.MessageTalk(405);
+	this.Talk.PlayCommunication_AniSlotB("f01_m01", true);
+	this.MessageClose();
+	this.CommunicationClose();
+	this.TalkExit();
+	this.WaitFrame(0.1);
+}
+
+function s407_t05_0101()
+{
+	this.Talk.Load("quest_207");
+	this.Talk.LoadCommunication(3006, 6000);
+	this.Talk.LoadCommunication_Ani("e001");
+	this.Talk.LoadCommunication_Ani("e004");
+	this.Talk.LoadCommunication_Ani("e004_end");
+	this.Talk.LoadCommunication_Ani("f02_m01");
+	this.Talk.LoadCommunication_Ani("f02_m02");
+	this.Talk.LoadCommunication_Ani("f07_m02");
+	this.Talk.LoadModel(1, this.Common.GetPlayerModelName(), 1);
+	this.Talk.LoadAnimation(1, "e001");
+	this.WaitTalkLoadModel();
+	this.Talk.SetMode(2);
+	this.Talk.SetCamera("talkCamera01");
+	this.Talk.SetLight("talkLight01");
+	this.Talk.ShowModel(1, 2113, 1, 0);
+	this.Talk.ShowModel(2, 2133, 1, 0);
+	this.ShowCommunication("e001");
+	this.Talk.PlayCommunication_AniSlotB("f02_m02", true);
+	this.MessageTalk(151);
+	this.Talk.PlayCommunication_Ani("e004", 0.2, true);
+	this.Talk.PlayCommunication_AniSlotB("f07_m02", true);
+	this.MessageTalk(152);
+	this.Talk.PlayCommunication_AniSlotB("f02_m02", true);
+	this.MessageTalk(153);
+	this.Talk.PlayCommunication_AniSlotB("f02_m01", true);
+	this.Talk.PlayCommunication_Ani("e004_end", 0.2, true);
+	this.WaitFrame(0.40000001);
+	this.Talk.PlayCommunication_Ani("e001", 0.40000001, true);
+	this.Talk.PlayCommunication_AniSlotB("f02_m02", true);
+	this.MessageTalk(154);
+	this.MessageTalk(155);
+	this.Talk.PlayCommunication_AniSlotB("f02_m01", true);
+	this.MessageClose();
+	this.CommunicationClose();
+	this.TalkExit();
+	this.WaitFrame(0.1);
+}
+
+function s407_t05_0301()
+{
+	this.Sound.StopBGM(0.2);
+	this.Talk.Load("quest_207");
+	this.Talk.LoadModel(1, this.Common.GetPlayerModelName(), 4);
+	this.Talk.LoadModel(2, "mob117", 1);
+	this.Talk.LoadModel(3, "mob119", 3);
+	this.Talk.LoadModel(4, "mob118", 2);
+	this.Talk.LoadModel(5, "mob005", 4);
+	this.Talk.LoadAnimation(1, "e001");
+	this.Talk.LoadAnimation(2, "fn01");
+	this.Talk.LoadAnimation(2, "fn06");
+	this.Talk.LoadAnimation(3, "fn01");
+	this.Talk.LoadAnimation(4, "fn01");
+	this.Talk.LoadAnimation(4, "fn02");
+	this.Talk.LoadAnimation(5, "fn01");
+	this.Talk.LoadAnimation(5, "fn07");
+	this.Talk.LoadAnimation(2, "f02_m01");
+	this.Talk.LoadAnimation(2, "f02_m02");
+	this.Talk.LoadAnimation(3, "f01_m01");
+	this.Talk.LoadAnimation(3, "f01_m02");
+	this.Talk.LoadAnimation(4, "f01_m01");
+	this.Talk.LoadAnimation(4, "f01_m02");
+	this.Talk.LoadAnimation(5, "f01_m01");
+	this.Talk.LoadAnimation(5, "f01_m02");
+	this.Talk.LoadModelTexture(5, "c");
+	this.WaitTalkLoadModel();
+	this.Talk.SetMode(2);
+	this.Talk.SetCamera("talkCamera01");
+	this.Talk.SetLight("talkLight01");
+	this.Talk.ShowModel(2, 4113, 1, 0);
+	this.Talk.ShowModel(3, 4133, 1, 0);
+	this.Talk.ShowModel(4, 4133, 1, 0);
+	this.Talk.ShowModel(5, 4133, 1, 0);
+	this.Talk.ChangeTextureModel(5, "c");
+	this.Talk.MovePosition(2, 4110, 1.0, 1);
+	this.Talk.MovePosition(3, 4131, 1.0, 1);
+	this.Talk.MovePosition(5, 4132, 1.0, 1);
+	this.Talk.PlayAnimation(5, "fn07", 0, true);
+	this.Talk.PlayAnimationSlotB(2, "f02_m01", true);
+	this.WaitFrame(0.5);
+	this.Talk.PlayAnimationSlotB(2, "f02_m02", true);
+	this.MessageTalk(301);
+	this.Talk.PlayAnimationSlotB(2, "f02_m01", true);
+	this.Talk.PlayAnimationSlotB(3, "f01_m02", true);
+	this.MessageTalk(302);
+	this.Talk.PlayAnimationSlotB(3, "f01_m01", true);
+	this.Talk.PlayAnimationSlotB(5, "f01_m02", true);
+	this.MessageTalk(303);
+	this.Talk.PlayAnimationSlotB(5, "f01_m01", true);
+	this.MessageClose();
+	this.Talk.MovePosition(5, 4133, 1.5, 1);
+	this.Talk.MovePosition(3, 4133, 1.5, 1);
+	this.Talk.HideModel(3, 2, 0.5);
+	this.Talk.HideModel(5, 2, 0.5);
+	this.WaitFrame(0.30000001);
+	this.Talk.ShowModel(1, 4133, 1, 0);
+	this.Talk.PlayAnimation(4, "fn02", 0, true);
+	this.Talk.MovePosition(4, 4131, 1.0, 1);
+	this.Talk.MovePosition(1, 4132, 1.0, 1);
+	this.Talk.PlayAnimationSlotB(4, "f01_m02", true);
+	this.MessageTalk(304);
+	this.Talk.PlayAnimationSlotB(4, "f01_m01", true);
+	this.Talk.PlayAnimation(2, "fn06", 0.40000001, true);
+	this.Talk.PlayAnimationSlotB(2, "f02_m02", true);
+	this.MessageTalk(305);
+	this.Talk.PlayAnimationSlotB(2, "f02_m01", true);
+	this.MessageClose();
+	this.Talk.MovePosition(1, 4133, 1.5, 1);
+	this.Talk.MovePosition(2, 4113, 1.5, 1);
+	this.Talk.MovePosition(4, 4133, 1.5, 1);
+	this.Talk.HideModel(1, 2, 0.5);
+	this.Talk.HideModel(2, 2, 0.5);
+	this.Talk.HideModel(4, 2, 0.5);
+	this.WaitFrame(0.5);
+	this.TalkExit();
+	this.WaitFrame(0.1);
+}
+
+function s407_t05_0401()
+{
+	this.Talk.Load("quest_207");
+	this.Talk.LoadModel(1, this.Common.GetPlayerModelName(), 3);
+	this.Talk.LoadModel(2, "mob117", 2);
+	this.Talk.LoadModel(3, "mob005", 1);
+	this.Talk.LoadAnimation(1, "e001");
+	this.Talk.LoadAnimation(1, "e009");
+	this.Talk.LoadAnimation(2, "fn01");
+	this.Talk.LoadAnimation(2, "fn06");
+	this.Talk.LoadAnimation(3, "fn01");
+	this.Talk.LoadAnimation(3, "fn08");
+	this.Talk.LoadAnimation(2, "f08_m01");
+	this.Talk.LoadAnimation(2, "f08_m02");
+	this.Talk.LoadAnimation(3, "f01_m01");
+	this.Talk.LoadAnimation(3, "f01_m02");
+	this.WaitTalkLoadModel();
+	this.Talk.ChangeTextureModel(3, "c");
+	this.Talk.SetMode(2);
+	this.Talk.SetCamera("talkCamera01");
+	this.Talk.SetLight("talkLight01");
+	this.Talk.ShowModel(1, 4133, 1, 0);
+	this.Talk.ShowModel(2, 4113, 1, 0);
+	this.Talk.ShowModel(3, 4133, 1, 0);
+	this.Talk.ChangeTextureModel(3, "c");
+	this.Talk.MovePosition(1, 4132, 1.0, 1);
+	this.Talk.MovePosition(2, 4110, 1.0, 1);
+	this.Talk.MovePosition(3, 4131, 1.0, 1);
+	this.Talk.PlayAnimation(3, "fn08", 0, true);
+	this.Talk.PlayAnimationSlotB(2, "f08_m01", true);
+	this.Talk.PlayAnimation(2, "fn06", 0, true);
+	this.WaitFrame(0.5);
+	this.Talk.PlayAnimationSlotB(2, "f08_m02", true);
+	this.MessageTalk(351);
+	this.Talk.PlayAnimationSlotB(2, "f08_m01", true);
+	this.MessageClose();
+	this.Talk.PlayAnimation(1, "e009", 0.2, true);
+	this.WaitFrame(0.80000001);
+	this.Talk.PlayAnimationSlotB(3, "f01_m02", true);
+	this.MessageTalk(352);
+	this.Talk.PlayAnimationSlotB(3, "f01_m01", true);
+	this.MessageClose();
+	this.Talk.MovePosition(1, 4133, 1.5, 1);
+	this.Talk.MovePosition(2, 4113, 1.5, 1);
+	this.Talk.MovePosition(3, 4133, 1.5, 1);
+	this.Talk.HideModel(1, 2, 0.5);
+	this.Talk.HideModel(2, 2, 0.5);
+	this.Talk.HideModel(3, 2, 0.5);
+	this.WaitFrame(0.5);
+	this.TalkExit();
+	this.WaitFrame(0.1);
+}
+
+function Message( a_message_id )
+{
+	this.Talk.Message(a_message_id);
+	this.WaitMessage();
+}
+
+function Message_Center( a_message_id )
+{
+	this.Talk.Message_C(a_message_id);
+	this.WaitMessage();
+}
+
+function Message_wait( a_message_id, a_wait )
+{
+	this.Talk.Message_Auto(a_message_id);
+	this.SetWaitMessage(a_wait);
+}
+
+function Message_Center_wait( a_message_id, a_wait )
+{
+	this.Talk.Message_C_Auto(a_message_id);
+	this.SetWaitMessage(a_wait);
+}
+
+function MessageComic( a_message_id, a_position )
+{
+	this.Talk.MessageComic(a_message_id, a_position);
+	this.WaitMessage();
+}
+
+function MessageTalk( a_message_id )
+{
+	this.Talk.MessageTalk(a_message_id);
+	this.WaitMessage();
+}
+
+function MessageTalk_wait( a_message_id, a_wait )
+{
+	this.Talk.MessageTalk_Auto(a_message_id);
+	this.SetWaitMessage(a_wait);
+}
+
+function MessageSel( a_sel_num, a_message_id )
+{
+	this.Talk.MessageSel(a_sel_num, a_message_id);
+	this.WaitMessage();
+	this.Talk.ResultSelectedNum();
+}
+
+function MessageTalkSel( a_sel_num, a_message_id )
+{
+	this.Talk.MessageTalkSel(a_sel_num, a_message_id);
+	this.WaitMessage();
+	this.Talk.ResultSelectedNum();
+}
+
+function TalkCommunication( a_position, a_disp_model, a_animation )
+{
+	this.Talk.TalkCommunication(a_position, a_disp_model, a_animation);
+	this.WaitCommunication();
+}
+
+function ShowCommunication( a_animation )
+{
+	this.Talk.ShowCommunication(a_animation);
+	this.Sound.PlaySE("ev_101", false);
+	this.WaitCommunication();
+}
+
+function YesNoInfo( a_para_id )
+{
+	this.Window.OpenYesNoInfo(a_para_id);
+	this.WaitYesNoInfoWindow();
+}
+
+function YesNoSystem( a_para_id )
+{
+	this.Window.OpenYesNoSystem(a_para_id);
+	this.WaitYesNoSystemWindow();
+}
+
+function OpenTutorial( a_tutorial_id )
+{
+	this.Window.OpenTutorial(a_tutorial_id);
+	this.WaitTutorialWindow();
+	this.Window.CloseTutorial();
+	this.WaitCloseTutorialWindow();
+}
+
+function OpenCutin()
+{
+	this.Talk.OpenCutin();
+	this.WaitOpenTalkCutin();
+}
+
+function WaitMessage()
+{
+	this.WaitFrame(this.Util.SecondFromFrame(1));
+
+	while (1)
+	{
+		if (this.Talk.IsNext())
+		{
+			break;
+		}
+
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+}
+
+function SetWaitMessage( Wait )
+{
+	this.Talk.SetWait(Wait);
+	this.WaitFrame(this.Util.SecondFromFrame(1));
+
+	while (1)
+	{
+		if (this.Talk.IsWait())
+		{
+			break;
+		}
+
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+}
+
+function WaitCloseTalkWindow()
+{
+	this.WaitFrame(this.Util.SecondFromFrame(1));
+
+	while (1)
+	{
+		if (this.Talk.IsClose())
+		{
+			break;
+		}
+
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+}
+
+function WaitCommunication()
+{
+	this.WaitFrame(this.Util.SecondFromFrame(1));
+
+	while (1)
+	{
+		if (this.Talk.IsOpenTalkCommunication())
+		{
+			break;
+		}
+
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+}
+
+function WaitCloseTalkCommunication()
+{
+	this.WaitFrame(this.Util.SecondFromFrame(1));
+
+	while (1)
+	{
+		if (this.Talk.IsCommunicationClose())
+		{
+			break;
+		}
+
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+}
+
+function WaitOpenTalkCutin()
+{
+	this.WaitFrame(this.Util.SecondFromFrame(1));
+
+	while (1)
+	{
+		if (this.Talk.IsOpenCutin())
+		{
+			break;
+		}
+
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+}
+
+function WaitCloseTalkCutin()
+{
+	this.WaitFrame(this.Util.SecondFromFrame(1));
+
+	while (1)
+	{
+		if (this.Talk.IsCloseCutin())
+		{
+			break;
+		}
+
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+}
+
+function WaitEffect( a_effectId )
+{
+	this.WaitFrame(this.Util.SecondFromFrame(1));
+
+	while (1)
+	{
+		if (this.Talk.IsEffect(a_effectId))
+		{
+			break;
+		}
+
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+}
+
+function WaitInfoWindow()
+{
+	this.WaitFrame(this.Util.SecondFromFrame(1));
+
+	while (1)
+	{
+		if (this.Window.IsNextInfo())
+		{
+			break;
+		}
+
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+}
+
+function WaitCloseInfoWindow()
+{
+	this.WaitFrame(this.Util.SecondFromFrame(1));
+
+	while (1)
+	{
+		if (this.Window.IsEndCloseInfo())
+		{
+			break;
+		}
+
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+}
+
+function WaitSystemWindow()
+{
+	this.WaitFrame(this.Util.SecondFromFrame(1));
+
+	while (1)
+	{
+		if (this.Window.IsNextSystemWindow())
+		{
+			break;
+		}
+
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+}
+
+function WaitCloseSystemWindow()
+{
+	this.WaitFrame(this.Util.SecondFromFrame(1));
+
+	while (1)
+	{
+		if (this.Window.IsEndCloseSystemWindow())
+		{
+			break;
+		}
+
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+}
+
+function WaitYesNoInfoWindow()
+{
+	this.WaitFrame(this.Util.SecondFromFrame(1));
+
+	while (1)
+	{
+		if (this.Window.IsNextYesNoInfo())
+		{
+			break;
+		}
+
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+}
+
+function WaitCloseYesNoInfoWindow()
+{
+	this.WaitFrame(this.Util.SecondFromFrame(1));
+
+	while (1)
+	{
+		if (this.Window.IsEndCloseYesNoInfo())
+		{
+			break;
+		}
+
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+}
+
+function WaitYesNoSystemWindow()
+{
+	this.WaitFrame(this.Util.SecondFromFrame(1));
+
+	while (1)
+	{
+		if (this.Window.IsNextYesNoSystem())
+		{
+			break;
+		}
+
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+}
+
+function WaitCloseYesNoSystemWindow()
+{
+	this.WaitFrame(this.Util.SecondFromFrame(1));
+
+	while (1)
+	{
+		if (this.Window.IsEndCloseYesNoSystem())
+		{
+			break;
+		}
+
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+}
+
+function WaitTutorialWindow()
+{
+	this.WaitFrame(this.Util.SecondFromFrame(1));
+
+	while (1)
+	{
+		if (this.Window.IsNextTutorial())
+		{
+			break;
+		}
+
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+}
+
+function WaitCloseTutorialWindow()
+{
+	this.WaitFrame(this.Util.SecondFromFrame(1));
+
+	while (1)
+	{
+		if (this.Window.IsEndCloseTutorial())
+		{
+			break;
+		}
+
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+}
+
+function WaitMultiSelectWindow()
+{
+	this.WaitFrame(this.Util.SecondFromFrame(1));
+
+	while (1)
+	{
+		if (this.Window.IsNextMultiSelect())
+		{
+			break;
+		}
+
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+}
+
+function WaitCloseMultiSelectWindow()
+{
+	this.WaitFrame(this.Util.SecondFromFrame(1));
+
+	while (1)
+	{
+		if (this.Window.IsEndCloseMultiSelect())
+		{
+			break;
+		}
+
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+}
+
+function WaitCloseMoneyWindow()
+{
+	this.WaitFrame(this.Util.SecondFromFrame(1));
+
+	while (1)
+	{
+		if (this.Window.IsEndMoneyWindow())
+		{
+			break;
+		}
+
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+}
+
+function MessageClose()
+{
+	this.Talk.Close();
+	this.WaitCloseTalkWindow();
+}
+
+function CommunicationClose()
+{
+	this.Talk.CommunicationClose();
+	this.Sound.PlaySE("ev_102", false);
+	this.WaitCloseTalkCommunication();
+}
+
+function YesNoInfoClose()
+{
+	this.Window.CloseYesNoInfo();
+	this.WaitCloseYesNoInfoWindow();
+}
+
+function YesNoSystemClose()
+{
+	this.Window.CloseYesNoSystem();
+	this.WaitCloseYesNoSystemWindow();
+}
+
+function CloseCutin()
+{
+	this.Talk.CloseCutin();
+	this.WaitCloseTalkCutin();
+}
+
+function WaitTalkLoadModel()
+{
+	this.WaitFrame(this.Util.SecondFromFrame(1));
+
+	while (1)
+	{
+		if (this.Talk.IsEndLoadModel())
+		{
+			break;
+		}
+
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+}
+
+function WaitTalkLoadEffect()
+{
+	this.WaitFrame(this.Util.SecondFromFrame(1));
+
+	while (1)
+	{
+		if (this.Talk.IsEndLoadEffect())
+		{
+			break;
+		}
+
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+}
+
+function WaitTalkLoadModelCommunication()
+{
+	this.WaitFrame(this.Util.SecondFromFrame(1));
+
+	while (1)
+	{
+		if (this.Talk.IsLoadCommunication())
+		{
+			break;
+		}
+
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+}
+
+function WaitTalkLoadCutin()
+{
+	this.WaitFrame(this.Util.SecondFromFrame(1));
+
+	while (1)
+	{
+		if (this.Talk.IsEndLoadCutin())
+		{
+			break;
+		}
+
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+}
+
+function WaitVistaLoad()
+{
+	this.WaitFrame(this.Util.SecondFromFrame(1));
+
+	while (1)
+	{
+		if (this.Vista.IsEndLoad())
+		{
+			break;
+		}
+
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+}
+
+function WaitVistaBGMovie()
+{
+	this.WaitFrame(this.Util.SecondFromFrame(1));
+
+	while (1)
+	{
+		if (this.Vista.IsReadyBGMovie())
+		{
+			break;
+		}
+
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+}
+
+function TalkExit()
+{
+	this.WaitFrame(this.Util.SecondFromFrame(1));
+	this.Talk.Exit();
+
+	while (!this.Talk.IsExit())
+	{
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+
+	this.Talk.End();
+}
+
+function TalkExit2()
+{
+	this.WaitFrame(this.Util.SecondFromFrame(1));
+	this.Talk.Exit();
+
+	while (!this.Talk.IsExit())
+	{
+		this.Field.CloseUI(false);
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+
+	this.Talk.End();
+}
+
+function VistaExit()
+{
+	this.WaitFrame(this.Util.SecondFromFrame(1));
+	this.Vista.Exit();
+
+	while (!this.Vista.IsExit())
+	{
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+
+	this.Vista.End();
+}
+
+function MovieIsPlay()
+{
+	this.WaitFrame(this.Util.SecondFromFrame(1));
+
+	while (1)
+	{
+		if (!this.Movie.IsPlay())
+		{
+			break;
+		}
+
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+}
+
+function FADE_IN( type, time )
+{
+	this.Fade.In(type, time);
+
+	while (!this.Fade.IsEndType(type))
+	{
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+}
+
+function FADE_OUT( type, time )
+{
+	this.Fade.Out(type, time);
+
+	while (!this.Fade.IsEndType(type))
+	{
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+}
+
+function INFO_WINDOW( mesNo )
+{
+	this.Window.OpenInfo(mesNo);
+	this.WaitInfoWindow();
+	this.Window.CloseInfo();
+	this.WaitCloseInfoWindow();
+}
+
+function INFO_WINDOW_WITH_CLOSE_MONEY( mesNo )
+{
+	this.Window.OpenInfo(mesNo);
+	this.WaitInfoWindow();
+	this.Window.CloseMoneyWindow();
+	this.Window.CloseInfo();
+	this.WaitCloseInfoWindow();
+	this.WaitCloseMoneyWindow();
+}
+
+function INFO_GET_ITEM( ItemNo, num )
+{
+	this.Sound.PlaySE("com_033", false);
+	this.Window.OpenInfoGetItem(ItemNo, num);
+	this.WaitInfoWindow();
+	this.Window.CloseInfo();
+	this.WaitCloseInfoWindow();
+}
+
+function INFO_DEL_ITEM( ItemNo, num )
+{
+	this.Window.OpenInfoReleaseItem(ItemNo, num);
+	this.WaitInfoWindow();
+	this.Window.CloseInfo();
+	this.WaitCloseInfoWindow();
+}
+
+function SE_PLAY( fileName, type )
+{
+	this.Sound.PlaySE(fileName, type);
+
+	while (1)
+	{
+		if (!this.Sound.IsPlaySE(fileName))
+		{
+			break;
+		}
+
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+}
+
+function WaitVoicePlay()
+{
+	this.WaitFrame(this.Util.SecondFromFrame(1));
+	local waittime = 10 * 30;
+
+	while (1)
+	{
+		if (!this.Sound.IsPlaying(2))
+		{
+			break;
+		}
+
+		if (waittime <= 0)
+		{
+			break;
+		}
+
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+
+		if (waittime > 0)
+		{
+			waittime = waittime - 1;
+		}
+	}
+
+	this.WaitFrame(this.Util.SecondFromFrame(3));
+}
+
+function NPC_MESSAGE( fileName, msgNo )
+{
+	this.Field.MoveOffPlayer();
+	this.Talk.Load(fileName);
+	this.Talk.SetMode(1);
+	this.Message(msgNo);
+	this.MessageClose();
+	this.TalkExit();
+	this.Field.MoveOnPlayer();
+}
+
+function debagMesssage( npcNo )
+{
+	this.Talk.Load("debug_message");
+	this.Talk.SetMode(1);
+	this.Talk.Message(npcNo);
+	this.WaitMessage();
+	this.MessageClose();
+	this.TalkExit();
+}
+
+function KEYWORD_GET( keyNo )
+{
+	this.Window.OpenInfoGetKeyword(keyNo);
+	this.WaitInfoWindow();
+	this.Window.CloseInfo();
+	this.WaitCloseInfoWindow();
+}
+
+function EVENT_START_SET( evtNo )
+{
+	this.Field.MoveOffPlayer();
+
+	if (evtNo == 1)
+	{
+		this.Field.SetPlayerVisible(false);
+		this.Field.SetDigimonVisible(false);
+		this.WaitFrame(1);
+	}
+	else if (evtNo == 0)
+	{
+		this.WaitFrame(1);
+	}
+}
+
+function EVENT_END_SET( evtNo )
+{
+	if (evtNo == 1)
+	{
+		this.Field.SetPlayerVisible(true);
+		this.Field.SetDigimonVisible(true);
+	}
+	else if (evtNo == 0)
+	{
+	}
+
+	this.Field.MoveOnPlayer();
+}
+
+function YES_NO_WARP( textNo, MapName, Area, Locater, Angle )
+{
+	this.Field.MoveOffPlayer();
+	this.Window.OpenYesNoInfo(textNo);
+	this.WaitYesNoInfoWindow();
+	local result = this.Window.GetResultYesNoInfo();
+	this.Window.CloseYesNoInfo();
+	this.WaitCloseYesNoInfoWindow();
+	this.WaitFrame(0.5);
+
+	switch(result)
+	{
+	case 1:
+		this.Field.ChangeField(MapName, Area, Locater, Angle);
+		return true;
+		break;
+
+	case 2:
+		this.Field.MoveOnPlayer();
+		return false;
+		break;
+
+	case 3:
+		this.Field.MoveOnPlayer();
+		return false;
+		break;
+	}
+}
+
+function YES_NO_CONNECT_JUMP( textNo, MapName, Area, Locater, Angle )
+{
+	this.Field.MoveOffPlayer();
+	this.Window.OpenYesNoInfo(textNo);
+	this.WaitYesNoInfoWindow();
+	local result = this.Window.GetResultYesNoInfo();
+	this.Window.CloseYesNoInfo();
+	this.WaitCloseYesNoInfoWindow();
+	this.WaitFrame(0.5);
+	local select = 0;
+
+	switch(result)
+	{
+	case 1:
+		select = 1;
+		this.Field.StartCJEffect();
+		break;
+
+	case 2:
+		this.Field.MoveOnPlayer();
+		break;
+
+	case 3:
+		this.Field.MoveOnPlayer();
+		break;
+	}
+
+	if (select > 0)
+	{
+		while (!this.Field.IsEndCJEffect())
+		{
+			this.WaitFrame(this.Util.SecondFromFrame(0.1));
+		}
+
+		this.Field.ChangeField(MapName, Area, Locater, Angle);
+	}
+}
+
+function YES_NO_CONNECT_JUMP_VER2( textNo, MapName, Area, Locater, Angle, MoveLocater )
+{
+	this.Field.MoveOffPlayer();
+	this.Window.OpenYesNoInfo(textNo);
+	this.WaitYesNoInfoWindow();
+	local result = this.Window.GetResultYesNoInfo();
+	this.Window.CloseYesNoInfo();
+	this.WaitCloseYesNoInfoWindow();
+	this.WaitFrame(0.5);
+	local select = 0;
+
+	switch(result)
+	{
+	case 1:
+		select = 1;
+		this.Field.MovePlayer(MoveLocater);
+
+		while (this.Field.IsMovePlayer())
+		{
+			this.WaitFrame(this.Util.SecondFromFrame(0.1));
+		}
+
+		this.Field.StartCJEffect();
+		break;
+
+	case 2:
+		this.Field.MoveOnPlayer();
+		break;
+
+	case 3:
+		this.Field.MoveOnPlayer();
+		break;
+	}
+
+	if (select > 0)
+	{
+		while (!this.Field.IsEndCJEffect())
+		{
+			this.WaitFrame(this.Util.SecondFromFrame(0.1));
+		}
+
+		this.Field.ChangeField(MapName, Area, Locater, Angle);
+		return true;
+	}
+
+	return false;
+}
+
+function YES_NO_CONNECT_JUMP_TO_EDEN( textNo, MoveLocater )
+{
+	this.Field.MoveOffPlayer();
+	this.Window.OpenYesNoInfo(textNo);
+	this.WaitYesNoInfoWindow();
+	local result = this.Window.GetResultYesNoInfo();
+	this.Window.CloseYesNoInfo();
+	this.WaitCloseYesNoInfoWindow();
+	this.WaitFrame(0.5);
+	local select = 0;
+
+	switch(result)
+	{
+	case 1:
+		select = 1;
+		this.Field.MovePlayer(MoveLocater);
+
+		while (this.Field.IsMovePlayer())
+		{
+			this.WaitFrame(this.Util.SecondFromFrame(0.1));
+		}
+
+		this.Field.StartCJEffect();
+		break;
+
+	case 2:
+		this.Field.MoveOnPlayer();
+		break;
+
+	case 3:
+		this.Field.MoveOnPlayer();
+		break;
+	}
+
+	if (select > 0)
+	{
+		while (!this.Field.IsEndCJEffect())
+		{
+			this.WaitFrame(this.Util.SecondFromFrame(0.1));
+		}
+
+		this.Field.SetEdenLogOut(1, 4, "t05", 4);
+		this.Field.ChangeScene(8, 1);
+		return true;
+	}
+
+	return false;
+}
+
+function YES_NO_BATTLE( textNo, FlagNo, battleNo, battleMap )
+{
+	this.Field.MoveOffPlayer();
+	this.Window.OpenYesNoInfo(textNo);
+	this.WaitYesNoInfoWindow();
+	local result = this.Window.GetResultYesNoInfo();
+	this.Window.CloseYesNoInfo();
+	this.WaitCloseYesNoInfoWindow();
+	this.WaitFrame(0.5);
+
+	switch(result)
+	{
+	case 1:
+		this.Flag.Set(FlagNo);
+		this.Battle.Encount(battleNo, battleMap);
+		break;
+
+	case 2:
+		this.Field.MoveOnPlayer();
+		break;
+
+	case 3:
+		this.Field.MoveOnPlayer();
+		break;
+	}
+}
+
+function YES_NO_WARPtoEDEN_SELECT( Ftype )
+{
+	if (this.Flag.Check(1002) && !this.Flag.Check(1108))
+	{
+		this.Field.SetEdenLogOut(1, 0, "t05", 4);
+	}
+
+	while (this.Field.IsHitEvent())
+	{
+		if (this.Work.IsPushKey("DECIDE"))
+		{
+			this.Field.MoveOffPlayer();
+			this.Window.OpenYesNoInfo(17);
+			this.WaitYesNoInfoWindow();
+			local result = this.Window.GetResultYesNoInfo();
+			this.Window.CloseYesNoInfo();
+			this.WaitCloseYesNoInfoWindow();
+
+			switch(result)
+			{
+			case 1:
+				if (Ftype == 1)
+				{
+					this.Field.WarpIn("EFF_FLD_WARP_IN", 30, false, true, false);
+					this.WaitFrame(1.0);
+				}
+
+				if (this.Common.GetPlayerSex() == 1)
+				{
+					this.Field.PlayAnimation(this.Common.GetPlayerModelName(), "ff03", 0.2, false);
+					this.WaitFrame(0.69999999);
+					this.Sound.PlaySE("fe_046", false);
+
+					while (!this.Field.IsEndAnimation(this.Common.GetPlayerModelName()))
+					{
+						this.WaitFrame(this.Util.SecondFromFrame(1));
+					}
+				}
+				else
+				{
+					this.Field.PlayAnimation(this.Common.GetPlayerModelName(), "ff03", 0.2, false);
+					this.WaitFrame(0.69999999);
+					this.Sound.PlaySE("fe_046", false);
+
+					while (!this.Field.IsEndAnimation(this.Common.GetPlayerModelName()))
+					{
+						this.WaitFrame(this.Util.SecondFromFrame(1));
+					}
+				}
+
+				this.Field.SetPlayerVisible(false);
+				this.Field.ChangeScene(8, 1);
+				break;
+
+			case 2:
+				this.Field.MoveOnPlayer();
+				break;
+
+			case 3:
+				this.Field.MoveOnPlayer();
+				break;
+			}
+
+			if (result == 1)
+			{
+				break;
+			}
+
+			this.Field.PlayerIconVisible(true);
+		}
+
+		this.WaitFrame(this.Util.SecondFromFrame(0.1));
+	}
+}
+
+function EDEN_LANDING( Ftype )
+{
+	if (this.Flag.Check(5))
+	{
+		this.Field.MoveOffPlayer();
+		this.Field.SetPlayerVisible(false);
+		this.Field.SetDigimonVisible(false);
+		this.WaitFrame(0.5);
+		this.Debug.Log("LANDING");
+
+		if (this.Common.GetPlayerSex() == 1)
+		{
+			this.Field.PlayAnimation(this.Common.GetPlayerModelName(), "ff04", 0.0, false);
+			this.Sound.PlaySE("fe_047", false);
+			this.Field.SetPlayerVisible(true);
+
+			while (!this.Field.IsEndAnimation(this.Common.GetPlayerModelName()))
+			{
+				this.WaitFrame(this.Util.SecondFromFrame(1));
+			}
+		}
+		else
+		{
+			this.Field.PlayAnimation(this.Common.GetPlayerModelName(), "ff04", 0.0, false);
+			this.Sound.PlaySE("fe_047", false);
+			this.Field.SetPlayerVisible(true);
+
+			while (!this.Field.IsEndAnimation(this.Common.GetPlayerModelName()))
+			{
+				this.WaitFrame(this.Util.SecondFromFrame(1));
+			}
+		}
+
+		if (Ftype == 1 || this.Common.GetFieldGuest() != 0)
+		{
+			this.Field.WarpOut("EFF_FLD_WARP_OUT", 30, false, true, false);
+			this.WaitFrame(1.5);
+		}
+
+		this.Field.MoveOnPlayer();
+	}
+}
+
+function KEYWORD_EVENT_START( keyID )
+{
+	this.Keyword.EventHappen(keyID);
+}
+
+function SET_KEYICON_KEY( npcNo )
+{
+	this.Field.SetNpcIcon(npcNo, 6);
+}
+
+function SET_KEYICON_LOCK( keyID, npcNo )
+{
+	this.Field.SetNpcIcon(npcNo, 7);
+}
+
+function SET_KEYICON_SWING( keyID, npcNo )
+{
+	this.Field.SetNpcKeywordID(npcNo, keyID);
+	this.Field.SetNpcIcon(npcNo, 8);
+}
+
+function KEYWORD_TALK( keyID )
+{
+	local dataName = this.Keyword.GetTalkDataName();
+	this.Talk.Load(dataName);
+	this.Talk.SetMode(1);
+	local index = 0;
+	local messageType = -1;
+	local useResult = -2;
+	local isProgress = false;
+	local msgID = this.Keyword.GetMessageID(keyID, index, messageType, useResult, isProgress);
+
+	while (msgID != -1)
+	{
+		messageType = this.Keyword.GetMessageType(keyID, msgID);
+
+		switch(messageType)
+		{
+		case 3:
+			this.Keyword.UnlockDirectionIncorrect();
+			break;
+
+		case 4:
+			this.Sound.PlaySE("fe_077", false);
+			this.Keyword.UnlockDirectionCorrect();
+			this.Keyword.AdvanceProgress(keyID);
+			isProgress = true;
+			break;
+
+		case 5:
+			this.Sound.PlaySE("fe_078", false);
+			this.Keyword.UnlockDirectionCorrect();
+			this.Keyword.AdvanceProgress(keyID);
+			isProgress = true;
+			break;
+		}
+
+		if (this.Keyword.GetProgress(160) == 1 && !this.Flag.Check(1601))
+		{
+			break;
+		}
+		else if (this.Keyword.GetProgress(161) == 1 && !this.Flag.Check(1602))
+		{
+			break;
+		}
+		else if (this.Keyword.GetProgress(300) == 1 && this.Quest.GetProgress(53) == 1)
+		{
+			break;
+		}
+		else if (this.Keyword.GetProgress(400) == 1 && this.Quest.GetProgress(50) == 1)
+		{
+			break;
+		}
+		else if (this.Keyword.GetProgress(401) == 1 && this.Quest.GetProgress(50) == 3)
+		{
+			break;
+		}
+		else if (this.Keyword.GetProgress(500) == 1 && this.Quest.GetProgress(52) == 5)
+		{
+			break;
+		}
+		else if (this.Keyword.GetProgress(800) == 1 && this.Quest.GetProgress(58) == 1)
+		{
+			break;
+		}
+		else if (this.Keyword.GetProgress(801) == 1 && this.Quest.GetProgress(58) == 2)
+		{
+			break;
+		}
+		else if (this.Keyword.GetProgress(802) == 1 && this.Quest.GetProgress(58) == 3)
+		{
+			break;
+		}
+		else if (this.Keyword.GetProgress(2800) == 1 && this.Quest.GetProgress(158) == 5 && !this.Flag.Check(5564))
+		{
+			break;
+		}
+		else if (this.Keyword.GetProgress(2801) == 1 && this.Quest.GetProgress(158) == 5 && !this.Flag.Check(5564))
+		{
+			break;
+		}
+		else if (this.Keyword.GetProgress(2802) == 1 && this.Quest.GetProgress(158) == 5 && !this.Flag.Check(5564))
+		{
+			break;
+		}
+
+		this.Message(msgID);
+
+		switch(messageType)
+		{
+		case 1:
+			this.Window.OpenInfoGetKeyword(keyID);
+			this.WaitInfoWindow();
+			this.Window.CloseInfo();
+			this.WaitCloseInfoWindow();
+			isProgress = true;
+			break;
+
+		case 2:
+			this.Talk.Close();
+			this.Keyword.OpenUseWindow();
+
+			while (!this.Keyword.IsNextUseWindow())
+			{
+				this.WaitFrame(this.Util.SecondFromFrame(1));
+			}
+
+			useResult = this.Keyword.GetResultUseWindow();
+
+			if (useResult >= 0)
+			{
+				keyID = useResult;
+			}
+
+			this.Keyword.CloseUseWindow();
+
+			while (!this.Keyword.IsEndCloseUseWindow())
+			{
+				this.WaitFrame(this.Util.SecondFromFrame(1));
+			}
+
+			index = -1;
+			break;
+		}
+
+		index++;
+		msgID = this.Keyword.GetMessageID(keyID, index, messageType, useResult, isProgress);
+	}
+
+	if (index > 0)
+	{
+		this.MessageClose();
+	}
+
+	this.TalkExit();
+	return useResult;
+}
+
+function ELEVATOR_UP( objName, locatorName )
+{
+	this.Field.MoveOffPlayer();
+	this.Field.MovePlayer(locatorName);
+
+	while (this.Field.IsMovePlayer())
+	{
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+
+	this.Field.MoveOffPlayer();
+	this.Field.StartElevator(objName, 8.0, 0.125, true);
+
+	while (!this.Field.IsEndElevator(objName))
+	{
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+}
+
+function ELEVATOR_DOWN( objName, locatorName )
+{
+	this.Field.MoveOffPlayer();
+	this.Field.MovePlayer(locatorName);
+
+	while (this.Field.IsMovePlayer())
+	{
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+
+	this.Field.MoveOffPlayer();
+	this.Field.StartElevator(objName, 8.0, -0.125, true);
+
+	while (!this.Field.IsEndElevator(objName))
+	{
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+}
+
+function LIFT_MOTION( objName, locatorName, flag, height, speed, type )
+{
+	while (this.Field.IsHitEvent())
+	{
+		if (this.Work.IsPushKey("DECIDE"))
+		{
+			this.Field.SetEnableSecurityEffect(false);
+			this.Field.SetEnablePasteColorEffect(false);
+			this.Field.MoveOffPlayer();
+			this.Field.MovePlayer(locatorName);
+
+			while (this.Field.IsMovePlayer())
+			{
+				this.WaitFrame(this.Util.SecondFromFrame(0.1));
+			}
+
+			this.Field.MoveOffPlayer();
+			this.Field.StartElevator(objName, height, speed, false);
+
+			if (type == 0)
+			{
+				while (!this.Field.IsEndElevator(objName))
+				{
+					this.WaitFrame(this.Util.SecondFromFrame(0.1));
+				}
+			}
+			else if (type == 1)
+			{
+				while (!this.Field.IsEndElevator(objName))
+				{
+					this.WaitFrame(this.Util.SecondFromFrame(0.1));
+				}
+			}
+
+			if (this.Flag.Check(flag))
+			{
+				this.Flag.Clear(flag);
+			}
+			else
+			{
+				this.Flag.Set(flag);
+			}
+
+			this.Field.MoveOnPlayer();
+			this.Field.SetEnableSecurityEffect(true);
+			this.Field.SetEnablePasteColorEffect(true);
+			break;
+		}
+
+		this.WaitFrame(this.Util.SecondFromFrame(0.1));
+	}
+}
+
+function LIFT_STATUS( objName, height, speed )
+{
+	this.Field.StartElevator(objName, height, speed, false);
+}
+
+function EV_NAKANO( windowNo )
+{
+	this.Field.MoveOffPlayer();
+	this.Window.OpenMultiSelect(windowNo);
+
+	while (!this.Window.IsNextMultiSelect())
+	{
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+
+	local result = this.Window.GetResultMultiSelect();
+	this.Window.CloseMultiSelect();
+
+	while (!this.Window.IsEndCloseMultiSelect())
+	{
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+
+	switch(result)
+	{
+	case 1:
+		this.EV_SE_START();
+		this.Field.ChangeField("t05", 12, "start_01", 0);
+		break;
+
+	case 2:
+		this.EV_SE_START();
+		this.Field.ChangeField("t05", 10, "start_01", 0);
+		break;
+
+	case 3:
+		this.EV_SE_START();
+		this.Field.ChangeField("t05", 7, "start_01", 0);
+		break;
+
+	case 4:
+		this.EV_SE_START();
+		this.Field.ChangeField("t05", 3, "start_01", 0);
+		break;
+
+	case 5:
+		this.Field.MoveOnPlayer();
+		break;
+
+	case -1:
+		this.Field.MoveOnPlayer();
+		break;
+	}
+}
+
+function EV_SE_START()
+{
+	this.FADE_OUT(0, 0.5);
+	this.WaitFrame(0.5);
+	this.Sound.PlaySE("fe_018", false);
+
+	while (!this.Sound.IsPlaySE("fe_018"))
+	{
+		this.WaitFrame(this.Util.SecondFromFrame(0.1));
+	}
+}
+
+function EV_HOSIPTAL_LEFT( windowNo )
+{
+	this.Field.MoveOffPlayer();
+	this.Window.OpenMultiSelect(windowNo);
+
+	while (!this.Window.IsNextMultiSelect())
+	{
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+
+	local result = this.Window.GetResultMultiSelect();
+	this.Window.CloseMultiSelect();
+
+	while (!this.Window.IsEndCloseMultiSelect())
+	{
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+
+	switch(result)
+	{
+	case 1:
+		this.HOSPITAL_EV_SE_START("obj_gk_0001");
+		this.WaitFrame(2);
+		this.Field.ChangeField("t04", 3, "start_02", 0);
+		break;
+
+	case 2:
+		this.HOSPITAL_EV_SE_START("obj_gk_0001");
+		this.WaitFrame(2);
+		this.Field.ChangeField("t04", 2, "start_01", 0);
+		break;
+
+	case 3:
+		this.HOSPITAL_EV_SE_START("obj_gk_0001");
+		this.WaitFrame(2);
+		this.Field.ChangeField("t04", 1, "start_01", 0);
+		break;
+
+	case 4:
+		this.Field.MoveOnPlayer();
+		break;
+
+	case -1:
+		this.Field.MoveOnPlayer();
+		break;
+	}
+
+	this.Field.PlayerIconVisible(true);
+}
+
+function EV_HOSIPTAL_RIGHT( windowNo )
+{
+	this.Field.MoveOffPlayer();
+	this.Window.OpenMultiSelect(windowNo);
+
+	while (!this.Window.IsNextMultiSelect())
+	{
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+
+	local result = this.Window.GetResultMultiSelect();
+	this.Window.CloseMultiSelect();
+
+	while (!this.Window.IsEndCloseMultiSelect())
+	{
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+
+	switch(result)
+	{
+	case 1:
+		this.HOSPITAL_EV_SE_START("obj_gk_0000");
+		this.WaitFrame(2);
+		this.Field.ChangeField("t04", 3, "start_00", 0);
+		break;
+
+	case 2:
+		this.HOSPITAL_EV_SE_START("obj_gk_0000");
+		this.WaitFrame(2);
+		this.Field.ChangeField("t04", 2, "start_00", 0);
+		break;
+
+	case 3:
+		this.HOSPITAL_EV_SE_START("obj_gk_0000");
+		this.WaitFrame(2);
+		this.Field.ChangeField("t04", 1, "start_02", 0);
+		break;
+
+	case 4:
+		this.Field.MoveOnPlayer();
+		break;
+
+	case -1:
+		this.Field.MoveOnPlayer();
+		break;
+	}
+
+	this.Field.PlayerIconVisible(true);
+}
+
+function HOSPITAL_EV_SE_START( objName )
+{
+	this.Sound.PlaySE("fe_018", false);
+	this.Field.StartGimmickAnime(objName);
+	this.WaitFrame(2);
+	this.FADE_OUT(0, 0.5);
+	this.WaitFrame(0.5);
+}
+
+function HOME_APPEAR( locator, angle )
+{
+	this.Sound.PlaySE("fe_021", false);
+	this.Field.ChangeField("t05", 4, locator, angle);
+}
+
+function QUEST_FREE_27_QUESTION()
+{
+	this.Window.OpenMultiSelect(402);
+
+	while (!this.Window.IsNextMultiSelect())
+	{
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+
+	local result = this.Window.GetResultMultiSelect();
+	this.Window.CloseMultiSelect();
+
+	while (!this.Window.IsEndCloseMultiSelect())
+	{
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+
+	switch(result)
+	{
+	case 1:
+		this.INFO_WINDOW(5013);
+		this.Flag.Set(9247);
+		break;
+
+	case 2:
+		this.INFO_WINDOW(5014);
+		this.Flag.Set(9248);
+		break;
+
+	case 3:
+		this.INFO_WINDOW(5015);
+		this.Flag.Set(9249);
+		break;
+
+	case 4:
+		this.INFO_WINDOW(5016);
+		this.Flag.Set(9250);
+		break;
+
+	case 5:
+		break;
+	}
+}
+
+function EV_D14_1ST( windowNo, locatorNo )
+{
+	this.Field.MoveOffPlayer();
+	this.Window.OpenMultiSelect(windowNo);
+
+	while (!this.Window.IsNextMultiSelect())
+	{
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+
+	local result = this.Window.GetResultMultiSelect();
+	this.Window.CloseMultiSelect();
+
+	while (!this.Window.IsEndCloseMultiSelect())
+	{
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+
+	switch(result)
+	{
+	case 1:
+		this.EV_SE_START();
+		this.Field.ChangeField("d14", 3, locatorNo, 0);
+		break;
+
+	case 2:
+		this.EV_SE_START();
+		this.Field.ChangeField("d14", 2, locatorNo, 0);
+		break;
+
+	case 3:
+		this.Field.MoveOnPlayer();
+		break;
+
+	case -1:
+		this.Field.MoveOnPlayer();
+		break;
+	}
+
+	this.Field.PlayerIconVisible(true);
+}
+
+function EV_D14_2ND( windowNo, locatorNo )
+{
+	this.Field.MoveOffPlayer();
+	this.Window.OpenMultiSelect(windowNo);
+
+	while (!this.Window.IsNextMultiSelect())
+	{
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+
+	local result = this.Window.GetResultMultiSelect();
+	this.Window.CloseMultiSelect();
+
+	while (!this.Window.IsEndCloseMultiSelect())
+	{
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+
+	switch(result)
+	{
+	case 1:
+		this.EV_SE_START();
+		this.Field.ChangeField("d14", 7, locatorNo, 0);
+		break;
+
+	case 2:
+		this.EV_SE_START();
+		this.Field.ChangeField("d14", 6, locatorNo, 0);
+		break;
+
+	case 3:
+		this.EV_SE_START();
+		this.Field.ChangeField("d14", 5, locatorNo, 0);
+		break;
+
+	case 4:
+		this.Field.MoveOnPlayer();
+		break;
+
+	case -1:
+		this.Field.MoveOnPlayer();
+		break;
+	}
+
+	this.Field.PlayerIconVisible(true);
+}
+
+function EV_D14_3RD( windowNo, locatorNo )
+{
+	this.Field.MoveOffPlayer();
+	this.Window.OpenMultiSelect(windowNo);
+
+	while (!this.Window.IsNextMultiSelect())
+	{
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+
+	local result = this.Window.GetResultMultiSelect();
+	this.Window.CloseMultiSelect();
+
+	while (!this.Window.IsEndCloseMultiSelect())
+	{
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+
+	switch(result)
+	{
+	case 1:
+		this.EV_SE_START();
+		this.Field.ChangeField("d14", 12, locatorNo, 0);
+		break;
+
+	case 2:
+		this.EV_SE_START();
+		this.Field.ChangeField("d14", 11, locatorNo, 0);
+		break;
+
+	case 3:
+		this.EV_SE_START();
+		this.Field.ChangeField("d14", 10, locatorNo, 0);
+		break;
+
+	case 4:
+		this.EV_SE_START();
+		this.Field.ChangeField("d14", 9, locatorNo, 0);
+		break;
+
+	case 5:
+		this.Field.MoveOnPlayer();
+		break;
+
+	case -1:
+		this.Field.MoveOnPlayer();
+		break;
+	}
+
+	this.Field.PlayerIconVisible(true);
+}
+
+function EV_D14_THROUGH( windowNo, AREA, locatorNo, locatorNo_02 )
+{
+	this.Field.MoveOffPlayer();
+	this.Window.OpenMultiSelect(windowNo);
+
+	while (!this.Window.IsNextMultiSelect())
+	{
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+
+	local result = this.Window.GetResultMultiSelect();
+	this.Window.CloseMultiSelect();
+
+	while (!this.Window.IsEndCloseMultiSelect())
+	{
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+
+	switch(result)
+	{
+	case 1:
+		this.EV_SE_START();
+		this.Field.ChangeField("d14", AREA, locatorNo, 0);
+		break;
+
+	case 2:
+		this.EV_SE_START();
+		this.Field.ChangeField("d14", 1, locatorNo_02, 0);
+		break;
+
+	case 3:
+		this.Field.MoveOnPlayer();
+		break;
+
+	case -1:
+		this.Field.MoveOnPlayer();
+		break;
+	}
+
+	this.Field.PlayerIconVisible(true);
+}
+
+function EV_D14_CASE2( windowNo, AREA, locatorNo, AREA_02, locatorNo_02 )
+{
+	this.Field.MoveOffPlayer();
+	this.Window.OpenMultiSelect(windowNo);
+
+	while (!this.Window.IsNextMultiSelect())
+	{
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+
+	local result = this.Window.GetResultMultiSelect();
+	this.Window.CloseMultiSelect();
+
+	while (!this.Window.IsEndCloseMultiSelect())
+	{
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+
+	switch(result)
+	{
+	case 1:
+		this.EV_SE_START();
+		this.Field.ChangeField("d14", AREA, locatorNo, 0);
+		break;
+
+	case 2:
+		this.EV_SE_START();
+		this.Field.ChangeField("d14", AREA_02, locatorNo_02, 0);
+		break;
+
+	case 3:
+		this.Field.MoveOnPlayer();
+		break;
+
+	case -1:
+		this.Field.MoveOnPlayer();
+		break;
+	}
+
+	this.Field.PlayerIconVisible(true);
+}
+
+function MOYAMOYA_DELETE( objName, index )
+{
+	this.Field.SetEffectAnime(objName, index, 30, 80);
+	this.Sound.PlaySE("fe_063", false);
+	this.Field.PlayEffect(objName, index, false, false);
+
+	while (!this.Field.IsEndEffect(objName))
+	{
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+}
+
+function CHAPTER_END_SAVE( mapName, Area )
+{
+	this.Field.MoveOffPlayer();
+	this.Window.OpenYesNoInfo(5055);
+	this.WaitYesNoInfoWindow();
+	local result = this.Window.GetResultYesNoInfo();
+	this.Window.CloseYesNoInfo();
+	this.WaitCloseYesNoInfoWindow();
+	this.WaitFrame(0.5);
+
+	switch(result)
+	{
+	case 1:
+		if (this.Flag.Check(3100) && this.Flag.Check(3199))
+		{
+			this.Flag.Clear(3005);
+			this.Flag.Clear(3006);
+			this.Flag.Clear(3007);
+			this.Flag.Clear(3008);
+			this.Flag.Clear(3009);
+			this.Flag.Clear(3010);
+			this.Flag.Clear(3011);
+			this.Flag.Clear(3012);
+			this.Flag.Clear(3018);
+			this.Flag.Clear(3013);
+			this.Flag.Clear(3019);
+			this.Flag.Clear(3014);
+			this.Flag.Clear(3099);
+			this.Flag.Clear(3199);
+		}
+
+		this.Field.SaveUI(mapName, Area);
+
+		while (!this.Field.IsEndSaveUI())
+		{
+			this.WaitFrame(this.Util.SecondFromFrame(1));
+		}
+
+		this.Field.MoveOnPlayer();
+		break;
+
+	case 2:
+		this.Field.MoveOnPlayer();
+		break;
+
+	case 3:
+		this.Field.MoveOnPlayer();
+		break;
+	}
+}
+
+function FIELD_MEDAL( ItemNo, num, FlagNo, Effect_loc )
+{
+	while (this.Field.IsHitEvent())
+	{
+		if (this.Work.IsPushKey("DECIDE"))
+		{
+			if (!this.Flag.Check(FlagNo))
+			{
+				this.Field.MoveOffPlayer();
+				this.Window.OpenInfoGetItem(ItemNo, num);
+				this.WaitInfoWindow();
+				this.Window.CloseInfo();
+				this.WaitCloseInfoWindow();
+				this.Flag.Set(FlagNo);
+				this.Field.EffectVisible(Effect_loc, false);
+				this.Field.MoveOnPlayer();
+			}
+		}
+
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+}
+
+function QUEST_TALK( mesNo )
+{
+	this.Talk.Load("quest_iteme");
+	this.Talk.SetMode(1);
+	local i = 0;
+	local QNo = 0;
+	local toneC = 0;
+	local str = "";
+
+	for( i = 400; i <= 632; i++ )
+	{
+		if (this.Quest.GetReceiveStatus(i) == 1)
+		{
+			QNo = i;
+		}
+	}
+
+	if (QNo == 451 || QNo == 452 || QNo == 489 || QNo == 502 || QNo == 522 || QNo == 523 || QNo == 543 || QNo == 423 || QNo == 516 || QNo == 519 || QNo == 566 || QNo == 576 || QNo == 599 || QNo == 617 || QNo == 428 || QNo == 483 || QNo == 493 || QNo == 498 || QNo == 504 || QNo == 556 || QNo == 578 || QNo == 624 || QNo == 453 || QNo == 459 || QNo == 465 || QNo == 475 || QNo == 508 || QNo == 518 || QNo == 567 || QNo == 574 || QNo == 585 || QNo == 591 || QNo == 615 || QNo == 464 || QNo == 506 || QNo == 512 || QNo == 514 || QNo == 539 || QNo == 541 || QNo == 571 || QNo == 630)
+	{
+		toneC = 2;
+	}
+	else if (QNo == 400 || QNo == 401 || QNo == 405 || QNo == 412 || QNo == 606 || QNo == 456 || QNo == 497 || QNo == 503 || QNo == 553 || QNo == 588)
+	{
+		toneC = 4;
+	}
+	else
+	{
+		toneC = 3;
+	}
+
+	if (this.Quest.GetProgress(QNo) == 1)
+	{
+		this.Message(mesNo);
+		this.Message(mesNo + 1);
+		this.Message(mesNo + 2);
+		this.Message(mesNo + 3);
+		this.MessageClose();
+		this.Quest.AdvanceProgress(QNo);
+	}
+	else if (this.Quest.GetProgress(QNo) == 2)
+	{
+		str = "tone:";
+		str += toneC;
+		this.Debug.Log(str);
+
+		if (toneC == 2)
+		{
+			this.Message(mesNo + 1);
+		}
+		else if (toneC == 3)
+		{
+			this.Message(mesNo + 2);
+		}
+		else if (toneC == 4)
+		{
+			this.Message(mesNo + 3);
+		}
+
+		this.MessageClose();
+	}
+	else if (this.Quest.GetProgress(QNo) == 3)
+	{
+		this.Message(mesNo + 10);
+		this.MessageClose();
+
+		if (this.Item.GetNum(622) >= 1)
+		{
+			this.INFO_DEL_ITEM(622, 1);
+		}
+		else if (this.Item.GetNum(623) >= 1)
+		{
+			this.INFO_DEL_ITEM(622, 1);
+		}
+		else if (this.Item.GetNum(624) >= 1)
+		{
+			this.INFO_DEL_ITEM(624, 1);
+		}
+
+		this.Message(mesNo + 11);
+		this.MessageClose();
+		this.Quest.AdvanceProgress(QNo);
+	}
+	else if (this.Quest.GetProgress(QNo) == 4)
+	{
+		this.Message(mesNo + 11);
+		this.MessageClose();
+	}
+
+	this.TalkExit();
+}
+
+function LOST_OBJECT( objNo, ItemNo )
+{
+	while (this.Field.IsHitEvent())
+	{
+		if (this.Work.IsPushKey("DECIDE"))
+		{
+			local i = 0;
+			local QNo = 0;
+
+			for( i = 400; i <= 632; i++ )
+			{
+				if (this.Quest.GetReceiveStatus(i) == 1)
+				{
+					QNo = i;
+				}
+			}
+
+			if (this.Quest.GetProgress(QNo) == 2)
+			{
+				this.Field.MoveOffPlayer();
+				this.INFO_GET_ITEM(ItemNo, 1);
+				this.Quest.AdvanceProgress(QNo);
+				this.Field.EffectVisible(objNo, false);
+				this.Field.MoveOnPlayer();
+			}
+		}
+
+		this.WaitFrame(this.Util.SecondFromFrame(0.1));
+	}
+}
+
+function QUEST_CLIENT_ViSIBLE( QNo, npcNo )
+{
+	if (this.Quest.GetReceiveStatus(QNo) == 1)
+	{
+		this.Field.SetNpcVisible(npcNo, true);
+	}
+	else
+	{
+		this.Field.SetNpcVisible(npcNo, false);
+	}
+}
+
+function TUTORIAL_WINDOW( id )
+{
+	this.Window.OpenTutorial(id);
+	this.WaitTutorialWindow();
+	this.Window.CloseTutorial();
+	this.WaitCloseTutorialWindow();
+}
+
+function HUCKER_BATTLE_SELECT( Mes, battleNo, battleMap )
+{
+	this.Field.MoveOffPlayer();
+	this.NPC_MESSAGE("quest_hucker", 401);
+	this.Window.OpenYesNoInfo(5065);
+	this.WaitYesNoInfoWindow();
+	local result = this.Window.GetResultYesNoInfo();
+	this.Window.CloseYesNoInfo();
+	this.WaitCloseYesNoInfoWindow();
+	this.WaitFrame(0.5);
+
+	switch(result)
+	{
+	case 1:
+		this.NPC_MESSAGE("quest_hucker", Mes);
+		this.Battle.Encount(battleNo, battleMap);
+		break;
+
+	case 2:
+		this.Field.MoveOnPlayer();
+		break;
+
+	case 3:
+		this.Field.MoveOnPlayer();
+		break;
+	}
+}
+
+function HUCKER_BATTLE_SELECT_DLC( Mes, battleNo, battleMap )
+{
+	this.Field.MoveOffPlayer();
+	this.Window.OpenYesNoInfo(5065);
+	this.WaitYesNoInfoWindow();
+	local result = this.Window.GetResultYesNoInfo();
+	this.Window.CloseYesNoInfo();
+	this.WaitCloseYesNoInfoWindow();
+	this.WaitFrame(0.5);
+
+	switch(result)
+	{
+	case 1:
+		this.NPC_MESSAGE("quest_hucker", Mes);
+		this.Battle.Encount(battleNo, battleMap);
+		break;
+
+	case 2:
+		this.Field.MoveOnPlayer();
+		break;
+
+	case 3:
+		this.Field.MoveOnPlayer();
+		break;
+	}
+}
+
+function HUCKER_END_MESSAGE( texID )
+{
+	this.Talk.Load("quest_hucker");
+	this.Talk.SetMode(1);
+	this.Message(texID);
+	this.MessageClose();
+
+	if (this.Quest.GetProgress(329) == 2)
+	{
+		this.Message(432);
+	}
+	else
+	{
+		this.Message(431);
+	}
+
+	this.MessageClose();
+	this.TalkExit();
+}
+
+function V_UCHIDA_TALK( verNo, npcID )
+{
+	this.Talk.Load("v_uchikda_message");
+	this.Talk.SetMode(1);
+
+	if (!this.Flag.Check(9463))
+	{
+		this.Message(verNo * 100);
+		this.Message(verNo * 100 + 1);
+		this.MessageClose();
+		this.WaitFrame(0.5);
+
+		if (verNo == 1)
+		{
+			this.INFO_GET_ITEM(396, 1);
+		}
+		else if (verNo == 2)
+		{
+			this.INFO_GET_ITEM(202, 1);
+			this.INFO_GET_ITEM(1254, 1);
+		}
+		else if (verNo == 3)
+		{
+			this.INFO_GET_ITEM(400, 1);
+		}
+		else if (verNo == 4)
+		{
+			this.INFO_GET_ITEM(203, 1);
+			this.INFO_GET_ITEM(1317, 1);
+		}
+		else if (verNo == 5)
+		{
+			this.INFO_GET_ITEM(395, 1);
+		}
+		else if (verNo == 6)
+		{
+			this.INFO_GET_ITEM(204, 1);
+			this.INFO_GET_ITEM(1472, 1);
+		}
+		else if (verNo == 7)
+		{
+			this.INFO_GET_ITEM(398, 1);
+		}
+		else if (verNo == 8)
+		{
+			this.INFO_GET_ITEM(205, 1);
+			this.INFO_GET_ITEM(1470, 1);
+		}
+		else if (verNo == 9)
+		{
+			this.INFO_GET_ITEM(399, 1);
+		}
+		else if (verNo == 10)
+		{
+			this.INFO_GET_ITEM(206, 1);
+			this.INFO_GET_ITEM(1382, 1);
+		}
+		else if (verNo == 11)
+		{
+			this.INFO_GET_ITEM(381, 1);
+		}
+		else if (verNo == 12)
+		{
+			this.INFO_GET_ITEM(207, 1);
+			this.INFO_GET_ITEM(1385, 1);
+			this.INFO_GET_ITEM(1386, 1);
+		}
+		else if (verNo == 13)
+		{
+			this.INFO_GET_ITEM(397, 1);
+		}
+		else if (verNo == 14)
+		{
+			this.INFO_GET_ITEM(208, 1);
+			this.INFO_GET_ITEM(1474, 1);
+			this.INFO_GET_ITEM(1476, 1);
+			this.INFO_GET_ITEM(1475, 1);
+		}
+
+		this.WaitFrame(0.5);
+		this.Message(verNo * 100 + 50);
+		this.MessageClose();
+		this.TalkExit();
+
+		if (verNo != 14)
+		{
+			this.FADE_OUT(0, 0.5);
+			this.WaitFrame(0.5);
+			this.Field.SetNpcVisible(npcID, false);
+			this.WaitFrame(0.5);
+			this.FADE_IN(0, 0.5);
+		}
+	}
+	else
+	{
+		this.Message(1450);
+		this.MessageClose();
+		this.TalkExit();
+	}
+}
+
+function GET_CSP( get_CSP, Move )
+{
+	local tpNum = 0;
+	this.Field.MoveOffPlayer();
+	this.Common.AddTP(get_CSP);
+	tpNum = get_CSP;
+	this.Window.SetReplaceNumberInfo(tpNum);
+	this.INFO_WINDOW(5067);
+
+	if (Move == 0)
+	{
+		this.Field.MoveOnPlayer();
+	}
+	else if (Move == 1)
+	{
+	}
+}
+
+function PC_WARP_EFFECT_IN()
+{
+	this.Field.MoveOffPlayer();
+	this.Field.WarpIn("EFF_FLD_WARP_IN", 30, false, false, false);
+
+	while (!this.Field.IsEndWarp())
+	{
+		this.WaitFrame(this.Util.SecondFromFrame(0.1));
+	}
+
+	this.Flag.Set(9040);
+}
+
+function PC_WARP_EFFECT_OUT()
+{
+	if (this.Flag.Check(9040))
+	{
+		this.Field.MoveOffPlayer();
+		this.Field.WarpOut("EFF_FLD_WARP_OUT", 30, false, false, false);
+
+		while (!this.Field.IsEndWarp())
+		{
+			this.WaitFrame(this.Util.SecondFromFrame(0.1));
+		}
+
+		this.Flag.Clear(9040);
+		this.Field.MoveOnPlayer();
+	}
+}
+
+function MirrorDungeon_EXIT( type )
+{
+	this.Field.MoveOffPlayer();
+	this.Window.OpenYesNoInfo(5068);
+	this.WaitYesNoInfoWindow();
+	local result = this.Window.GetResultYesNoInfo();
+	this.Window.CloseYesNoInfo();
+	this.WaitCloseYesNoInfoWindow();
+	this.WaitFrame(0.5);
+
+	switch(result)
+	{
+	case 1:
+		if (type == 0)
+		{
+			this.Field.WarpIn("EFF_FLD_WARP_IN", 30, false, false, false);
+
+			while (!this.Field.IsEndWarp())
+			{
+				this.WaitFrame(this.Util.SecondFromFrame(0.1));
+			}
+		}
+
+		this.Field.ChangeField("t30", 1, "start_01", 330);
+		return true;
+		break;
+
+	case 2:
+		this.Field.MoveOnPlayer();
+		return false;
+		break;
+
+	case 3:
+		this.Field.MoveOnPlayer();
+		return false;
+		break;
+	}
+}
+
+function LOGOUT_NG_TEXT()
+{
+	if (this.Flag.Check(4))
+	{
+		if ((this.Flag.Check(1000) && !this.Flag.Check(1003)) && (this.Keyword.GetProgress(100) == 0 || this.Keyword.GetProgress(100) == -2))
+		{
+			this.NPC_MESSAGE("field_text", 0);
+		}
+		else if ((this.Flag.Check(1000) && !this.Flag.Check(1003)) && this.Keyword.GetProgress(100) == 1)
+		{
+			this.NPC_MESSAGE("field_text", 1);
+		}
+		else if (this.Flag.Check(1003) && !this.Flag.Check(1099))
+		{
+			this.Field.MoveOffPlayer();
+			this.Talk.Load("field_text");
+			this.Talk.SetMode(1);
+			this.Message(2);
+			this.Message(3);
+			this.MessageClose();
+			this.TalkExit();
+			this.Field.MoveOnPlayer();
+		}
+		else if (this.Quest.GetProgress(57) == 2 || this.Quest.GetProgress(57) == 3)
+		{
+			this.NPC_MESSAGE("quest_106", 1000);
+		}
+
+		this.Flag.Clear(4);
+	}
+}
+
+function t0501()
+{
+	if (this.Flag.Check(4000))
+	{
+		if (this.Flag.Check(3099) && !this.Flag.Check(3199))
+		{
+		}
+		else if (this.Quest.GetProgress(156) == 1 || this.Quest.GetProgress(156) == 2 || this.Quest.GetProgress(156) == 3)
+		{
+			this.Sound.StopBGM(0.1);
+		}
+		else if (this.Quest.GetReceiveStatus(158) == 1)
+		{
+			if (this.Quest.GetProgress(158) == 6 || !this.Flag.Check(5651))
+			{
+				this.Field.PlayBGM("M84", 0.0);
+			}
+			else
+			{
+				this.Sound.StopBGM(0.1);
+			}
+		}
+		else
+		{
+			this.Field.PlayBGM("M84", 0.0);
+		}
+	}
+	else
+	{
+		this.Field.PlayBGM("M84", 0.0);
+	}
+
+	this.SET_t0501_STATUS();
+}
+
+function select_00()
+{
+	while (this.Field.IsHitEvent())
+	{
+		if (this.Work.IsPushKey("DECIDE"))
+		{
+			if (this.Quest.GetReceiveStatus(200) == 1)
+			{
+				this.NPC_MESSAGE("field_text", 120);
+				this.Field.MovePlayer("p_move_0000");
+
+				while (this.Field.IsMovePlayer())
+				{
+					this.WaitFrame(this.Util.SecondFromFrame(0.1));
+				}
+
+				this.Field.PlayerIconVisible(true);
+			}
+			else if (this.Quest.GetReceiveStatus(54) == 1)
+			{
+				this.NPC_MESSAGE("quest_102", 581);
+				this.Field.MovePlayer("p_move_0000");
+
+				while (this.Field.IsMovePlayer())
+				{
+					this.WaitFrame(this.Util.SecondFromFrame(0.1));
+				}
+
+				this.Field.PlayerIconVisible(true);
+			}
+			else if (this.Quest.GetReceiveStatus(158) == 1)
+			{
+				if (this.Quest.GetProgress(158) == 6 || !this.Flag.Check(5651))
+				{
+					this.Field.MoveOffPlayer();
+					this.Field.TownSelect(1);
+				}
+				else
+				{
+					this.NPC_MESSAGE("quest_208", 4250);
+					this.Field.MovePlayer("p_move_0000");
+
+					while (this.Field.IsMovePlayer())
+					{
+						this.WaitFrame(this.Util.SecondFromFrame(0.1));
+					}
+
+					this.Field.PlayerIconVisible(true);
+				}
+			}
+			else
+			{
+				this.Field.MoveOffPlayer();
+				this.Field.TownSelect(1);
+			}
+		}
+
+		this.WaitFrame(this.Util.SecondFromFrame(0.1));
+	}
+}
+
+function next_01()
+{
+	this.Field.ChangeField("t05", 2, "start_01", 90);
+}
+
+function next_02()
+{
+	if (this.Quest.GetProgress(156) == 1)
+	{
+		this.NPC_MESSAGE("quest_207", 904);
+		this.Field.MovePlayer("p_move_0003");
+	}
+	else
+	{
+		this.Field.ChangeField("t05", 3, "start_02", 180);
+	}
+}
+
+function next_03()
+{
+	if (this.Quest.GetProgress(156) == 1)
+	{
+		this.NPC_MESSAGE("quest_207", 901);
+		this.Field.MovePlayer("p_move_0002");
+	}
+	else
+	{
+		this.Field.ChangeField("t05", 9, "start_03", 180);
+	}
+}
+
+function SET_t0501_STATUS()
+{
+	this.Keyword.SetNpcKeywordIcon();
+
+	if (this.Quest.GetProgress(54) == 1)
+	{
+		if (!this.Flag.Check(9260))
+		{
+			this.Field.SetGimmickVisible("obj_gk_0001", true);
+		}
+		else
+		{
+			this.Field.SetGimmickVisible("obj_gk_0001", false);
+		}
+
+		if (!this.Flag.Check(9262))
+		{
+			this.Field.SetGimmickVisible("obj_gk_0000", true);
+		}
+		else
+		{
+			this.Field.SetGimmickVisible("obj_gk_0000", false);
+		}
+	}
+	else
+	{
+		this.Field.SetGimmickVisible("obj_gk_0000", false);
+		this.Field.SetGimmickVisible("obj_gk_0001", false);
+	}
+
+	if (this.Flag.Check(1207) || !this.Flag.Check(4000))
+	{
+		this.Field.IconOnID("npc_0013", 13, 0.0, 0.0);
+	}
+
+	if (this.Flag.Check(2200))
+	{
+		this.Field.SetNpcVisible("npc_0014", false);
+	}
+	else
+	{
+		this.Field.SetNpcVisible("npc_0012", false);
+	}
+
+	if (this.Flag.Check(1799) && this.Quest.GetReceiveStatus(54) == 0)
+	{
+		this.Field.SetNpcVisible("npc_0050", true);
+		this.Field.SetNpcVisible("npc_0003", false);
+
+		if (!this.Flag.Check(9259))
+		{
+			this.Field.IconOnID("npc_0050", 8, 0.0, 0.0);
+		}
+	}
+	else
+	{
+		this.Field.SetNpcVisible("npc_0050", false);
+	}
+
+	if (this.Quest.GetProgress(152) == 1 || this.Quest.GetProgress(156) == 1 && this.Flag.Check(5637))
+	{
+		this.Field.SetNpcVisible("npc_0051", true);
+
+		if (this.Quest.GetProgress(152) == 1 && !this.Flag.Check(9273))
+		{
+			this.Field.IconOnID("npc_0051", 8, 0.0, 0.0);
+		}
+
+		if (this.Quest.GetProgress(156) == 1 && this.Flag.Check(5637) && !this.Flag.Check(5545))
+		{
+			this.Field.IconOnID("npc_0051", 8, 0.0, 0.0);
+		}
+	}
+	else
+	{
+		this.Field.SetNpcVisible("npc_0051", false);
+	}
+
+	if (this.Flag.Check(2612) && !this.Flag.Check(5544))
+	{
+		this.Field.IconOnID("icon_03", 8, 0.0, 0.0);
+		this.Field.SetGimmickVisible("obj_gk_0003", true);
+	}
+	else
+	{
+		this.Field.SetGimmickVisible("obj_gk_0003", false);
+	}
+
+	if (this.Quest.GetProgress(156) == 1 || this.Quest.GetProgress(156) == 2 || this.Quest.GetProgress(156) == 3)
+	{
+		this.Field.IconOffID("npc_0013", 13);
+		this.Field.SetGimmickVisible("obj_gk_0002", false);
+		this.Field.SetNpcVisible("npc_0000", false);
+		this.Field.SetNpcVisible("npc_0001", false);
+		this.Field.SetNpcVisible("npc_0002", false);
+		this.Field.SetNpcVisible("npc_0003", false);
+		this.Field.SetNpcVisible("npc_0004", false);
+		this.Field.SetNpcVisible("npc_0005", false);
+		this.Field.SetNpcVisible("npc_0006", false);
+		this.Field.SetNpcVisible("npc_0007", false);
+		this.Field.SetNpcVisible("npc_0008", false);
+		this.Field.SetNpcVisible("npc_0009", false);
+		this.Field.SetNpcVisible("npc_0010", false);
+		this.Field.SetNpcVisible("npc_0011", false);
+		this.Field.SetNpcVisible("npc_0012", false);
+		this.Field.SetNpcVisible("npc_0013", false);
+		this.Field.SetNpcVisible("npc_0014", false);
+		this.Field.SetNpcVisible("npc_0020", false);
+		this.Field.SetNpcVisible("npc_0021", false);
+		this.Field.SetNpcVisible("npc_0022", false);
+		this.Field.SetNpcVisible("npc_0023", false);
+		this.Field.SetNpcVisible("npc_0024", false);
+		this.Field.SetNpcVisible("npc_0025", false);
+		this.Field.SetNpcVisible("npc_0026", false);
+		this.Field.SetNpcVisible("npc_0027", false);
+		this.Field.SetNpcVisible("npc_0028", false);
+		this.Field.SetNpcVisible("npc_0029", false);
+		this.Field.SetNpcVisible("npc_0030", false);
+		this.Field.SetNpcVisible("npc_0031", false);
+		this.Field.SetNpcVisible("npc_0032", false);
+		this.Field.SetNpcVisible("npc_0033", false);
+
+		if (this.Flag.Check(5637))
+		{
+			this.Field.SetNpcVisible("npc_0052", false);
+			this.Field.SetNpcVisible("npc_0053", false);
+			this.Field.SetNpcVisible("npc_0054", false);
+			this.Field.SetNpcVisible("npc_0055", false);
+		}
+	}
+	else
+	{
+		this.Field.SetNpcVisible("npc_0052", false);
+		this.Field.SetNpcVisible("npc_0053", false);
+		this.Field.SetNpcVisible("npc_0054", false);
+		this.Field.SetNpcVisible("npc_0055", false);
+	}
+
+	if (this.Flag.Check(2303) && this.Quest.GetReceiveStatus(59) == 0 || this.Quest.GetProgress(59) == 1 && !this.Flag.Check(5625))
+	{
+		this.Field.SetNpcVisible("npc_0056", true);
+		this.Field.SetNpcVisible("npc_0057", true);
+		this.Field.SetNpcVisible("npc_0058", true);
+		this.Field.SetNpcVisible("npc_0005", false);
+		this.Field.SetNpcVisible("npc_0008", false);
+
+		if (!this.Flag.Check(9267))
+		{
+			this.Field.IconOnID("npc_0058", 8, 0.0, 0.0);
+		}
+	}
+	else
+	{
+		this.Field.SetNpcVisible("npc_0056", false);
+		this.Field.SetNpcVisible("npc_0057", false);
+		this.Field.SetNpcVisible("npc_0058", false);
+	}
+
+	if (this.Quest.GetReceiveStatus(158) == 1)
+	{
+		if (this.Quest.GetProgress(158) == 6 || !this.Flag.Check(5651))
+		{
+		}
+		else
+		{
+			this.Field.IconOffID("npc_0013", 13);
+			this.Field.SetGimmickVisible("obj_gk_0002", false);
+			this.Field.SetNpcVisible("npc_0000", false);
+			this.Field.SetNpcVisible("npc_0001", false);
+			this.Field.SetNpcVisible("npc_0002", false);
+			this.Field.SetNpcVisible("npc_0003", false);
+			this.Field.SetNpcVisible("npc_0004", false);
+			this.Field.SetNpcVisible("npc_0005", false);
+			this.Field.SetNpcVisible("npc_0006", false);
+			this.Field.SetNpcVisible("npc_0007", false);
+			this.Field.SetNpcVisible("npc_0008", false);
+			this.Field.SetNpcVisible("npc_0009", false);
+			this.Field.SetNpcVisible("npc_0010", false);
+			this.Field.SetNpcVisible("npc_0011", false);
+			this.Field.SetNpcVisible("npc_0012", false);
+			this.Field.SetNpcVisible("npc_0013", false);
+			this.Field.SetNpcVisible("npc_0014", false);
+			this.Field.SetNpcVisible("npc_0020", false);
+			this.Field.SetNpcVisible("npc_0021", false);
+			this.Field.SetNpcVisible("npc_0022", false);
+			this.Field.SetNpcVisible("npc_0023", false);
+			this.Field.SetNpcVisible("npc_0024", false);
+			this.Field.SetNpcVisible("npc_0025", false);
+			this.Field.SetNpcVisible("npc_0026", false);
+			this.Field.SetNpcVisible("npc_0027", false);
+			this.Field.SetNpcVisible("npc_0028", false);
+			this.Field.SetNpcVisible("npc_0029", false);
+			this.Field.SetNpcVisible("npc_0030", false);
+			this.Field.SetNpcVisible("npc_0031", false);
+			this.Field.SetNpcVisible("npc_0032", false);
+			this.Field.SetNpcVisible("npc_0033", false);
+			this.Field.SetNpcVisible("npc_0051", false);
+			this.Field.SetNpcVisible("npc_0052", false);
+			this.Field.SetNpcVisible("npc_0053", false);
+			this.Field.SetNpcVisible("npc_0054", false);
+			this.Field.SetNpcVisible("npc_0055", false);
+		}
+	}
+
+	if (this.Quest.GetReceiveStatus(1) == 1)
+	{
+		this.Field.SetNpcVisible("npc_0001", false);
+	}
+	else
+	{
+		this.Field.SetNpcVisible("npc_0059", false);
+	}
+
+	if (this.Quest.GetProgress(150) == 1 || this.Quest.GetProgress(150) == 2 || this.Quest.GetProgress(150) == 3)
+	{
+		this.Field.SetNpcVisible("npc_0001", false);
+	}
+	else
+	{
+		this.Field.SetNpcVisible("npc_0060", false);
+	}
+
+	if (this.Flag.Check(1099) && !this.Flag.Check(1100))
+	{
+		this.Field.SetVisible(false);
+		this.Field.IconOffID("npc_0013", 13);
+		this.Common.AdvanceStoryProgress();
+		this.Field.SetNpcVisible("npc_0000", false);
+		this.EVENT_START_SET(1);
+		this.m01_t05_0101();
+		this.m01_t05_0102();
+		this.m01_t05_0103();
+		this.Flag.Set(1100);
+		this.Flag.Set(4150);
+		this.Flag.Set(4170);
+		this.Field.ChangeField("d62", 1, "start_00", 180.0);
+	}
+	else if (this.Flag.Check(3099) && !this.Flag.Check(3199))
+	{
+		this.Field.SetVisible(false);
+		this.Field.IconOffID("npc_0013", 13);
+		this.EVENT_START_SET(1);
+		this.m21_t05_0103();
+		this.Field.ChangeField("t06", 1, "start_00", 180);
+	}
+	else if (this.Quest.GetProgress(54) == 1 && this.Flag.Check(9260) && this.Flag.Check(9261) && this.Flag.Check(9262))
+	{
+		this.Field.MoveOffPlayer();
+		this.NPC_MESSAGE("quest_102", 580);
+		this.Quest.AdvanceProgress(54);
+		this.Field.ChangeField("t05", 4, "start_03", 120);
+	}
+	else if (this.Quest.GetProgress(156) == 1 && !this.Flag.Check(5637))
+	{
+		this.EVENT_START_SET(0);
+		this.s407_t05_0301();
+		this.Flag.Set(5637);
+		this.FADE_OUT(0, 1);
+		this.Field.SetNpcVisible("npc_0052", false);
+		this.Field.SetNpcVisible("npc_0053", false);
+		this.Field.SetNpcVisible("npc_0054", false);
+		this.Field.SetNpcVisible("npc_0055", false);
+		this.Field.SetNpcVisible("npc_0051", true);
+		this.Field.IconOnID("npc_0051", 8, 0.0);
+		this.FADE_IN(0, 1);
+		this.EVENT_END_SET(0);
+	}
+	else if (this.Quest.GetProgress(59) == 1 && !this.Flag.Check(5625))
+	{
+		this.EVENT_START_SET(0);
+		this.s111_t05_0201();
+		this.Common.SetFieldGuest(3002);
+		this.Flag.Set(5625);
+		this.Flag.Set(5995);
+		this.Field.ChangeField("d90", 1, "start_00", 0);
+	}
+	else if (this.Quest.GetProgress(1) == 1 && !this.Flag.Check(5635))
+	{
+		this.EVENT_START_SET(0);
+		this.s411_t05_0101();
+		this.Flag.Set(5635);
+		this.EVENT_END_SET(0);
+	}
+	else if (this.Quest.GetProgress(1) == 2 && !this.Flag.Check(5636))
+	{
+		this.EVENT_START_SET(0);
+		this.s411_t05_0201();
+		this.Flag.Set(5636);
+		this.EVENT_END_SET(0);
+	}
+}
+
+function evt_0000()
+{
+	while (this.Field.IsHitEvent())
+	{
+		if (this.Work.IsPushKey("DECIDE"))
+		{
+			if (this.Quest.GetProgress(54) == 1 && !this.Flag.Check(9260))
+			{
+				this.EVENT_START_SET(0);
+				this.s102_t05_0401();
+				this.Flag.Set(9260);
+				this.Field.ChangeField("t05", 1, "start_05", 270);
+			}
+		}
+
+		this.WaitFrame(this.Util.SecondFromFrame(0.1));
+	}
+}
+
+function evt_0001()
+{
+	while (this.Field.IsHitEvent())
+	{
+		if (this.Work.IsPushKey("DECIDE"))
+		{
+			if (this.Quest.GetProgress(54) == 1 && !this.Flag.Check(9262))
+			{
+				this.EVENT_START_SET(0);
+				this.s102_t05_0601();
+				this.Flag.Set(9262);
+				this.Field.ChangeField("t05", 1, "start_06", 90);
+			}
+		}
+
+		this.WaitFrame(this.Util.SecondFromFrame(0.1));
+	}
+}
+
+function evt_1000()
+{
+	while (this.Field.IsHitEvent())
+	{
+		if (this.Work.IsPushKey("DECIDE"))
+		{
+			this.GASHA_PLAY(1);
+		}
+
+		this.WaitFrame(this.Util.SecondFromFrame(0.1));
+	}
+}
+
+function t0501_npc_0013()
+{
+	if (this.Flag.Check(1207) || !this.Flag.Check(4000))
+	{
+		this.Shop.Open(4);
+
+		while (1)
+		{
+			if (this.Shop.IsEnd())
+			{
+				break;
+			}
+
+			this.WaitFrame(this.Util.SecondFromFrame(1));
+		}
+
+		this.Shop.Close();
+	}
+	else
+	{
+		this.Talk.Load("field_text");
+		this.Talk.SetMode(1);
+
+		if (!this.Flag.Check(1203))
+		{
+			this.Message(1010);
+			this.Message(1011);
+			this.Message(1012);
+			this.Message(1013);
+		}
+		else
+		{
+			this.Message(1000);
+		}
+
+		this.MessageClose();
+		this.TalkExit();
+	}
+}
+
+function t0501_npc_0001()
+{
+	if (this.Keyword.GetActiveID() != -1)
+	{
+		this.KEYWORD_TALK(this.Keyword.GetActiveID());
+		return;
+	}
+
+	this.Talk.Load("t0501");
+	this.Talk.SetMode(1);
+
+	if (!this.Flag.Check(2200))
+	{
+		this.Message(1000);
+	}
+	else if (this.Flag.Check(2200))
+	{
+		this.Message(1050);
+	}
+
+	this.MessageClose();
+	this.TalkExit();
+}
+
+function t0501_npc_0003()
+{
+	this.Talk.Load("t0501");
+	this.Talk.SetMode(1);
+
+	if (!this.Flag.Check(2200))
+	{
+		this.Message(1100);
+	}
+	else if (this.Flag.Check(2200))
+	{
+		this.Message(1150);
+	}
+
+	this.MessageClose();
+	this.TalkExit();
+}
+
+function t0501_npc_0005()
+{
+	this.Talk.Load("t0501");
+	this.Talk.SetMode(1);
+
+	if (!this.Flag.Check(2200))
+	{
+		this.Message(1200);
+		this.Message(1300);
+	}
+	else if (this.Flag.Check(2200))
+	{
+		this.Message(1250);
+		this.Message(1350);
+	}
+
+	this.MessageClose();
+	this.TalkExit();
+}
+
+function t0501_npc_0008()
+{
+	this.Talk.Load("t0501");
+	this.Talk.SetMode(1);
+
+	if (!this.Flag.Check(2200))
+	{
+		if (this.Flag.Check(1705) && !this.Flag.Check(1715))
+		{
+			this.Message(2000);
+		}
+		else
+		{
+			this.Message(1200);
+			this.Message(1300);
+		}
+	}
+	else if (this.Flag.Check(2200))
+	{
+		this.Message(1250);
+		this.Message(1350);
+	}
+
+	this.MessageClose();
+	this.TalkExit();
+}
+
+function t0501_npc_0012()
+{
+	this.Talk.Load("t0501");
+	this.Talk.SetMode(1);
+
+	if (!this.Flag.Check(2200))
+	{
+	}
+	else if (this.Flag.Check(2200))
+	{
+		this.Message(1450);
+	}
+
+	this.MessageClose();
+	this.TalkExit();
+}
+
+function t0501_npc_0014()
+{
+	this.Talk.Load("t0501");
+	this.Talk.SetMode(1);
+	this.Message(1500);
+	this.MessageClose();
+	this.TalkExit();
+}
+
+function t0501_npc_0050()
+{
+	if (this.Flag.Check(1799) && !this.Flag.Check(9259))
+	{
+		this.EVENT_START_SET(0);
+		this.s102_t05_0101();
+		this.Field.IconOffID("npc_0050", 8);
+		this.Flag.Set(9259);
+		this.EVENT_END_SET(0);
+	}
+	else
+	{
+		this.NPC_MESSAGE("quest_102", 151);
+	}
+}
+
+function t0501_npc_0051()
+{
+	if (this.Quest.GetProgress(152) == 1)
+	{
+		this.Talk.Load("quest_202");
+		this.Talk.SetMode(1);
+		this.Message(311);
+		this.Message(312);
+		this.Message(313);
+		this.Flag.Set(9273);
+		this.Field.IconOffID("npc_0051", 8);
+		this.MessageClose();
+		this.TalkExit();
+
+		if (this.Flag.Check(9272) && this.Flag.Check(9273) && this.Flag.Check(9274) && this.Flag.Check(9275))
+		{
+			this.EVENT_START_SET(0);
+			this.s202_t05_0301();
+			this.Field.ChangeField("t03", 1, "start_01", 340);
+		}
+	}
+	else if (this.Quest.GetProgress(156) == 1)
+	{
+		this.Talk.Load("quest_207");
+		this.Talk.SetMode(1);
+		this.Message(311);
+		this.Message(312);
+		this.Message(313);
+		this.Message(314);
+		this.Flag.Set(5545);
+		this.Field.IconOffID("npc_0051", 8);
+		this.MessageClose();
+		this.TalkExit();
+
+		if (this.Flag.Check(5545) && this.Flag.Check(5546) && this.Flag.Check(5547) && this.Flag.Check(5548))
+		{
+			this.EVENT_START_SET(0);
+			this.s407_t05_0401();
+			this.Field.ChangeField("t05", 6, "start_00", 0);
+		}
+	}
+}
+
+function evt_0002()
+{
+	if (this.Flag.Check(2612) && !this.Flag.Check(5544))
+	{
+		while (this.Field.IsHitEvent())
+		{
+			if (this.Work.IsPushKey("DECIDE"))
+			{
+				this.Field.MoveOffPlayer();
+				this.Field.IconOffID("icon_03", 8);
+				this.Field.SetGimmickVisible("obj_gk_0003", false);
+				this.Talk.Load("quest_207");
+				this.Talk.SetMode(1);
+				this.Message(101);
+				this.Message(102);
+				this.Message(103);
+				this.Message(104);
+				this.MessageClose();
+				this.TalkExit();
+				this.EVENT_START_SET(0);
+				this.s407_t05_0101();
+				this.Flag.Set(5544);
+				this.EVENT_END_SET(0);
+			}
+
+			this.WaitFrame(this.Util.SecondFromFrame(0.1));
+		}
+	}
+}
+
+function evt_0003()
+{
+	if (this.Quest.GetProgress(156) == 1 || this.Quest.GetProgress(156) == 2 || this.Quest.GetProgress(156) == 3)
+	{
+		this.NPC_MESSAGE("quest_207", 900);
+		this.Field.MovePlayer("p_move_0001");
+	}
+}
+
+function t0501_npc_0058()
+{
+	if (this.Flag.Check(2303) && !this.Flag.Check(9267))
+	{
+		this.EVENT_START_SET(0);
+		this.s111_t05_0101();
+		this.Flag.Set(9267);
+		this.Field.IconOffID("npc_0058", 8);
+		this.EVENT_END_SET(0);
+	}
+	else if (this.Flag.Check(9267) && this.Quest.GetReceiveStatus(59) == 0)
+	{
+		this.Talk.Load("quest_111");
+		this.Talk.SetMode(1);
+		this.Message(131);
+		this.Message(132);
+		this.MessageClose();
+		this.TalkExit();
+	}
+}
+
+function t0501_npc_0059()
+{
+	if (this.Quest.GetProgress(1) == 1)
+	{
+		this.NPC_MESSAGE("quest_001", 200);
+	}
+	else if (this.Quest.GetProgress(1) == 2)
+	{
+		this.NPC_MESSAGE("quest_001", 400);
+	}
+}
+
+function t0501_npc_0060()
+{
+	this.Talk.Load("quest_201");
+	this.Talk.SetMode(1);
+	this.Message(252);
+	this.Message(253);
+	this.MessageClose();
+	this.TalkExit();
+}
+

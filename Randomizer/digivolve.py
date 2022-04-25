@@ -28,20 +28,19 @@ def digivolve_func():
         print("backup has been made")
 
     # Open the csv file (Digimon)
-    # n= Number of Digimon
-    digi0 = pandas.read_csv(digimon).sample(n=347) 
-    digi1 = pandas.read_csv(digimon).sample(n=347) 
-    digi2 = pandas.read_csv(digimon).sample(n=347) 
-    digi3 = pandas.read_csv(digimon).sample(n=347) 
-    digi4 = pandas.read_csv(digimon).sample(n=347) 
-    digi5 = pandas.read_csv(digimon).sample(n=347) 
-    digi6 = pandas.read_csv(digimon).sample(n=347) 
+    # n= Number of Digimon in market
+    digi1 = pandas.read_csv(digimon).sample(n=332) 
+    digi2 = pandas.read_csv(digimon).sample(n=332) 
+    digi3 = pandas.read_csv(digimon).sample(n=332) 
+    digi4 = pandas.read_csv(digimon).sample(n=332) 
+    digi5 = pandas.read_csv(digimon).sample(n=332) 
+    digi6 = pandas.read_csv(digimon).sample(n=332) 
 
     # Open the csv file (File_Name)
     df = pandas.read_csv(file_name,index_col=["id","digi1","digi2","digi3","digi4","digi5","digi6"])
 
     # Inserts Colums
-    df.insert(loc=0, column="id", value= digi0 )
+    df.insert(loc=0, column="id", value= pandas.read_csv(digimon))
     df.insert(loc=1, column="digi1", value= digi1 )
     df.insert(loc=2, column="digi2", value= digi2 )
     df.insert(loc=3, column="digi3", value= digi3 )

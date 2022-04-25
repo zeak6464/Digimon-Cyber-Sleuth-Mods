@@ -38,10 +38,10 @@ def market_func():
     df.loc[:,'digimonId'] = dfc
 
     # Replaces Prices
-    df.loc[:,'price'] = random.sample(range(1000, 4000), 50)
+    df.loc[:,'price'] = 1
 
     # Replaces Level
-    df.loc[:,'level'] = random.sample(range(1, 99), 50)
+    df.loc[:,'level'] = 1
 
     # Reinserts Colum "ID" & "Unknown1"
     df.insert(loc=0, column="id", value=pandas.read_csv(file_name)["id"])

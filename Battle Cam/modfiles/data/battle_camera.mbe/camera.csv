@@ -1,0 +1,16 @@
+ID,Name,unk1,unk3,unk4,unk5,unk6
+1,"Cam_bt_getset{maxallsize}","",0,1,0,0
+2,"Cam_bt_escape01","",1,1,0,0
+3,"Cam_bt_escape01","",0,2,1,0
+4,"Cam_bt_escape01","",0,1,1,0
+5,"Cam_bt_escape01","",0,2,1,0
+6,"Cam_bt_escape01","Cam_bt_all_{PCEM}{maxsize}",0,2,1,0
+7,"Cam_bt_escape01","",0,2,1,0
+8,"Cam_bt_escape01","",0,2,1,0
+9,"Cam_bt_escape01","",0,1,0,0
+10,"Cam_bt_escape01","",0,1,0,0
+11,"Cam_bt_escape01","",0,4,0,0
+12,"Cam_bt_escape01","",0,3,0,1
+13,"Cam_bt_escape01","",0,3,0,1
+14,"Cam_bt_escape01","",0,6,0,0
+15,"Cam_bt_escape01","",0,4,0,0

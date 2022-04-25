@@ -8,6 +8,7 @@ import digivolve
 import encounters
 import market
 import digimondata
+import enskills
 
 #create display window
 SCREEN_HEIGHT = 500
@@ -26,6 +27,7 @@ mar_img = pygame.image.load('mar_btn.png').convert_alpha()
 done_img = pygame.image.load('done_btn.png').convert_alpha()
 re_img = pygame.image.load('re_btn.png').convert_alpha()
 digi_img = pygame.image.load('digi_btn.png').convert_alpha()
+enskill_img = pygame.image.load('enskill_btn.png').convert_alpha()
 
 #create button instances
 re_button = button.Button(250, 425, re_img, 1)
@@ -57,6 +59,10 @@ re5_button = button.Button(450, 150, en_img, 1)
 mar_button = button.Button(450, 250, mar_img, 1)
 done6 = button.Button(450, 250, done_img, 1)
 re6_button = button.Button(450, 250, mar_img, 1)
+
+enskill_button = button.Button(450, 350, enskill_img, 1)
+done8 = button.Button(450, 350, done_img, 1)
+re8_button = button.Button(450, 350, enskill_img, 1)
 
 #game loop
 run = True
@@ -91,7 +97,11 @@ while run:
     if digi_button.draw(screen):
         digimondata.digimondata_func()
         digi_button = done7
-        print('Digimon Data Done')    
+        print('Digimon Data Done')
+    if enskill_button.draw(screen):
+        enskills.enskills_func()
+        enskill_button = done8
+        print('Encounter Skills Done')        
     if re_button.draw(screen):
         start_button = re1_button
         shop_button = re2_button
@@ -100,6 +110,7 @@ while run:
         en_button = re5_button
         mar_button = re6_button
         digi_button = re7_button
+        enskill_button = re8_button
         print('Resetting Done')
 #event handler
     for event in pygame.event.get():
