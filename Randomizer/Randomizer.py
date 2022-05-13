@@ -10,6 +10,10 @@ import market
 import digimondata
 import enskills
 
+import numpy as np
+
+print(np.__version__)
+
 #create display window
 SCREEN_HEIGHT = 500
 SCREEN_WIDTH = 800
@@ -79,7 +83,7 @@ while run:
         shop_button = done2
         print('Shop Done')
     if de_button.draw(screen):
-        dedigivolve.dedigivolve_func() 
+        dedigivolve.dedigivolve_func(False) 
         de_button = done3
         print('Dedigivole Done')
     if di_button.draw(screen):
