@@ -45,8 +45,8 @@ def encounters_func():
     df.insert(loc=0,column="id",value= pandas.read_csv(file_name)["id"])
 
     df.insert(loc=1,column="digi1",value=  digi1)
-    df.insert(loc=2,column="digi2",value=  digi2)
-    df.insert(loc=3,column="digi3",value=  digi3)
+    df.insert(loc=2,column="digi2",value=  -1)
+    df.insert(loc=3,column="digi3",value=  -1)
     df.insert(loc=4,column="digi4",value=  -1)
     df.insert(loc=5,column="digi5",value=  -1)
     df.insert(loc=6,column="digi6",value=  -1)
