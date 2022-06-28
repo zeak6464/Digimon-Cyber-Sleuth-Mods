@@ -18,7 +18,7 @@ import hardest
 
 import numpy as np
 
-print("version 3")
+print("version 3.1")
 
 #create display window
 SCREEN_HEIGHT = 720
@@ -77,29 +77,29 @@ enskill_button = button.Button(100, 650, enskill_img, 1)
 done8 = button.Button(100, 650, done_img, 1)
 re8_button = button.Button(100, 650, enskill_img, 1)
 
-easyest_button = button.Button(650, 150, easyest_img, 1)
+easyest_button = button.Button(750, 150, easyest_img, 1)
 done9 = button.Button(750, 150, done_img, 1)
-re9_button = button.Button(650, 150, easyest_img, 1)
+re9_button = button.Button(750, 150, easyest_img, 1)
 
-easy_button = button.Button(650, 250, easy_img, 1)
+easy_button = button.Button(750, 250, easy_img, 1)
 done10 = button.Button(750, 250, done_img, 1)
-re10_button = button.Button(650, 250, easy_img, 1)
+re10_button = button.Button(750, 250, easy_img, 1)
 
-normal_button = button.Button(650, 350, normal_img, 1)
+normal_button = button.Button(750, 350, normal_img, 1)
 done11 = button.Button(750, 350, done_img, 1)
-re11_button = button.Button(650, 350, normal_img, 1)
+re11_button = button.Button(750, 350, normal_img, 1)
 
-hard_button = button.Button(650, 450, hard_img, 1)
+hard_button = button.Button(750, 450, hard_img, 1)
 done12 = button.Button(750, 450, done_img, 1)
-re12_button = button.Button(650, 450, hard_img, 1)
+re12_button = button.Button(750, 450, hard_img, 1)
 
-harder_button = button.Button(650, 550, harder_img, 1)
+harder_button = button.Button(750, 550, harder_img, 1)
 done13 = button.Button(750, 550, done_img, 1)
-re13_button = button.Button(650, 550, harder_img, 1)
+re13_button = button.Button(750, 550, harder_img, 1)
 
-hardest_button = button.Button(650, 650, hardest_img, 1)
+hardest_button = button.Button(750, 650, hardest_img, 1)
 done14 = button.Button(750, 650, done_img, 1)
-re14_button = button.Button(650, 650, hardest_img, 1)
+re14_button = button.Button(750, 650, hardest_img, 1)
 
 
 #game loop
