@@ -21,7 +21,7 @@ listbox1 = Listbox(root, listvariable = var)
 listbox1.grid(row=0 , column=0)
 canvas = Canvas(root, width = 300, height = 300)  
 canvas.grid(row=0,column=1, columnspan=2)
-img=PhotoImage(file='images/'+Data[index][0]+'.png')
+img=PhotoImage(file='images/0.png')
 image_container = canvas.create_image(0,0, anchor=NW, image=img)
 
 def update():
