@@ -15,10 +15,11 @@ import normal
 import hard
 import harder
 import hardest
+import choas
 
 import numpy as np
 
-print("version 3.1")
+print("version 3.2")
 
 #create display window
 SCREEN_HEIGHT = 720
@@ -44,6 +45,7 @@ normal_img = pygame.image.load('normal_btn.png').convert_alpha()
 hard_img = pygame.image.load('hard_btn.png').convert_alpha()
 harder_img = pygame.image.load('harder_btn.png').convert_alpha()
 hardest_img = pygame.image.load('hardest_btn.png').convert_alpha()
+choas_img = pygame.image.load('choas_btn.png').convert_alpha()
 
 #create button instances
 re_button = button.Button(450, 650, re_img, 1)
@@ -100,6 +102,10 @@ re13_button = button.Button(750, 550, harder_img, 1)
 hardest_button = button.Button(750, 650, hardest_img, 1)
 done14 = button.Button(750, 650, done_img, 1)
 re14_button = button.Button(750, 650, hardest_img, 1)
+
+choas_button = button.Button(850, 150, choas_img, 1)
+done15 = button.Button(850, 150, done_img, 1)
+re15_button = button.Button(850, 150, choas_img, 1)
 
 
 #game loop
@@ -160,7 +166,11 @@ while run:
     if hardest_button.draw(screen):
         hardest.encounters_func()
         hardest_button = done14
-        print('Encounters Done')        
+        print('Encounters Done')
+    if choas_button.draw(screen):
+        choas.encounters_func()
+        choas_button = done15
+        print('Encounters Done') 
     if re_button.draw(screen):
         start_button = re1_button
         shop_button = re2_button
@@ -176,6 +186,7 @@ while run:
         hard_button = re12_button
         harder_button = re13_button
         hardest_button = re14_button
+        choas_button = re15_button
         print('Resetting Done')
 #event handler
     for event in pygame.event.get():

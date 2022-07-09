@@ -12,6 +12,7 @@ def starters_func():
 
     # File name for Digimon Starters & Backup
     file_name = "./starters/modfiles/data/join_digimon_para_add.mbe/party.csv"
+    file_nameCS = "./starters/modfiles/data/join_digimon_para.mbe/party.csv"
     back_up = "./backup/starters_backup.csv"
 
     # List of all Digimon in Game
@@ -48,4 +49,5 @@ def starters_func():
 
     # Saves the Randomized File
     df.to_csv(file_name, index=False)
+    df.to_csv(file_nameCS, index=False)
     shutil.make_archive(output_filename, 'zip', dir_name)

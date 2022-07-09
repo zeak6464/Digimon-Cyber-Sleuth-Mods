@@ -9819,7 +9819,7 @@ function m51_d122_0801()
 	this.WaitFrame(1.0);
 	this.Talk.HideModel(1, 2, 0.5);
 	this.WaitFrame(0.5);
-	this.Fade.Out(0, 0.5);
+	
 	this.WaitFrame(0.5);
 	this.TalkExit();
 	this.VistaExit();
@@ -10107,7 +10107,7 @@ function m51_d122_0901()
 	this.Talk.PlayAnimation(1, "e101", 0.30000001, true);
 	this.Talk.PlayAnimationSlotB(1, "f13_m01", true);
 	this.WaitFrame(1.5);
-	this.Fade.Out(0, 0.30000001);
+	
 	this.WaitFrame(0.5);
 	this.TalkExit();
 	this.Talk.Load("m51_d122_0901");
@@ -10254,7 +10254,7 @@ function m51_d122_0901()
 	}
 
 	this.WaitFrame(1.5);
-	this.Fade.Out(0, 0.5);
+	
 	this.WaitFrame(0.5);
 	this.TalkExit();
 	this.VistaExit();
@@ -10605,7 +10605,7 @@ function m51_d122_1001()
 	this.MessageTalk(16);
 	this.Talk.SetLastTalkerManageID(-1);
 	this.MessageClose();
-	this.Fade.Out(0, 0.30000001);
+	
 	this.WaitFrame(0.30000001);
 	this.TalkExit();
 	this.VistaExit();
@@ -10900,7 +10900,7 @@ function m51_d122_1001()
 	this.Talk.PlayAnimationSlotB(3, "f02_m01", true);
 	this.Talk.SetLastTalkerManageID(-1);
 	this.MessageClose();
-	this.Fade.Out(1, 0.2);
+	
 	this.Sound.PlaySE("fe_028", false);
 	this.WaitFrame(0.2);
 	this.TalkExit();
@@ -11167,7 +11167,7 @@ function m51_d122_1101()
 	this.WaitFrame(0.5);
 	this.Talk.HideModel(1, 2, 0.5);
 	this.Sound.StopBGM(2.5);
-	this.Fade.Out(0, 1.0);
+	
 	this.WaitFrame(2.5);
 	this.TalkExit();
 	this.WaitFrame(0.1);
@@ -11952,7 +11952,7 @@ function s504_d122_0901()
 		this.Talk.PlayAnimationSlotB(ID_KOTARO, "f01_m01", true);
 		this.Talk.SetLastTalkerManageID(-1);
 		this.MessageClose();
-		this.Fade.Out(1, 0.2);
+		
 		this.Sound.PlaySE("fe_028", false);
 		this.WaitFrame(0.2);
 	}
@@ -12012,7 +12012,7 @@ function s504_d122_0901()
 		this.Talk.PlayAnimationSlotB(ID_SOSUKE, "f02_m01", true);
 		this.Talk.SetLastTalkerManageID(-1);
 		this.MessageClose();
-		this.Fade.Out(1, 0.2);
+		
 		this.Sound.PlaySE("fe_028", false);
 		this.WaitFrame(0.2);
 	}
@@ -12029,7 +12029,7 @@ function s504_d122_0901()
 		this.Talk.PlayAnimation(ID_PLAYER, "e010", 0.5, true);
 		this.Talk.PlayAnimationSlotB(ID_PLAYER, "f04_e03", true);
 		this.WaitFrame(1.0);
-		this.Fade.Out(0, 0.30000001);
+		
 		this.WaitFrame(0.30000001);
 		this.Talk.MovePosition(ID_PLAYER, 2113, 0, 1);
 		this.Fade.In(0, 0.30000001);
@@ -12063,7 +12063,7 @@ function s504_d122_0901()
 		this.Talk.SetLastTalkerManageID(-1);
 		this.MessageClose();
 		this.Sound.StopBGM(5.0);
-		this.Fade.Out(0, 1.0);
+		
 		this.WaitFrame(1.0);
 		this.Talk.PlayAnimationSlotB(ID_SOSUKE, "f02_m01", true);
 		this.Talk.PlayAnimation(ID_SOSUKE, "fn03", 0, true);
@@ -12123,7 +12123,7 @@ function s504_d122_0901()
 		this.MessageTalk(33);
 		this.Talk.SetLastTalkerManageID(-1);
 		this.MessageClose();
-		this.Fade.Out(0, 0.5);
+		
 		this.WaitFrame(0.5);
 		this.Talk.ShowModel(ID_SHOP, 2136, 1, 0);
 		this.Talk.PlayAnimation(ID_SHOP, "fn09", 0, true);
@@ -12332,7 +12332,7 @@ function s504_d122_1001()
 	this.Talk.PlayAnimation(ID_ADOLISH_A, "e517", 0.2, true);
 	this.Talk.PlayAnimation(ID_ADOLISH_B, "e517", 0.2, true);
 	this.WaitFrame(0.5);
-	this.Fade.Out(0, 0.5);
+	
 	this.WaitFrame(0.5);
 	this.Talk.PlayAnimationSlotB(ID_PLAYER, "f01_m01", true);
 	this.Talk.PlayAnimation(ID_PLAYER, "fn01", 0, true);
@@ -14296,53 +14296,65 @@ function Event_m51_d122_0901()
 		this.Flag.Set(11107);
 		this.Flag.Set(11108);
 		local is_get_digimon = true;
-
-		if (this.Common.GetPartyEmptyNum() < 1)
+		
+		local str2;
+		this.Talk.Load("s_common_message");
+		this.Talk.SetMode(1);
+		
+		this.Field.MoveOffPlayer();
+		
+		this.Window.OpenMultiSelect(64);
+		
+		while (!this.Window.IsNextMultiSelect())
 		{
-			is_get_digimon = false;
-			this.Debug.Log("Digimon not get(Party full).");
-			this.Flag.Set(10503);
+			this.WaitFrame(this.Util.SecondFromFrame(1));
 		}
-		else
+		
+		local pick = this.Window.GetResultMultiSelect();
+		this.Window.CloseMultiSelect();
+		
+		while (!this.Window.IsEndCloseMultiSelect())
 		{
-			local add_digimon_memory = 0;
-
-			if (this.Flag.Check(10500))
-			{
-				add_digimon_memory = this.Digimon.GetMemory(389);
-			}
-			else if (this.Flag.Check(10501))
-			{
-				add_digimon_memory = this.Digimon.GetMemory(303);
-			}
-			else if (this.Flag.Check(10502))
-			{
-				add_digimon_memory = this.Digimon.GetMemory(595);
-			}
-
-			if (this.Common.GetFreePartyMemory() < add_digimon_memory)
-			{
-				is_get_digimon = false;
-				this.Debug.Log("Digimon not get(Memory over). Add memory:" + add_digimon_memory);
-				this.Flag.Set(10504);
-			}
+			this.WaitFrame(this.Util.SecondFromFrame(1));
 		}
-
-		if (is_get_digimon)
+				
+		switch(pick)
 		{
-			if (this.Flag.Check(10500))
-			{
-				this.Field.AddPartyFormal(this.Math.Rand(1, 332));
-			}
-			else if (this.Flag.Check(10501))
-			{
-				this.Field.AddPartyFormal(this.Math.Rand(1, 332));
-			}
-			else if (this.Flag.Check(10502))
-			{
-				this.Field.AddPartyFormal(this.Math.Rand(1, 332));
-			}
+		case 1:
+			this.Field.AddPartyFormal(this.Math.Rand(1, 332));
+			break;
+		case 2:
+			this.Field.AddPartyFormal(this.Math.Rand(1, 332));
+			this.Field.AddPartyFormal(this.Math.Rand(1, 332));
+			break;		
+		case 3:
+			this.Field.AddPartyFormal(this.Math.Rand(1, 332));
+			this.Field.AddPartyFormal(this.Math.Rand(1, 332));
+			this.Field.AddPartyFormal(this.Math.Rand(1, 332));
+			break;		
+		case 4:
+			this.Field.AddPartyFormal(this.Math.Rand(1, 332));
+			this.Field.AddPartyFormal(this.Math.Rand(1, 332));
+			this.Field.AddPartyFormal(this.Math.Rand(1, 332));
+			this.Field.AddPartyFormal(this.Math.Rand(1, 332));
+			break;		
+		case 5:
+			this.Field.AddPartyFormal(this.Math.Rand(1, 332));
+			this.Field.AddPartyFormal(this.Math.Rand(1, 332));
+			this.Field.AddPartyFormal(this.Math.Rand(1, 332));
+			this.Field.AddPartyFormal(this.Math.Rand(1, 332));
+			this.Field.AddPartyFormal(this.Math.Rand(1, 332));
+			break;		
+		case 6:
+			this.Field.AddPartyFormal(this.Math.Rand(1, 332));
+			this.Field.AddPartyFormal(this.Math.Rand(1, 332));
+			this.Field.AddPartyFormal(this.Math.Rand(1, 332));
+			this.Field.AddPartyFormal(this.Math.Rand(1, 332));
+			this.Field.AddPartyFormal(this.Math.Rand(1, 332));
+			this.Field.AddPartyFormal(this.Math.Rand(1, 332));
+			break;
 		}
+
 
 		this.Common.SetFieldGuest(3026);
 		this.Field.AddGuestFormal(0, 101);
