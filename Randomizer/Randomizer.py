@@ -1,5 +1,6 @@
 import pygame
 import button
+import subprocess
 
 import starters
 import shop
@@ -19,7 +20,7 @@ import choas
 
 import numpy as np
 
-print("version 3.2")
+print("version 3.3")
 
 #create display window
 SCREEN_HEIGHT = 720
@@ -46,10 +47,11 @@ hard_img = pygame.image.load('hard_btn.png').convert_alpha()
 harder_img = pygame.image.load('harder_btn.png').convert_alpha()
 hardest_img = pygame.image.load('hardest_btn.png').convert_alpha()
 choas_img = pygame.image.load('choas_btn.png').convert_alpha()
+text_img = pygame.image.load('text_btn.png').convert_alpha()
 
 #create button instances
 re_button = button.Button(450, 650, re_img, 1)
-en_button = button.Button(650, 50, en_img, 1)
+en_button = button.Button(725, 50, en_img, 1)
 
 start_button = button.Button(100, 50, start_img, 1)
 done1 = button.Button(100, 50, done_img, 1)
@@ -106,6 +108,10 @@ re14_button = button.Button(750, 650, hardest_img, 1)
 choas_button = button.Button(850, 150, choas_img, 1)
 done15 = button.Button(850, 150, done_img, 1)
 re15_button = button.Button(850, 150, choas_img, 1)
+
+text_button = button.Button(450, 150, text_img, 1)
+done16 = button.Button(450, 150, done_img, 1)
+re16_button = button.Button(450, 150, text_img, 1)
 
 
 #game loop
@@ -170,7 +176,11 @@ while run:
     if choas_button.draw(screen):
         choas.encounters_func()
         choas_button = done15
-        print('Encounters Done') 
+        print('Encounters Done')
+    if text_button.draw(screen):
+        subprocess.call([r'.\randtexture.bat'])
+        text_button = done16
+        print('Textures Done') 
     if re_button.draw(screen):
         start_button = re1_button
         shop_button = re2_button
@@ -187,6 +197,7 @@ while run:
         harder_button = re13_button
         hardest_button = re14_button
         choas_button = re15_button
+        text_button = re16_button
         print('Resetting Done')
 #event handler
     for event in pygame.event.get():

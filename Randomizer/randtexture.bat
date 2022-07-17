@@ -1,0 +1,1 @@
+texture ".\textures\modfiles\images" *.img

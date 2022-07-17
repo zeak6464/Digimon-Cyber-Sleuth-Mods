@@ -1,0 +1,10 @@
+{
+	"data/degeneration_para.mbe/digimon.csv": ["data/degeneration_para.mbe/digimon.csv", "mberecord_append"],
+	"data/evolution_next_para.mbe/digimon.csv": ["data/evolution_next_para.mbe/digimon.csv", "mberecord_append"],
+    "images/ui_chara_icon_[Digimon::Jyarimon::4ID()].img" : "images/ui_chara_icon_jyarimon.img",
+    "images/dot[Digimon::Jyarimon::3ID()].img" : "images/dotjyarimon.img",
+    "[Digimon::Jyarimon::filename()].name": "jyarimon.name",
+    "[Digimon::Jyarimon::filename()].skel": "jyarimon.skel",
+    "[Digimon::Jyarimon::filename()].geom": "jyarimon.geom",
+    "[Digimon::Jyarimon::filename()].anim": "jyarimon.anim"
+}

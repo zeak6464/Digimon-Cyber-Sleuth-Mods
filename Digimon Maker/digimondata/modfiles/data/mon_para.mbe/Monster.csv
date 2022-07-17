@@ -1,0 +1,2 @@
+type,variation,unk3,unk4,unk5,baseHP,baseATK,baseDEF,baseINT,baseSPD,levelHP,levelATK,levelDEF,levelINT,levelSPD,unk16,poisonResist,panicResist,paraResist,sleepResist,stunResist,dotResist,bugResist,deathResist,ATKResist,DEFResist,INTResist,SPDResist,padding1,padding2,padding3,EXP,EXPx2,YEN,YENx2,itemId1,itemChance1,itemId2,itemChance2,scanRate,unk32,unk33
+[Digimon::Jyarimon],1,8,1,0,3500,2400,3200,2300,2200,175,100,110,130,110,3171,0,0,0,0,0,0,0,0,0,0,0,0,-1,-1,-1,4,5,10,1,1,30,1395,15,30,215,0
