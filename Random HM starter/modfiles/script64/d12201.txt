@@ -14321,7 +14321,7 @@ function Event_m51_d122_0901()
 		switch(pick)
 		{
 		case 1:
-			this.Field.AddPartyFormal(333)
+			this.Field.AddPartyFormal(this.Math.Rand(1, 332))
 			break;
 		case 2:
 			this.Field.AddPartyFormal(this.Math.Rand(1, 332));

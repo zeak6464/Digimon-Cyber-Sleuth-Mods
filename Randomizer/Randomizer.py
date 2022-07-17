@@ -1,6 +1,8 @@
 import pygame
 import button
 import subprocess
+import shutil
+import os.path
 
 import starters
 import shop
@@ -179,6 +181,9 @@ while run:
         print('Encounters Done')
     if text_button.draw(screen):
         subprocess.call([r'.\randtexture.bat'])
+        dir_name = "./textures"
+        output_filename = "Random Textures"
+        shutil.make_archive(output_filename, 'zip', dir_name)
         text_button = done16
         print('Textures Done') 
     if re_button.draw(screen):
