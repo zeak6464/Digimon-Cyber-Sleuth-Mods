@@ -11,8 +11,10 @@ adult = [102,730,758,15,676,64,711,344,377,680,393,11,365,87,394,341,760,68,304,
 perfect = [305,65,731,342,756,627,85,210,679,400,311,148,401,309,681,402,44,727,211,403,26,4,719,723,379,720,79,404,6,345,116,405,129,84,23,374,406,699,376,33,407,718,576,408,409,41,596,410,82,584,753,177,411,21,101,59,31,74,412,132,134,302,327,364,413,61,721,71,73,722,359,39,107,140,715,726,192,751]
 ultimate = [66,416,417,451,732,419,346,773,117,600,27,421,744,677,150,422,688,127,754,423,32,704,83,734,774,735,48,424,425,749,94,737,86,213,315,741,771,745,440,128,733,632,38,126,738,700,739,743,19,75,426,60,36,49,427,428,69,175,429,214,450,306,35,439,310,453,431,678,675,748,24,747,95,385,47,312,135,182,434,80,383,37,34,740,703,57,742,901,902,903,905,193,382,683,782,784]
 ultimateplus = [106,67,766,420,215,88,757,772,118,104,105,40,435,328,776,775,777,778,779,904]
+eaters = [800,801,802,803,804,805,806,807,808,809,810,811,812,813,814,815,816,817]
+gates = [818,819,820,821,822,823,824]
 
-mon_lists_by_stage = [baby, babytwo, child,adult,perfect,ultimate,ultimateplus]
+mon_lists_by_stage = [baby, babytwo, child,adult,perfect,ultimate,ultimateplus,eaters,gates]
 mon_list_lookups = [set(lst) for lst in mon_lists_by_stage] # O(1) lookup instead of O(n)
 
 def get_stage(id_):
@@ -74,8 +76,12 @@ def encounters_func():
         if mon_stage == -1:
             continue
         elif mon_stage == 0:
-            continue     
+            continue
         elif mon_stage == 7:
+            pass  
+        elif mon_stage == 8:
+            pass  
+        elif mon_stage == 9:
             pass   
         else:
             potential_evos = mon_lists_by_stage[mon_stage]
@@ -91,19 +97,19 @@ def encounters_func():
     df.insert(loc=11,column="level5",value= pandas.read_csv(file_name)["level5"])
     df.insert(loc=12,column="level6",value= pandas.read_csv(file_name)["level6"])
 
-    df.insert(loc=13,column="variation1",value= pandas.read_csv(file_name)["variation1"])
-    df.insert(loc=14,column="variation2",value= pandas.read_csv(file_name)["variation2"])
-    df.insert(loc=15,column="variation3",value= pandas.read_csv(file_name)["variation3"])
-    df.insert(loc=16,column="variation4",value= pandas.read_csv(file_name)["variation4"])
-    df.insert(loc=17,column="variation5",value= pandas.read_csv(file_name)["variation5"])
-    df.insert(loc=18,column="variation6",value= pandas.read_csv(file_name)["variation6"])
+    df.insert(loc=13,column="variation1",value= 1)
+    df.insert(loc=14,column="variation2",value= 1)
+    df.insert(loc=15,column="variation3",value= 1)
+    df.insert(loc=16,column="variation4",value= 1)
+    df.insert(loc=17,column="variation5",value= 1)
+    df.insert(loc=18,column="variation6",value= 1)
 
-    df.insert(loc=19,column="unk13",value= pandas.read_csv(file_name)["unk13"])
-    df.insert(loc=20,column="unk14",value= pandas.read_csv(file_name)["unk14"])
-    df.insert(loc=21,column="unk15",value= pandas.read_csv(file_name)["unk15"])
-    df.insert(loc=22,column="unk16",value= pandas.read_csv(file_name)["unk16"])
-    df.insert(loc=23,column="unk9",value= pandas.read_csv(file_name)["unk9"])
-    df.insert(loc=24,column="unk10",value= pandas.read_csv(file_name)["unk10"])
+    df.insert(loc=19,column="unk13",value= 0)
+    df.insert(loc=20,column="unk14",value= 0)
+    df.insert(loc=21,column="unk15",value= 0)
+    df.insert(loc=22,column="unk16",value= 0)
+    df.insert(loc=23,column="unk9",value= 0)
+    df.insert(loc=24,column="unk10",value= "a")
 
     # Saves the Randomized File
     df.to_csv(file_name, index=False)

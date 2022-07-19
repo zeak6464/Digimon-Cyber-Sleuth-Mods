@@ -1,0 +1,1305 @@
+function BattleGetLowHp( chr, per )
+{
+	local hp = this.Battle.GetParameter(chr, 0);
+	local maxhp = this.Battle.GetParameter(chr, 2);
+
+	if (hp <= maxhp * per / 100)
+	{
+		return true;
+	}
+
+	return false;
+}
+
+function BattleGetLowSp( chr, per )
+{
+	local sp = this.Battle.GetParameter(chr, 1);
+	local maxsp = this.Battle.GetParameter(chr, 3);
+
+	if (sp <= maxsp * per / 100)
+	{
+		return true;
+	}
+
+	return false;
+}
+
+function BattleGetHighHp( chr, per )
+{
+	local hp = this.Battle.GetParameter(chr, 0);
+	local maxhp = this.Battle.GetParameter(chr, 2);
+
+	if (hp >= maxhp * per / 100)
+	{
+		return true;
+	}
+
+	return false;
+}
+
+function BattleGetPartyHighHp( per )
+{
+	local hp1 = this.Battle.GetParameter(0, 0);
+	local maxhp1 = this.Battle.GetParameter(0, 2);
+	local hp2 = this.Battle.GetParameter(1, 0);
+	local maxhp2 = this.Battle.GetParameter(1, 2);
+	local hp3 = this.Battle.GetParameter(2, 0);
+	local maxhp3 = this.Battle.GetParameter(2, 2);
+
+	if (hp1 + hp2 + hp3 >= (maxhp1 + maxhp2 + maxhp3) * per / 100)
+	{
+		return true;
+	}
+
+	return false;
+}
+
+function BattleAliveCharacterCount()
+{
+	local cnt = 0;
+
+	if (this.Battle.GetParameter(0, 0) >= 1)
+	{
+		cnt = cnt + 1;
+	}
+
+	if (this.Battle.GetParameter(1, 0) >= 1)
+	{
+		cnt = cnt + 1;
+	}
+
+	if (this.Battle.GetParameter(2, 0) >= 1)
+	{
+		cnt = cnt + 1;
+	}
+
+	return cnt;
+}
+
+function BattleIsNormalMode()
+{
+	if (this.Battle.GetDifficulty() == 0)
+	{
+		return true;
+	}
+
+	return false;
+}
+
+function BattleIsHardMode()
+{
+	if (this.Battle.GetDifficulty() == 1)
+	{
+		return true;
+	}
+
+	return false;
+}
+
+function BattleIsVeryHardMode()
+{
+	return false;
+}
+
+function Battle_Init_Base()
+{
+	if (this.Flag.Check(17000))
+	{
+		this.Battle.SetTurnStartActionBuff(0, -1, -1);
+	}
+
+	if (this.Flag.Check(17001))
+	{
+		if (this.Flag.Check(17033))
+		{
+			this.Battle.SetTurnStartActionBuff(1, -1, -1);
+		}
+		else
+		{
+			this.Battle.SetTurnStartActionBuff(1, -1, -2);
+		}
+	}
+
+	if (this.Flag.Check(17002))
+	{
+		if (this.Flag.Check(17033))
+		{
+			this.Battle.SetTurnStartActionBuff(2, -1, -1);
+		}
+		else
+		{
+			this.Battle.SetTurnStartActionBuff(2, -1, -2);
+		}
+	}
+
+	if (this.Flag.Check(17003))
+	{
+		if (this.Flag.Check(17033))
+		{
+			this.Battle.SetTurnStartActionBuff(3, -1, -1);
+		}
+		else
+		{
+			this.Battle.SetTurnStartActionBuff(3, -1, -2);
+		}
+	}
+
+	if (this.Flag.Check(17004))
+	{
+		if (this.Flag.Check(17033))
+		{
+			this.Battle.SetTurnStartActionBuff(4, -1, -1);
+		}
+		else
+		{
+			this.Battle.SetTurnStartActionBuff(4, -1, -2);
+		}
+	}
+
+	if (this.Flag.Check(17005))
+	{
+		if (this.Flag.Check(17033))
+		{
+			this.Battle.SetTurnStartActionBuff(5, -1, -1);
+		}
+		else
+		{
+			this.Battle.SetTurnStartActionBuff(5, -1, -2);
+		}
+	}
+
+	if (this.Flag.Check(17006))
+	{
+		if (this.Flag.Check(17033))
+		{
+			this.Battle.SetTurnStartActionBuff(6, -1, -1);
+		}
+		else
+		{
+			this.Battle.SetTurnStartActionBuff(6, -1, -2);
+		}
+	}
+
+	if (this.Flag.Check(17007))
+	{
+		if (this.Flag.Check(17033))
+		{
+			this.Battle.SetTurnStartActionBuff(7, -1, -1);
+		}
+		else
+		{
+			this.Battle.SetTurnStartActionBuff(7, -1, -2);
+		}
+	}
+
+	if (this.Flag.Check(17008))
+	{
+		this.Battle.SetTurnStartActionBuff(8, -1, -1);
+	}
+
+	if (this.Flag.Check(17009))
+	{
+		if (this.Flag.Check(17033))
+		{
+			this.Battle.SetTurnStartActionBuff(9, 10, -1);
+		}
+		else
+		{
+			this.Battle.SetTurnStartActionBuff(9, 10, -2);
+		}
+	}
+
+	if (this.Flag.Check(17010))
+	{
+		if (this.Flag.Check(17033))
+		{
+			this.Battle.SetTurnStartActionBuff(10, 10, -1);
+		}
+		else
+		{
+			this.Battle.SetTurnStartActionBuff(10, 10, -2);
+		}
+	}
+
+	if (this.Flag.Check(17011))
+	{
+		if (this.Flag.Check(17033))
+		{
+			this.Battle.SetTurnStartActionBuff(11, 10, -1);
+		}
+		else
+		{
+			this.Battle.SetTurnStartActionBuff(11, 10, -2);
+		}
+	}
+
+	if (this.Flag.Check(17012))
+	{
+		if (this.Flag.Check(17033))
+		{
+			this.Battle.SetTurnStartActionBuff(12, 10, -1);
+		}
+		else
+		{
+			this.Battle.SetTurnStartActionBuff(12, 10, -2);
+		}
+	}
+
+	if (this.Flag.Check(17013))
+	{
+		if (this.Flag.Check(17033))
+		{
+			this.Battle.SetTurnStartActionBuff(13, 10, -1);
+		}
+		else
+		{
+			this.Battle.SetTurnStartActionBuff(13, 10, -2);
+		}
+	}
+
+	if (this.Flag.Check(17014))
+	{
+		if (this.Flag.Check(17033))
+		{
+			this.Battle.SetTurnStartActionBuff(14, 10, -1);
+		}
+		else
+		{
+			this.Battle.SetTurnStartActionBuff(14, 10, -2);
+		}
+	}
+
+	if (this.Flag.Check(17015))
+	{
+		if (this.Flag.Check(17033))
+		{
+			this.Battle.SetTurnStartActionBuff(15, 10, -1);
+		}
+		else
+		{
+			this.Battle.SetTurnStartActionBuff(15, 10, -2);
+		}
+	}
+
+	if (this.Flag.Check(17016))
+	{
+		if (this.Flag.Check(17033))
+		{
+			this.Battle.SetTurnStartActionBuff(16, 10, -1);
+		}
+		else
+		{
+			this.Battle.SetTurnStartActionBuff(16, 10, -2);
+		}
+	}
+
+	if (this.Flag.Check(17017))
+	{
+		if (this.Flag.Check(17033))
+		{
+			this.Battle.SetTurnStartActionBuff(17, 10, -1);
+		}
+		else
+		{
+			this.Battle.SetTurnStartActionBuff(17, 10, -2);
+		}
+	}
+
+	if (this.Flag.Check(17018))
+	{
+		if (this.Flag.Check(17033))
+		{
+			this.Battle.SetTurnStartActionBuff(18, 10, -1);
+		}
+		else
+		{
+			this.Battle.SetTurnStartActionBuff(18, 10, -2);
+		}
+	}
+
+	if (this.Flag.Check(17019))
+	{
+		if (this.Flag.Check(17033))
+		{
+			this.Battle.SetTurnStartActionBuff(19, 10, -1);
+		}
+		else
+		{
+			this.Battle.SetTurnStartActionBuff(19, 10, -2);
+		}
+	}
+
+	if (this.Flag.Check(17020))
+	{
+		if (this.Flag.Check(17033))
+		{
+			this.Battle.SetTurnStartActionBuff(20, -1, -1);
+		}
+		else
+		{
+			this.Battle.SetTurnStartActionBuff(20, -1, -2);
+		}
+	}
+
+	if (this.Flag.Check(17021))
+	{
+		if (this.Flag.Check(17033))
+		{
+			this.Battle.SetTurnStartActionBuff(21, -1, -1);
+		}
+		else
+		{
+			this.Battle.SetTurnStartActionBuff(21, -1, -2);
+		}
+	}
+
+	if (this.Flag.Check(17022))
+	{
+		if (this.Flag.Check(17033))
+		{
+			this.Battle.SetTurnStartActionBuff(22, -1, -1);
+		}
+		else
+		{
+			this.Battle.SetTurnStartActionBuff(22, -1, -2);
+		}
+	}
+
+	if (this.Flag.Check(17023))
+	{
+		if (this.Flag.Check(17033))
+		{
+			this.Battle.SetTurnStartActionBuff(23, -1, -1);
+		}
+		else
+		{
+			this.Battle.SetTurnStartActionBuff(23, -1, -2);
+		}
+	}
+
+	if (this.Flag.Check(17024))
+	{
+		if (this.Flag.Check(17033))
+		{
+			this.Battle.SetTurnStartActionBuff(24, -1, -1);
+		}
+		else
+		{
+			this.Battle.SetTurnStartActionBuff(24, -1, -2);
+		}
+	}
+
+	if (this.Flag.Check(17025))
+	{
+		if (this.Flag.Check(17033))
+		{
+			this.Battle.SetTurnStartActionBuff(25, -1, -1);
+		}
+		else
+		{
+			this.Battle.SetTurnStartActionBuff(25, -1, -2);
+		}
+	}
+
+	if (this.Flag.Check(17026))
+	{
+		if (this.Flag.Check(17033))
+		{
+			this.Battle.SetTurnStartActionBuff(26, -1, -1);
+		}
+		else
+		{
+			this.Battle.SetTurnStartActionBuff(26, -1, -2);
+		}
+	}
+
+	if (this.Flag.Check(17027))
+	{
+		if (this.Flag.Check(17033))
+		{
+			this.Battle.SetTurnStartActionBuff(27, -1, -1);
+		}
+		else
+		{
+			this.Battle.SetTurnStartActionBuff(27, -1, -2);
+		}
+	}
+
+	if (this.Flag.Check(17028))
+	{
+		if (this.Flag.Check(17033))
+		{
+			this.Battle.SetTurnStartActionBuff(28, -1, -1);
+		}
+		else
+		{
+			this.Battle.SetTurnStartActionBuff(28, -1, -2);
+		}
+	}
+
+	if (this.Flag.Check(17029))
+	{
+		this.Battle.SetFirstAttack();
+	}
+
+	if (this.Flag.Check(17030))
+	{
+		this.Battle.SetBackAttack();
+	}
+
+	if (this.Flag.Check(17031))
+	{
+		if (this.Flag.Check(17033))
+		{
+			this.Battle.SetItemDisable(true);
+		}
+		else
+		{
+			this.Battle.SetItemDisable(false);
+		}
+	}
+
+	if (this.Flag.Check(17032))
+	{
+		if (this.Flag.Check(17033))
+		{
+			this.Battle.SetReserveDisable(true);
+		}
+		else
+		{
+			this.Battle.SetReserveDisable(false);
+		}
+	}
+
+	this.Battle_Init();
+}
+
+function Battle_Boot_Base()
+{
+	this.Battle_Boot();
+}
+
+function Battle_Start_Base()
+{
+	this.Battle_Start();
+}
+
+function Battle_Command_Base()
+{
+	this.Battle_Command();
+}
+
+function Battle_Victory_Base()
+{
+	this.Battle_Victory();
+}
+
+function Battle_Defeat_Base()
+{
+	this.Battle_Defeat();
+}
+
+function Battle_Turn_End_Base()
+{
+	this.Battle_Turn_End();
+}
+
+function Battle_Direction_End_Base()
+{
+	this.Battle_Direction_End();
+}
+
+function Battle_Direction_Result_Base()
+{
+	this.Battle_Direction_Result();
+}
+
+function Message( a_message_id )
+{
+	this.Talk.Message(a_message_id);
+	this.WaitMessage();
+}
+
+function Message_Center( a_message_id )
+{
+	this.Talk.Message_C(a_message_id);
+	this.WaitMessage();
+}
+
+function Message_wait( a_message_id, a_wait )
+{
+	this.Talk.Message_Auto(a_message_id);
+	this.SetWaitMessage(a_wait);
+}
+
+function Message_Center_wait( a_message_id, a_wait )
+{
+	this.Talk.Message_C_Auto(a_message_id);
+	this.SetWaitMessage(a_wait);
+}
+
+function MessageComic( a_message_id, a_position )
+{
+	this.Talk.MessageComic(a_message_id, a_position);
+	this.WaitMessage();
+}
+
+function MessageTalk( a_message_id )
+{
+	this.Talk.MessageTalk(a_message_id);
+	this.WaitMessage();
+}
+
+function MessageTalk_wait( a_message_id, a_wait )
+{
+	this.Talk.MessageTalk_Auto(a_message_id);
+	this.SetWaitMessage(a_wait);
+}
+
+function MessageSel( a_sel_num, a_message_id )
+{
+	this.Talk.MessageSel(a_sel_num, a_message_id);
+	this.WaitMessage();
+	this.Talk.ResultSelectedNum();
+}
+
+function MessageTalkSel( a_sel_num, a_message_id )
+{
+	this.Talk.MessageTalkSel(a_sel_num, a_message_id);
+	this.WaitMessage();
+	this.Talk.ResultSelectedNum();
+}
+
+function TalkCommunication( a_position, a_disp_model, a_animation )
+{
+	this.Talk.TalkCommunication(a_position, a_disp_model, a_animation);
+	this.WaitCommunication();
+}
+
+function ShowCommunication( a_animation )
+{
+	this.Talk.ShowCommunication(a_animation);
+	this.Sound.PlaySE("ev_101", false);
+	this.WaitCommunication();
+}
+
+function YesNoInfo( a_para_id )
+{
+	this.Window.OpenYesNoInfo(a_para_id);
+	this.WaitYesNoInfoWindow();
+}
+
+function YesNoSystem( a_para_id )
+{
+	this.Window.OpenYesNoSystem(a_para_id);
+	this.WaitYesNoSystemWindow();
+}
+
+function OpenTutorial( a_tutorial_id )
+{
+	this.Window.OpenTutorial(a_tutorial_id);
+	this.WaitTutorialWindow();
+	this.Window.CloseTutorial();
+	this.WaitCloseTutorialWindow();
+}
+
+function OpenCutin()
+{
+	this.Talk.OpenCutin();
+	this.WaitOpenTalkCutin();
+}
+
+function WaitMessage()
+{
+	this.WaitFrame(this.Util.SecondFromFrame(1));
+
+	while (1)
+	{
+		if (this.Talk.IsNext())
+		{
+			break;
+		}
+
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+}
+
+function SetWaitMessage( Wait )
+{
+	this.Talk.SetWait(Wait);
+	this.WaitFrame(this.Util.SecondFromFrame(1));
+
+	while (1)
+	{
+		if (this.Talk.IsWait())
+		{
+			break;
+		}
+
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+}
+
+function WaitCloseTalkWindow()
+{
+	this.WaitFrame(this.Util.SecondFromFrame(1));
+
+	while (1)
+	{
+		if (this.Talk.IsClose())
+		{
+			break;
+		}
+
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+}
+
+function WaitCommunication()
+{
+	this.WaitFrame(this.Util.SecondFromFrame(1));
+
+	while (1)
+	{
+		if (this.Talk.IsOpenTalkCommunication())
+		{
+			break;
+		}
+
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+}
+
+function WaitCloseTalkCommunication()
+{
+	this.WaitFrame(this.Util.SecondFromFrame(1));
+
+	while (1)
+	{
+		if (this.Talk.IsCommunicationClose())
+		{
+			break;
+		}
+
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+}
+
+function WaitOpenTalkCutin()
+{
+	this.WaitFrame(this.Util.SecondFromFrame(1));
+
+	while (1)
+	{
+		if (this.Talk.IsOpenCutin())
+		{
+			break;
+		}
+
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+}
+
+function WaitCloseTalkCutin()
+{
+	this.WaitFrame(this.Util.SecondFromFrame(1));
+
+	while (1)
+	{
+		if (this.Talk.IsCloseCutin())
+		{
+			break;
+		}
+
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+}
+
+function WaitEffect( a_effectId )
+{
+	this.WaitFrame(this.Util.SecondFromFrame(1));
+
+	while (1)
+	{
+		if (this.Talk.IsEffect(a_effectId))
+		{
+			break;
+		}
+
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+}
+
+function WaitInfoWindow()
+{
+	this.WaitFrame(this.Util.SecondFromFrame(1));
+
+	while (1)
+	{
+		if (this.Window.IsNextInfo())
+		{
+			break;
+		}
+
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+}
+
+function WaitCloseInfoWindow()
+{
+	this.WaitFrame(this.Util.SecondFromFrame(1));
+
+	while (1)
+	{
+		if (this.Window.IsEndCloseInfo())
+		{
+			break;
+		}
+
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+}
+
+function WaitSystemWindow()
+{
+	this.WaitFrame(this.Util.SecondFromFrame(1));
+
+	while (1)
+	{
+		if (this.Window.IsNextSystemWindow())
+		{
+			break;
+		}
+
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+}
+
+function WaitCloseSystemWindow()
+{
+	this.WaitFrame(this.Util.SecondFromFrame(1));
+
+	while (1)
+	{
+		if (this.Window.IsEndCloseSystemWindow())
+		{
+			break;
+		}
+
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+}
+
+function WaitYesNoInfoWindow()
+{
+	this.WaitFrame(this.Util.SecondFromFrame(1));
+
+	while (1)
+	{
+		if (this.Window.IsNextYesNoInfo())
+		{
+			break;
+		}
+
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+}
+
+function WaitCloseYesNoInfoWindow()
+{
+	this.WaitFrame(this.Util.SecondFromFrame(1));
+
+	while (1)
+	{
+		if (this.Window.IsEndCloseYesNoInfo())
+		{
+			break;
+		}
+
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+}
+
+function WaitYesNoSystemWindow()
+{
+	this.WaitFrame(this.Util.SecondFromFrame(1));
+
+	while (1)
+	{
+		if (this.Window.IsNextYesNoSystem())
+		{
+			break;
+		}
+
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+}
+
+function WaitCloseYesNoSystemWindow()
+{
+	this.WaitFrame(this.Util.SecondFromFrame(1));
+
+	while (1)
+	{
+		if (this.Window.IsEndCloseYesNoSystem())
+		{
+			break;
+		}
+
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+}
+
+function WaitTutorialWindow()
+{
+	this.WaitFrame(this.Util.SecondFromFrame(1));
+
+	while (1)
+	{
+		if (this.Window.IsNextTutorial())
+		{
+			break;
+		}
+
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+}
+
+function WaitCloseTutorialWindow()
+{
+	this.WaitFrame(this.Util.SecondFromFrame(1));
+
+	while (1)
+	{
+		if (this.Window.IsEndCloseTutorial())
+		{
+			break;
+		}
+
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+}
+
+function WaitMultiSelectWindow()
+{
+	this.WaitFrame(this.Util.SecondFromFrame(1));
+
+	while (1)
+	{
+		if (this.Window.IsNextMultiSelect())
+		{
+			break;
+		}
+
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+}
+
+function WaitCloseMultiSelectWindow()
+{
+	this.WaitFrame(this.Util.SecondFromFrame(1));
+
+	while (1)
+	{
+		if (this.Window.IsEndCloseMultiSelect())
+		{
+			break;
+		}
+
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+}
+
+function WaitCloseMoneyWindow()
+{
+	this.WaitFrame(this.Util.SecondFromFrame(1));
+
+	while (1)
+	{
+		if (this.Window.IsEndMoneyWindow())
+		{
+			break;
+		}
+
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+}
+
+function MessageClose()
+{
+	this.Talk.Close();
+	this.WaitCloseTalkWindow();
+}
+
+function CommunicationClose()
+{
+	this.Talk.CommunicationClose();
+	this.Sound.PlaySE("ev_102", false);
+	this.WaitCloseTalkCommunication();
+}
+
+function YesNoInfoClose()
+{
+	this.Window.CloseYesNoInfo();
+	this.WaitCloseYesNoInfoWindow();
+}
+
+function YesNoSystemClose()
+{
+	this.Window.CloseYesNoSystem();
+	this.WaitCloseYesNoSystemWindow();
+}
+
+function CloseCutin()
+{
+	this.Talk.CloseCutin();
+	this.WaitCloseTalkCutin();
+}
+
+function WaitTalkLoadModel()
+{
+	this.WaitFrame(this.Util.SecondFromFrame(1));
+
+	while (1)
+	{
+		if (this.Talk.IsEndLoadModel())
+		{
+			break;
+		}
+
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+}
+
+function WaitTalkLoadEffect()
+{
+	this.WaitFrame(this.Util.SecondFromFrame(1));
+
+	while (1)
+	{
+		if (this.Talk.IsEndLoadEffect())
+		{
+			break;
+		}
+
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+}
+
+function WaitTalkLoadModelCommunication()
+{
+	this.WaitFrame(this.Util.SecondFromFrame(1));
+
+	while (1)
+	{
+		if (this.Talk.IsLoadCommunication())
+		{
+			break;
+		}
+
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+}
+
+function WaitTalkLoadCutin()
+{
+	this.WaitFrame(this.Util.SecondFromFrame(1));
+
+	while (1)
+	{
+		if (this.Talk.IsEndLoadCutin())
+		{
+			break;
+		}
+
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+}
+
+function WaitVistaLoad()
+{
+	this.WaitFrame(this.Util.SecondFromFrame(1));
+
+	while (1)
+	{
+		if (this.Vista.IsEndLoad())
+		{
+			break;
+		}
+
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+}
+
+function WaitVistaBGMovie()
+{
+	this.WaitFrame(this.Util.SecondFromFrame(1));
+
+	while (1)
+	{
+		if (this.Vista.IsReadyBGMovie())
+		{
+			break;
+		}
+
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+}
+
+function TalkExit()
+{
+	this.WaitFrame(this.Util.SecondFromFrame(1));
+	this.Talk.Exit();
+
+	while (!this.Talk.IsExit())
+	{
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+
+	this.Talk.End();
+}
+
+function TalkExit2()
+{
+	this.WaitFrame(this.Util.SecondFromFrame(1));
+	this.Talk.Exit();
+
+	while (!this.Talk.IsExit())
+	{
+		this.Field.CloseUI(false);
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+
+	this.Talk.End();
+}
+
+function VistaExit()
+{
+	this.WaitFrame(this.Util.SecondFromFrame(1));
+	this.Vista.Exit();
+
+	while (!this.Vista.IsExit())
+	{
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+
+	this.Vista.End();
+}
+
+function MovieIsPlay()
+{
+	this.WaitFrame(this.Util.SecondFromFrame(1));
+
+	while (1)
+	{
+		if (!this.Movie.IsPlay())
+		{
+			break;
+		}
+
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+}
+
+function FADE_IN( type, time )
+{
+	this.Fade.In(type, time);
+
+	while (!this.Fade.IsEndType(type))
+	{
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+}
+
+function FADE_OUT( type, time )
+{
+	this.Fade.Out(type, time);
+
+	while (!this.Fade.IsEndType(type))
+	{
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+}
+
+function INFO_WINDOW( mesNo )
+{
+	this.Window.OpenInfo(mesNo);
+	this.WaitInfoWindow();
+	this.Window.CloseInfo();
+	this.WaitCloseInfoWindow();
+}
+
+function INFO_WINDOW_WITH_CLOSE_MONEY( mesNo )
+{
+	this.Window.OpenInfo(mesNo);
+	this.WaitInfoWindow();
+	this.Window.CloseMoneyWindow();
+	this.Window.CloseInfo();
+	this.WaitCloseInfoWindow();
+	this.WaitCloseMoneyWindow();
+}
+
+function INFO_GET_ITEM( ItemNo, num )
+{
+	this.Sound.PlaySE("com_033", false);
+	this.Window.OpenInfoGetItem(ItemNo, num);
+	this.WaitInfoWindow();
+	this.Window.CloseInfo();
+	this.WaitCloseInfoWindow();
+}
+
+function INFO_DEL_ITEM( ItemNo, num )
+{
+	this.Window.OpenInfoReleaseItem(ItemNo, num);
+	this.WaitInfoWindow();
+	this.Window.CloseInfo();
+	this.WaitCloseInfoWindow();
+}
+
+function SE_PLAY( fileName, type )
+{
+	this.Sound.PlaySE(fileName, type);
+
+	while (1)
+	{
+		if (!this.Sound.IsPlaySE(fileName))
+		{
+			break;
+		}
+
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+	}
+}
+
+function WaitVoicePlay()
+{
+	this.WaitFrame(this.Util.SecondFromFrame(1));
+	local waittime = 10 * 30;
+
+	while (1)
+	{
+		if (!this.Sound.IsPlaying(2))
+		{
+			break;
+		}
+
+		if (waittime <= 0)
+		{
+			break;
+		}
+
+		this.WaitFrame(this.Util.SecondFromFrame(1));
+
+		if (waittime > 0)
+		{
+			waittime = waittime - 1;
+		}
+	}
+
+	this.WaitFrame(this.Util.SecondFromFrame(3));
+}
+
+function NPC_MESSAGE( fileName, msgNo )
+{
+	this.Field.MoveOffPlayer();
+	this.Talk.Load(fileName);
+	this.Talk.SetMode(1);
+	this.Message(msgNo);
+	this.MessageClose();
+	this.TalkExit();
+	this.Field.MoveOnPlayer();
+}
+
+function debagMesssage( npcNo )
+{
+	this.Talk.Load("debug_message");
+	this.Talk.SetMode(1);
+	this.Talk.Message(npcNo);
+	this.WaitMessage();
+	this.MessageClose();
+	this.TalkExit();
+}
+
+function KEYWORD_GET( keyNo )
+{
+	this.Window.OpenInfoGetKeyword(keyNo);
+	this.WaitInfoWindow();
+	this.Window.CloseInfo();
+	this.WaitCloseInfoWindow();
+}
+
+function Battle_Init()
+{
+	this.Battle.SetBGM("M24", "M26");
+}
+
+function Battle_Boot()
+{
+	this.Battle.AttachUndead(0, true);
+	this.Battle.SetParameter(3, 7, 25);
+
+	if (this.BattleIsHardMode())
+	{
+		this.Battle.SetParameter(6, 7, 15);
+		this.Battle.SetParameter(7, 7, 15);
+	}
+	else
+	{
+		this.Battle.SetParameter(6, 7, 15);
+		this.Battle.SetParameter(7, 7, 15);
+	}
+}
+
+function Battle_Start()
+{
+	this.Window.OpenTutorial(1);
+	this.WaitTutorialWindow();
+	this.Flag.Set(14300);
+	this.Window.CloseTutorial();
+	this.Window.OpenTutorial(2);
+	this.WaitTutorialWindow();
+	this.Flag.Set(14301);
+	this.Window.CloseTutorial();
+	this.WaitFrame(0.5);
+}
+
+function Battle_Victory()
+{
+}
+
+function Battle_Defeat()
+{
+}
+
+function Battle_Command()
+{
+	if (this.Battle.GetTurnCharacter() == 6)
+	{
+		this.Battle.SetCommand(5000);
+		this.Battle.SetCommandTarget(3);
+	}
+	else if (this.Battle.GetTurnCharacter() == 7)
+	{
+		this.Battle.SetCommand(5000);
+		this.Battle.SetCommandTarget(3);
+	}
+	else if (this.Battle.GetTurnCharacter() == 3)
+	{
+		this.Battle.AttachUndead(6, true);
+		this.Battle.AttachUndead(7, true);
+	}
+}
+
+function Battle_Turn_End()
+{
+	if (this.Battle.GetTurnCharacter() == 3)
+	{
+		this.Battle.AttachUndead(6, false);
+		this.Battle.AttachUndead(7, false);
+	}
+}
+
+function Battle_Direction_End()
+{
+}
+

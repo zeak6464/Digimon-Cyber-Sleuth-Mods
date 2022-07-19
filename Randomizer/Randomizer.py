@@ -11,6 +11,7 @@ import digivolve
 import market
 import digimondata
 import enskills
+import monsters
 
 import easyest
 import easy
@@ -22,7 +23,7 @@ import choas
 
 import numpy as np
 
-print("version 3.3")
+print("version 3.4")
 
 #create display window
 SCREEN_HEIGHT = 720
@@ -50,6 +51,7 @@ harder_img = pygame.image.load('harder_btn.png').convert_alpha()
 hardest_img = pygame.image.load('hardest_btn.png').convert_alpha()
 choas_img = pygame.image.load('choas_btn.png').convert_alpha()
 text_img = pygame.image.load('text_btn.png').convert_alpha()
+mon_img = pygame.image.load('mon_btn.png').convert_alpha()
 
 #create button instances
 re_button = button.Button(450, 650, re_img, 1)
@@ -115,6 +117,10 @@ text_button = button.Button(450, 150, text_img, 1)
 done16 = button.Button(450, 150, done_img, 1)
 re16_button = button.Button(450, 150, text_img, 1)
 
+mon_button = button.Button(450, 250, mon_img, 1)
+done17 = button.Button(450, 250, done_img, 1)
+re17_button = button.Button(450, 250, mon_img, 1)
+
 
 #game loop
 run = True
@@ -179,6 +185,10 @@ while run:
         choas.encounters_func()
         choas_button = done15
         print('Encounters Done')
+    if mon_button.draw(screen):
+        monsters.monsters_func()
+        mon_button = done17
+        print('Monster Data Done')
     if text_button.draw(screen):
         subprocess.call([r'.\randtexture.bat'])
         dir_name = "./textures"
@@ -191,7 +201,6 @@ while run:
         shop_button = re2_button
         de_button = re3_button
         di_button = re4_button
-        en_button = re5_button
         mar_button = re6_button
         digi_button = re7_button
         enskill_button = re8_button
@@ -203,6 +212,7 @@ while run:
         hardest_button = re14_button
         choas_button = re15_button
         text_button = re16_button
+        mon_button = re17_button
         print('Resetting Done')
 #event handler
     for event in pygame.event.get():
