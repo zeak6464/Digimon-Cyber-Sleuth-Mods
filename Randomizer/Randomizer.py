@@ -1,9 +1,11 @@
 import pygame
-import button
 import subprocess
 import shutil
 import os.path
+import logging
+from typing import Dict, Optional
 
+# Import game modules
 import starters
 import shop
 import dedigivolve
@@ -12,7 +14,6 @@ import market
 import digimondata
 import enskills
 import monsters
-
 import easyest
 import easy
 import normal
@@ -20,203 +21,174 @@ import hard
 import harder
 import hardest
 import choas
+import button
 
-import numpy as np
-
-print("version 3.4")
-
-#create display window
-SCREEN_HEIGHT = 720
-SCREEN_WIDTH = 1080
-
-screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-pygame.display.set_caption('Digimon CSHM - Randomizer')
-
-#load button images
-start_img = pygame.image.load('start_btn.png').convert_alpha()
-shop_img = pygame.image.load('shop_btn.png').convert_alpha()
-de_img = pygame.image.load('de_btn.png').convert_alpha()
-di_img = pygame.image.load('di_btn.png').convert_alpha()
-en_img = pygame.image.load('en_btn.png').convert_alpha()
-mar_img = pygame.image.load('mar_btn.png').convert_alpha()
-done_img = pygame.image.load('done_btn.png').convert_alpha()
-re_img = pygame.image.load('re_btn.png').convert_alpha()
-digi_img = pygame.image.load('digi_btn.png').convert_alpha()
-enskill_img = pygame.image.load('enskill_btn.png').convert_alpha()
-easyest_img = pygame.image.load('easyest_btn.png').convert_alpha()
-easy_img = pygame.image.load('easy_btn.png').convert_alpha()
-normal_img = pygame.image.load('normal_btn.png').convert_alpha()
-hard_img = pygame.image.load('hard_btn.png').convert_alpha()
-harder_img = pygame.image.load('harder_btn.png').convert_alpha()
-hardest_img = pygame.image.load('hardest_btn.png').convert_alpha()
-choas_img = pygame.image.load('choas_btn.png').convert_alpha()
-text_img = pygame.image.load('text_btn.png').convert_alpha()
-mon_img = pygame.image.load('mon_btn.png').convert_alpha()
-
-#create button instances
-re_button = button.Button(450, 650, re_img, 1)
-en_button = button.Button(725, 50, en_img, 1)
-
-start_button = button.Button(100, 50, start_img, 1)
-done1 = button.Button(100, 50, done_img, 1)
-re1_button = button.Button(100, 50, start_img, 1)
-
-shop_button = button.Button(100, 150, shop_img, 1)
-done2 = button.Button(100, 150, done_img, 1)
-re2_button = button.Button(100, 150, shop_img, 1)
-
-de_button = button.Button(100, 250, de_img, 1)
-done3 = button.Button(100, 250, done_img, 1)
-re3_button = button.Button(100, 250, de_img, 1)
-
-digi_button = button.Button(100, 350, digi_img, 1)
-done7 = button.Button(100, 350, done_img, 1)
-re7_button = button.Button(100, 350, digi_img, 1)
-
-di_button = button.Button(100, 450, di_img, 1)
-done4 = button.Button(100, 450, done_img, 1)
-re4_button = button.Button(100, 450, di_img, 1)
-
-mar_button = button.Button(100, 550, mar_img, 1)
-done6 = button.Button(100, 550, done_img, 1)
-re6_button = button.Button(100, 550, mar_img, 1)
-
-enskill_button = button.Button(100, 650, enskill_img, 1)
-done8 = button.Button(100, 650, done_img, 1)
-re8_button = button.Button(100, 650, enskill_img, 1)
-
-easyest_button = button.Button(750, 150, easyest_img, 1)
-done9 = button.Button(750, 150, done_img, 1)
-re9_button = button.Button(750, 150, easyest_img, 1)
-
-easy_button = button.Button(750, 250, easy_img, 1)
-done10 = button.Button(750, 250, done_img, 1)
-re10_button = button.Button(750, 250, easy_img, 1)
-
-normal_button = button.Button(750, 350, normal_img, 1)
-done11 = button.Button(750, 350, done_img, 1)
-re11_button = button.Button(750, 350, normal_img, 1)
-
-hard_button = button.Button(750, 450, hard_img, 1)
-done12 = button.Button(750, 450, done_img, 1)
-re12_button = button.Button(750, 450, hard_img, 1)
-
-harder_button = button.Button(750, 550, harder_img, 1)
-done13 = button.Button(750, 550, done_img, 1)
-re13_button = button.Button(750, 550, harder_img, 1)
-
-hardest_button = button.Button(750, 650, hardest_img, 1)
-done14 = button.Button(750, 650, done_img, 1)
-re14_button = button.Button(750, 650, hardest_img, 1)
-
-choas_button = button.Button(850, 150, choas_img, 1)
-done15 = button.Button(850, 150, done_img, 1)
-re15_button = button.Button(850, 150, choas_img, 1)
-
-text_button = button.Button(450, 150, text_img, 1)
-done16 = button.Button(450, 150, done_img, 1)
-re16_button = button.Button(450, 150, text_img, 1)
-
-mon_button = button.Button(450, 250, mon_img, 1)
-done17 = button.Button(450, 250, done_img, 1)
-re17_button = button.Button(450, 250, mon_img, 1)
-
-
-#game loop
-run = True
-while run:
-        
-    screen.fill((202, 228, 241))
-    en_button.draw(screen)
+class RandomizerApp:
+    VERSION = "3.4"
+    SCREEN_HEIGHT = 720
+    SCREEN_WIDTH = 1080
+    BG_COLOR = (202, 228, 241)
     
-    if start_button.draw(screen):
-        starters.starters_func()
-        start_button = done1
-        print('Starters Done')
-    if shop_button.draw(screen):
-        shop.shop_func()
-        shop_button = done2
-        print('Shop Done')
-    if de_button.draw(screen):
-        dedigivolve.dedigivolve_func(False) 
-        de_button = done3
-        print('Dedigivole Done')
-    if di_button.draw(screen):
-        digivolve.digivolve_func()
-        di_button = done4
-        print('Digivolve Done')
-    if mar_button.draw(screen):
-        market.market_func()
-        mar_button = done6
-        print('Market Done')
-    if digi_button.draw(screen):
-        digimondata.digimondata_func()
-        digi_button = done7
-        print('Digimon Data Done')
-    if enskill_button.draw(screen):
-        enskills.enskills_func()
-        enskill_button = done8
-        print('Encounter Skills Done')
-    if easyest_button.draw(screen):
-        easyest.encounters_func()
-        easyest_button = done9
-        print('Encounters Done')
-    if easy_button.draw(screen):
-        easy.encounters_func()
-        easy_button = done10
-        print('Encounters Done')
-    if normal_button.draw(screen):
-        normal.encounters_func()
-        normal_button = done11
-        print('Encounters Done')
-    if hard_button.draw(screen):
-        hard.encounters_func()
-        hard_button = done12
-        print('Encounters Done')
-    if harder_button.draw(screen):
-        harder.encounters_func()
-        harder_button = done13
-        print('Encounters Done')
-    if hardest_button.draw(screen):
-        hardest.encounters_func()
-        hardest_button = done14
-        print('Encounters Done')
-    if choas_button.draw(screen):
-        choas.encounters_func()
-        choas_button = done15
-        print('Encounters Done')
-    if mon_button.draw(screen):
-        monsters.monsters_func()
-        mon_button = done17
-        print('Monster Data Done')
-    if text_button.draw(screen):
-        subprocess.call([r'.\randtexture.bat'])
-        dir_name = "./textures"
-        output_filename = "Random Textures"
-        shutil.make_archive(output_filename, 'zip', dir_name)
-        text_button = done16
-        print('Textures Done') 
-    if re_button.draw(screen):
-        start_button = re1_button
-        shop_button = re2_button
-        de_button = re3_button
-        di_button = re4_button
-        mar_button = re6_button
-        digi_button = re7_button
-        enskill_button = re8_button
-        easyest_button = re9_button
-        easy_button = re10_button
-        normal_button = re11_button
-        hard_button = re12_button
-        harder_button = re13_button
-        hardest_button = re14_button
-        choas_button = re15_button
-        text_button = re16_button
-        mon_button = re17_button
-        print('Resetting Done')
-#event handler
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            run = False
-    pygame.display.update()
-pygame.quit()
+    def __init__(self):
+        pygame.init()
+        self.setup_logging()
+        self.screen = self.setup_display()
+        self.buttons = self.load_buttons()
+        self.running = True
+        
+    def setup_logging(self):
+        logging.basicConfig(
+            filename='randomizer.log',
+            level=logging.INFO,
+            format='%(asctime)s - %(levelname)s - %(message)s'
+        )
+        logging.info(f"Starting Randomizer v{self.VERSION}")
+        
+    def setup_display(self) -> pygame.Surface:
+        screen = pygame.display.set_mode((self.SCREEN_WIDTH, self.SCREEN_HEIGHT))
+        pygame.display.set_caption('Digimon CSHM - Randomizer')
+        return screen
+        
+    def load_image(self, name: str) -> Optional[pygame.Surface]:
+        try:
+            return pygame.image.load(f'{name}_btn.png').convert_alpha()
+        except pygame.error as e:
+            logging.error(f"Failed to load image {name}_btn.png: {e}")
+            return None
+            
+    def load_buttons(self) -> Dict[str, Dict]:
+        """Load and configure all buttons"""
+        buttons = {
+            'main': {},
+            'done': {},
+            'reset': {}
+        }
+        
+        # Button configurations
+        button_configs = [
+            ('start', 100, 50),
+            ('shop', 100, 150),
+            ('de', 100, 250),
+            ('digi', 100, 350),
+            ('di', 100, 450),
+            ('mar', 100, 550),
+            ('enskill', 100, 650),
+            ('easyest', 750, 150),
+            ('easy', 750, 250),
+            ('normal', 750, 350),
+            ('hard', 750, 450),
+            ('harder', 750, 550),
+            ('hardest', 750, 650),
+            ('choas', 850, 150),
+            ('text', 450, 150),
+            ('mon', 450, 250),
+            ('en', 725, 50),
+            ('re', 450, 650)
+        ]
+        
+        # Load done image once
+        done_img = self.load_image('done')
+        
+        for btn_name, x, y in button_configs:
+            img = self.load_image(btn_name)
+            if img:
+                buttons['main'][btn_name] = button.Button(x, y, img, 1)
+                if done_img:
+                    buttons['done'][btn_name] = button.Button(x, y, done_img, 1)
+                buttons['reset'][btn_name] = button.Button(x, y, img, 1)
+                
+        return buttons
+        
+    def handle_button_click(self, btn_name: str) -> None:
+        """Handle button click events"""
+        try:
+            if btn_name == 'start':
+                starters.starters_func()
+            elif btn_name == 'shop':
+                shop.shop_func()
+            elif btn_name == 'de':
+                dedigivolve.dedigivolve_func(False)
+            elif btn_name == 'di':
+                digivolve.digivolve_func()
+            elif btn_name == 'mar':
+                market.market_func()
+            elif btn_name == 'digi':
+                digimondata.digimondata_func()
+            elif btn_name == 'enskill':
+                enskills.enskills_func()
+            elif btn_name == 'easyest':
+                easyest.encounters_func()
+            elif btn_name == 'easy':
+                easy.encounters_func()
+            elif btn_name == 'normal':
+                normal.encounters_func()
+            elif btn_name == 'hard':
+                hard.encounters_func()
+            elif btn_name == 'harder':
+                harder.encounters_func()
+            elif btn_name == 'hardest':
+                hardest.encounters_func()
+            elif btn_name == 'choas':
+                choas.encounters_func()
+            elif btn_name == 'mon':
+                monsters.monsters_func()
+            elif btn_name == 'text':
+                self.handle_textures()
+                
+            # Mark button as done
+            self.buttons['main'][btn_name] = self.buttons['done'][btn_name]
+            logging.info(f"{btn_name.capitalize()} function completed")
+            
+        except Exception as e:
+            logging.error(f"Error in {btn_name} function: {e}")
+            
+    def handle_textures(self) -> None:
+        """Handle texture randomization"""
+        try:
+            subprocess.call([r'.\randtexture.bat'])
+            dir_name = "./textures"
+            output_filename = "Random Textures"
+            if os.path.exists(dir_name):
+                shutil.make_archive(output_filename, 'zip', dir_name)
+                logging.info("Textures randomized and archived successfully")
+            else:
+                logging.error(f"Texture directory not found: {dir_name}")
+        except Exception as e:
+            logging.error(f"Error processing textures: {e}")
+            
+    def handle_reset(self) -> None:
+        """Reset all buttons to their original state"""
+        for btn_name in self.buttons['main']:
+            self.buttons['main'][btn_name] = self.buttons['reset'][btn_name]
+        logging.info("All buttons reset")
+        
+    def run(self) -> None:
+        """Main game loop"""
+        print(f"version {self.VERSION}")
+        
+        while self.running:
+            # Handle events
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    self.running = False
+                    
+            # Draw background
+            self.screen.fill(self.BG_COLOR)
+            
+            # Draw and handle buttons
+            for btn_name, btn in self.buttons['main'].items():
+                if btn.draw(self.screen):
+                    if btn_name == 're':
+                        self.handle_reset()
+                    else:
+                        self.handle_button_click(btn_name)
+                        
+            # Update display
+            pygame.display.flip()
+            
+        pygame.quit()
+        logging.info("Application closed")
+
+if __name__ == '__main__':
+    app = RandomizerApp()
+    app.run()
