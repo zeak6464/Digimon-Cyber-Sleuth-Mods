@@ -1,1 +1,0 @@
-pyinstaller --onedir Randomizer.py
